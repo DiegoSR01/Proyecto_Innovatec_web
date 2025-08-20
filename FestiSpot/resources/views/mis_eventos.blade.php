@@ -46,12 +46,12 @@
                 <option>Cultural</option>
             </select>
             <select class="bg-card px-4 py-2 rounded-lg text-text border border-cardLight/30 focus:border-accent focus:ring-2 focus:ring-accent/20">
-                <option value="">Estado</option>
+                <option value="">Estatus</option>
                 <option>Activo</option>
                 <option>Finalizado</option>
             </select>
-            <button type="submit" class="ml-auto px-6 py-2 bg-accent text-white rounded-lg font-bold hover:bg-secondary transition-all"><i class="fa-solid fa-filter"></i> Filtrar</button>
-            <button type="button" id="btn-borrar-filtros" class="px-6 py-2 bg-warning text-white rounded-lg font-bold hover:bg-accent transition-all"><i class="fa-solid fa-xmark"></i> Borrar filtros</button>
+            <button type="submit" class="ml-auto px-6 py-2 border-2 border-[#00e5ff] text-[#00e5ff] bg-transparent rounded-lg font-bold transition-all hover:bg-[#00e5ff] hover:text-white"><i class="fa-solid fa-filter"></i> Filtrar</button>
+            <button type="button" id="btn-borrar-filtros" class="px-6 py-2 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-xmark"></i> Borrar filtros</button>
         </form>
 
         <!-- Lista de eventos (grid de tarjetas) -->
@@ -72,9 +72,9 @@
                         <span class="font-semibold">120 asistentes</span>
                     </div>
                     <div class="flex gap-2 mt-4">
-                        <a href="#" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all"><i class="fa-solid fa-pen"></i> Editar</a>
-                        <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all"><i class="fa-solid fa-trash"></i> Eliminar</a>
-                        <a href="#" class="px-3 py-1 bg-secondary/20 text-secondary rounded-lg text-sm font-bold hover:bg-secondary/40 transition-all"><i class="fa-solid fa-chart-line"></i> Estadísticas</a>
+                        <a href="#" class="px-3 py-1 border-2 border-[#00e5ff] text-[#00e5ff] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#00e5ff] hover:text-white"><i class="fa-solid fa-pen"></i> Editar</a>
+                        <a href="#" class="px-3 py-1 border-2 border-[#00e5ff] text-[#00e5ff] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#00e5ff] hover:text-white"><i class="fa-solid fa-trash"></i> Eliminar</a>
+                        <a href="#" class="px-3 py-1 border-2 border-[#00e5ff] text-[#00e5ff] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#00e5ff] hover:text-white"><i class="fa-solid fa-chart-line"></i> Estadísticas</a>
                     </div>
                 </div>
             </div>
@@ -94,9 +94,9 @@
                         <span class="font-semibold">80 asistentes</span>
                     </div>
                     <div class="flex gap-2 mt-4">
-                        <a href="#" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all"><i class="fa-solid fa-pen"></i> Editar</a>
-                        <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all"><i class="fa-solid fa-trash"></i> Eliminar</a>
-                        <a href="#" class="px-3 py-1 bg-secondary/20 text-secondary rounded-lg text-sm font-bold hover:bg-secondary/40 transition-all"><i class="fa-solid fa-chart-line"></i> Estadísticas</a>
+                        <a href="#" class="px-3 py-1 border-2 border-[#7c4dff] text-[#7c4dff] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#7c4dff] hover:text-white"><i class="fa-solid fa-pen"></i> Editar</a>
+                        <a href="#" class="px-3 py-1 border-2 border-[#7c4dff] text-[#7c4dff] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#7c4dff] hover:text-white"><i class="fa-solid fa-trash"></i> Eliminar</a>
+                        <a href="#" class="px-3 py-1 border-2 border-[#7c4dff] text-[#7c4dff] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#7c4dff] hover:text-white"><i class="fa-solid fa-chart-line"></i> Estadísticas</a>
                     </div>
                 </div>
             </div>
@@ -116,9 +116,9 @@
                         <span class="font-semibold">60 asistentes</span>
                     </div>
                     <div class="flex gap-2 mt-4">
-                        <a href="#" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all"><i class="fa-solid fa-pen"></i> Editar</a>
-                        <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all"><i class="fa-solid fa-trash"></i> Eliminar</a>
-                        <a href="#" class="px-3 py-1 bg-secondary/20 text-secondary rounded-lg text-sm font-bold hover:bg-secondary/40 transition-all"><i class="fa-solid fa-chart-line"></i> Estadísticas</a>
+                        <a href="#" class="px-3 py-1 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-pen"></i> Editar</a>
+                        <a href="#" class="px-3 py-1 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-trash"></i> Eliminar</a>
+                        <a href="#" class="px-3 py-1 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-chart-line"></i> Estadísticas</a>
                     </div>
                 </div>
             </div>
@@ -348,9 +348,9 @@
                         <div class="acciones-titulo">Acciones rápidas</div>
                         <div class="acciones-desc">Gestiona tu evento fácilmente</div>
                         <div class="evento-acciones">
-                            <a href="#"><i class="fa-solid fa-pen-to-square"></i>Modificación<br>del evento</a>
-                            <a href="#"><i class="fa-solid fa-bullhorn"></i>Creación<br>de anuncios</a>
-                            <a href="#"><i class="fa-solid fa-star"></i>Reseñas</a>
+                            <a href="#" class="border-2 border-[#00e5ff] text-[#00e5ff] bg-transparent font-bold rounded-xl px-4 py-6 text-lg shadow-lg transition-all flex flex-col items-center justify-center hover:bg-[#00e5ff] hover:text-white"><i class="fa-solid fa-pen-to-square mb-2"></i>Modificación<br>del evento</a>
+                            <a href="#" class="border-2 border-[#7c4dff] text-[#7c4dff] bg-transparent font-bold rounded-xl px-4 py-6 text-lg shadow-lg transition-all flex flex-col items-center justify-center hover:bg-[#7c4dff] hover:text-white"><i class="fa-solid fa-bullhorn mb-2"></i>Creación<br>de anuncios</a>
+                            <a href="#" class="border-2 border-[#ff4081] text-[#ff4081] bg-transparent font-bold rounded-xl px-4 py-6 text-lg shadow-lg transition-all flex flex-col items-center justify-center hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-star mb-2"></i>Reseñas</a>
                         </div>
                         <button class="cerrar-modal-btn">Cerrar gestión</button>
                     `;

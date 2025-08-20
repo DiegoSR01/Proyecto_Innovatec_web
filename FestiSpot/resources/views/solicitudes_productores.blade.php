@@ -19,13 +19,13 @@
                     <option>Expo Cultura</option>
                 </select>
                 <select class="bg-card px-4 py-2 rounded-lg text-text border border-cardLight/30 focus:border-accent focus:ring-2 focus:ring-accent/20">
-                    <option value="">Estado</option>
+                    <option value="">Estatus</option>
                     <option>Pendiente</option>
                     <option>Aceptada</option>
                     <option>Rechazada</option>
                 </select>
-                <button type="submit" class="px-6 py-2 bg-accent text-white rounded-lg font-bold hover:bg-secondary transition-all"><i class="fa-solid fa-filter"></i> Filtrar</button>
-                <button type="button" id="btn-borrar-filtros" class="px-6 py-2 bg-warning text-white rounded-lg font-bold hover:bg-accent transition-all"><i class="fa-solid fa-xmark"></i></button>
+                <button type="submit" class="px-6 py-2 border-2 border-[#00e5ff] text-[#00e5ff] bg-transparent rounded-lg font-bold transition-all hover:bg-[#00e5ff] hover:text-white"><i class="fa-solid fa-filter"></i> Filtrar</button>
+                <button type="button" id="btn-borrar-filtros" class="px-6 py-2 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </form>
         </div>
         <!-- Lista de solicitudes -->
@@ -46,8 +46,8 @@
                     </div>
                 </div>
                 <div class="flex gap-2 mt-4 md:mt-0">
-                    <button class="btn-aceptar px-4 py-2 bg-success/80 text-white rounded-lg font-bold hover:bg-success transition-all"><i class="fa-solid fa-check"></i> Aceptar</button>
-                    <button class="btn-rechazar px-4 py-2 bg-accent/80 text-white rounded-lg font-bold hover:bg-accent transition-all"><i class="fa-solid fa-xmark"></i> Rechazar</button>
+                    <button class="btn-aceptar px-4 py-2 border-2 border-[#00e676] text-[#00e676] bg-transparent rounded-lg font-bold transition-all hover:bg-[#00e676] hover:text-white"><i class="fa-solid fa-check"></i> Aceptar</button>
+                    <button class="btn-rechazar px-4 py-2 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-xmark"></i> Rechazar</button>
                 </div>
             </div>
             <!-- Solicitud 2 -->
@@ -66,8 +66,8 @@
                     </div>
                 </div>
                 <div class="flex gap-2 mt-4 md:mt-0">
-                    <button class="btn-aceptar px-4 py-2 bg-success/80 text-white rounded-lg font-bold hover:bg-success transition-all"><i class="fa-solid fa-check"></i> Aceptar</button>
-                    <button class="btn-rechazar px-4 py-2 bg-accent/80 text-white rounded-lg font-bold hover:bg-accent transition-all"><i class="fa-solid fa-xmark"></i> Rechazar</button>
+                    <button class="btn-aceptar px-4 py-2 border-2 border-[#00e676] text-[#00e676] bg-transparent rounded-lg font-bold transition-all hover:bg-[#00e676] hover:text-white"><i class="fa-solid fa-check"></i> Aceptar</button>
+                    <button class="btn-rechazar px-4 py-2 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-xmark"></i> Rechazar</button>
                 </div>
             </div>
             <!-- Solicitud 3 -->
@@ -86,8 +86,8 @@
                     </div>
                 </div>
                 <div class="flex gap-2 mt-4 md:mt-0">
-                    <button class="btn-aceptar px-4 py-2 bg-success/80 text-white rounded-lg font-bold hover:bg-success transition-all"><i class="fa-solid fa-check"></i> Aceptar</button>
-                    <button class="btn-rechazar px-4 py-2 bg-accent/80 text-white rounded-lg font-bold hover:bg-accent transition-all"><i class="fa-solid fa-xmark"></i> Rechazar</button>
+                    <button class="btn-aceptar px-4 py-2 border-2 border-[#00e676] text-[#00e676] bg-transparent rounded-lg font-bold transition-all hover:bg-[#00e676] hover:text-white"><i class="fa-solid fa-check"></i> Aceptar</button>
+                    <button class="btn-rechazar px-4 py-2 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-xmark"></i> Rechazar</button>
                 </div>
             </div>
         </div>
