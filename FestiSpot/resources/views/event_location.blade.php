@@ -38,6 +38,33 @@
     </script>
     
     <style>
+      .header {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+        border-bottom: 1px solid rgba(255, 64, 129, 0.2);
+        backdrop-filter: blur(20px);
+      }
+      .nav-link {
+        color: #ffffff;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        font-weight: 500;
+        opacity: 0.8;
+      }
+      .nav-link:hover {
+        color: #ff4081;
+        opacity: 1;
+        background: rgba(255, 64, 129, 0.1);
+      }
+      .nav-link.active {
+        color: #ff4081;
+        opacity: 1;
+        background: rgba(255, 64, 129, 0.15);
+        font-weight: 600;
+      }
+      
       .radio-option:checked + .radio-label {
         background: linear-gradient(135deg, #ff4081 0%, #00e5ff 100%);
         border-color: #ff4081;
@@ -61,26 +88,6 @@
           transform: translateY(0) scale(1);
         }
       }
-      
-      /* Estilos para secciones de media y preview */
-      .media-upload-area {
-        background: linear-gradient(135deg, rgba(22, 33, 62, 0.5) 0%, rgba(30, 39, 73, 0.3) 100%);
-        border: 2px dashed rgba(255, 64, 129, 0.5);
-        transition: all 0.3s ease;
-      }
-      .media-upload-area:hover {
-        border-color: #ff4081;
-        background: linear-gradient(135deg, rgba(255, 64, 129, 0.1) 0%, rgba(0, 229, 255, 0.05) 100%);
-      }
-      .preview-card {
-        background: linear-gradient(135deg, rgba(22, 33, 62, 0.8) 0%, rgba(30, 39, 73, 0.6) 100%);
-        border: 1px solid rgba(255, 64, 129, 0.3);
-        backdrop-filter: blur(10px);
-      }
-      .preview-card:hover {
-        border-color: #ff4081;
-        box-shadow: 0 8px 25px rgba(255, 64, 129, 0.2);
-      }
     </style>
 </head>
 <body class="bg-background text-text min-h-screen">
@@ -96,29 +103,26 @@
     </div>
 
     <div class="relative flex size-full min-h-screen flex-col bg-background z-10">
-        <!-- Header -->
-        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-cardLight/30 px-10 py-4 bg-card/80 backdrop-blur-xl">
-            <div class="flex items-center gap-4 text-text">
-                <div class="size-6 text-accent drop-shadow-lg">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" 
-                              d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" 
-                              fill="currentColor"></path>
-                    </svg>
+        <!-- Header minimalista -->
+        <header class="header">
+            <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 40px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 28px; height: 28px; color: #ff4081;">
+                        <svg viewBox="0 0 48 48" fill="currentColor">
+                            <path d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z"></path>
+                        </svg>
+                    </div>
+                    <h1 style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</h1>
                 </div>
-                <h2 class="text-text text-xl font-bold leading-tight tracking-[-0.015em] bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent drop-shadow-lg">
-                    FestiSpot
-                </h2>
-            </div>
-            <div class="flex flex-1 justify-end gap-8">
-                <div class="flex items-center gap-9">
-                    <a class="text-textMuted text-sm font-medium leading-normal hover:text-accent hover:drop-shadow-lg transition-all duration-300" href="#">Panel</a>
-                    <a class="text-textMuted text-sm font-medium leading-normal hover:text-secondary hover:drop-shadow-lg transition-all duration-300" href="#">Eventos</a>
-                    <a class="text-textMuted text-sm font-medium leading-normal hover:text-tertiary hover:drop-shadow-lg transition-all duration-300" href="#">Analíticas</a>
-                    <a class="text-textMuted text-sm font-medium leading-normal hover:text-success hover:drop-shadow-lg transition-all duration-300" href="#">Soporte</a>
-                </div>
-                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" 
-                     style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBLCsTZpxKXCAKoDY9xg8CTUN_CUYfM6jTFLmg3YTg5xI2UJQcbEx0zzDAk-Pn2cXIa7F3B0J0XPi3mLxWRRDcEJNFN5Hp474_Dlp1nneZeBOaXn6T33SkaRLdYUZ0p4hyg4N_CSATsBm-0sNp2ganJdu6782Gm_e4Y5rBwPlpL6gS8NI6GVmpZugdXscLW4ICwuVrsIvLA099FGDQ97rn7VvJtICeeTPnM7t0-je_xEumfPYUeJNKzn_TtmVN7cp4eFAu5_FlVCxE");'>
+                
+                <nav style="display: flex; gap: 8px;">
+                    <a href="/" class="nav-link">Inicio</a>
+                    <a href="/event/create" class="nav-link">Crear evento</a>
+                    <a href="/subscription/plans" class="nav-link">Suscripción</a>
+                </nav>
+                
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #ff4081, #00e5ff); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; box-shadow: 0 4px 12px rgba(255, 64, 129, 0.3);">
+                    U
                 </div>
             </div>
         </header>
@@ -206,7 +210,7 @@
                         <div class="text-sm text-textMuted mt-2">Los campos se mostrarán según tu selección</div>
                     </div>
 
-                    <!-- Physical Location Section -->
+                    <!-- Physical Location Section - Sin país -->
                     <div id="physical-section" class="section-hidden mb-8">
                         <h3 class="text-text text-2xl font-bold mb-8 flex items-center bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">
                             <span class="mr-4">📍</span> Información del Lugar
@@ -231,8 +235,8 @@
                                        value="{{ old('direccion_completa', $eventLocation['direccion_completa'] ?? '') }}">
                             </div>
 
-                            <!-- City and State -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- City and State - Sin país -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div class="bg-gradient-to-br from-card/50 to-tertiary/5 backdrop-blur-sm rounded-2xl p-6 border border-cardLight/50">
                                     <label class="block text-text font-bold mb-3 text-lg">🌆 Ciudad *</label>
                                     <input type="text" name="ciudad" id="ciudad"
@@ -240,6 +244,7 @@
                                            placeholder="Ej: Ciudad de México"
                                            value="{{ old('ciudad', $eventLocation['ciudad'] ?? '') }}">
                                 </div>
+                                
                                 <div class="bg-gradient-to-br from-card/50 to-purple/5 backdrop-blur-sm rounded-2xl p-6 border border-cardLight/50">
                                     <label class="block text-text font-bold mb-3 text-lg">🗺️ Estado *</label>
                                     <select name="estado" id="estado"
@@ -254,6 +259,14 @@
                                         <option value="Guanajuato" {{ (old('estado', $eventLocation['estado'] ?? '') == 'Guanajuato') ? 'selected' : '' }}>Guanajuato</option>
                                         <option value="Yucatan" {{ (old('estado', $eventLocation['estado'] ?? '') == 'Yucatan') ? 'selected' : '' }}>Yucatán</option>
                                     </select>
+                                </div>
+
+                                <div class="bg-gradient-to-br from-card/50 to-warning/5 backdrop-blur-sm rounded-2xl p-6 border border-cardLight/50">
+                                    <label class="block text-text font-bold mb-3 text-lg">📮 Código Postal</label>
+                                    <input type="text" name="codigo_postal" id="codigo_postal" maxlength="5"
+                                           class="w-full px-6 py-4 bg-cardLight/70 border-2 border-cardLight/50 rounded-xl text-text placeholder-textDark focus:border-warning focus:ring-4 focus:ring-warning/20 focus:outline-none transition-all duration-200 backdrop-blur-sm text-lg"
+                                           placeholder="Ej: 09440"
+                                           value="{{ old('codigo_postal', $eventLocation['codigo_postal'] ?? '') }}">
                                 </div>
                             </div>
 
@@ -727,32 +740,6 @@
                     `;
                     
                     // Deshabilitar botón siguiente
-                    submitBtn.disabled = true;
-                    
-                    // Solo limpiar sesión si la ruta existe
-                    @if(Route::has('event.clearLocation'))
-                        fetch('{{ route("event.clearLocation") }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            }
-                        }).then(() => {
-                            console.log('Datos de ubicación limpiados del servidor');
-                            alert('✅ Información de ubicación limpiada correctamente');
-                        }).catch(error => {
-                            console.error('Error al limpiar ubicación:', error);
-                            alert('✅ Información limpiada localmente');
-                        });
-                    @else
-                        alert('✅ Información de ubicación limpiada correctamente');
-                    @endif
-                }
-            });
-        });
-    </script>
-</body>
-</html>
                     submitBtn.disabled = true;
                     
                     // Limpiar sesión del servidor

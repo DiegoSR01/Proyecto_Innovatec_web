@@ -37,6 +37,33 @@
     </script>
     
     <style>
+      .header {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+        border-bottom: 1px solid rgba(255, 64, 129, 0.2);
+        backdrop-filter: blur(20px);
+      }
+      .nav-link {
+        color: #ffffff;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        font-weight: 500;
+        opacity: 0.8;
+      }
+      .nav-link:hover {
+        color: #ff4081;
+        opacity: 1;
+        background: rgba(255, 64, 129, 0.1);
+      }
+      .nav-link.active {
+        color: #ff4081;
+        opacity: 1;
+        background: rgba(255, 64, 129, 0.15);
+        font-weight: 600;
+      }
+      
       .date-selected {
         background: linear-gradient(135deg, #ff4081 0%, #00e5ff 100%) !important;
         color: white !important;
@@ -82,27 +109,26 @@
     </div>
 
     <div class="relative flex size-full min-h-screen flex-col bg-background z-10">
-        <!-- Header -->
-        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-cardLight/30 px-10 py-3 bg-gradient-to-r from-card to-purple/20">
-            <div class="flex items-center gap-4 text-text">
-                <div class="size-4">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" 
-                              d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" 
-                              fill="currentColor"></path>
-                    </svg>
+        <!-- Header minimalista -->
+        <header class="header">
+            <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 40px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 28px; height: 28px; color: #ff4081;">
+                        <svg viewBox="0 0 48 48" fill="currentColor">
+                            <path d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z"></path>
+                        </svg>
+                    </div>
+                    <h1 style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</h1>
                 </div>
-                <h2 class="text-text text-lg font-bold leading-tight tracking-[-0.015em]">FestiSpot</h2>
-            </div>
-            <div class="flex flex-1 justify-end gap-8">
-                <div class="flex items-center gap-9">
-                    <a class="text-text text-sm font-medium leading-normal hover:text-accent" href="#">Panel</a>
-                    <a class="text-text text-sm font-medium leading-normal hover:text-accent" href="#">Eventos</a>
-                    <a class="text-text text-sm font-medium leading-normal hover:text-accent" href="#">Analíticas</a>
-                    <a class="text-text text-sm font-medium leading-normal hover:text-accent" href="#">Soporte</a>
-                </div>
-                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" 
-                     style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBLCsTZpxKXCAKoDY9xg8CTUN_CUYfM6jTFLmg3YTg5xI2UJQcbEx0zzDAk-Pn2cXIa7F3B0J0XPi3mLxWRRDcEJNFN5Hp474_Dlp1nneZeBOaXn6T33SkaRLdYUZ0p4hyg4N_CSATsBm-0sNp2ganJdu6782Gm_e4Y5rBwPlpL6gS8NI6GVmpZugdXscLW4ICwuVrsIvLA099FGDQ97rn7VvJtICeeTPnM7t0-je_xEumfPYUeJNKzn_TtmVN7cp4eFAu5_FlVCxE");'>
+                
+                <nav style="display: flex; gap: 8px;">
+                    <a href="/" class="nav-link">Inicio</a>
+                    <a href="/mis-eventos" class="nav-link">Mis eventos</a>
+                    <a href="/solicitudes-productores" class="nav-link">Productores</a>
+                </nav>
+                
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #ff4081, #00e5ff); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; box-shadow: 0 4px 12px rgba(255, 64, 129, 0.3);">
+                    U
                 </div>
             </div>
         </header>
@@ -180,19 +206,13 @@
                                 </div>
                             </div>
 
-                            <!-- Options -->
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <!-- Options - Solo repetir horario (se detecta automáticamente si es un día) -->
+                            <div class="flex justify-center">
                                 <label class="flex items-center p-6 bg-gradient-to-br from-purple/20 to-tertiary/20 rounded-2xl border-2 border-purple/30 hover:bg-purple/30 transition-all duration-300 cursor-pointer backdrop-blur-lg shadow-lg hover:shadow-xl hover:shadow-purple/30">
                                     <input type="checkbox" name="repetir_horario" id="repetir_horario" value="1"
                                            class="rounded-lg border-purple bg-purple/20 text-purple focus:ring-0 mr-4 w-6 h-6"
                                            {{ old('repetir_horario', $eventDate['repetir_horario'] ?? false) ? 'checked' : '' }}>
                                     <span class="text-text font-bold text-lg">🔄 Repetir horario para todos los días</span>
-                                </label>
-                                
-                                <label class="flex items-center p-6 bg-gradient-to-br from-info/20 to-secondary/20 rounded-2xl border-2 border-info/30 hover:bg-info/30 transition-all duration-300 cursor-pointer backdrop-blur-lg shadow-lg hover:shadow-xl hover:shadow-info/30">
-                                    <input type="checkbox" id="evento_un_dia"
-                                           class="rounded-lg border-info bg-info/20 text-info focus:ring-0 mr-4 w-6 h-6">
-                                    <span class="text-text font-bold text-lg">📋 Evento de un solo día</span>
                                 </label>
                             </div>
                         </div>
@@ -204,12 +224,15 @@
                             📅 Fechas del Evento
                         </h3>
                         
-                        <!-- Date Display -->
+                        <!-- Date Display mejorado -->
                         <div class="mb-8">
                             <div class="p-8 bg-gradient-to-r from-card/60 to-cardLight/40 rounded-3xl border-2 border-cardLight/30 backdrop-blur-xl shadow-2xl">
                                 <div class="text-accent font-bold text-2xl mb-3 text-center">🎯 Fechas seleccionadas</div>
                                 <div id="fechas-display" class="text-text text-xl text-center font-medium">
                                     Sin fechas seleccionadas
+                                </div>
+                                <div id="evento-tipo-display" class="text-textMuted text-lg text-center mt-2 font-medium">
+                                    <!-- Se actualizará automáticamente -->
                                 </div>
                             </div>
                         </div>
@@ -362,6 +385,63 @@
             console.log(`✅ ${times.length} opciones de hora agregadas`);
         }
 
+        function setupEventListeners() {
+            const horaInicio = document.getElementById('hora_inicio');
+            const horaFin = document.getElementById('hora_fin');
+            const form = document.getElementById('date-form');
+            
+            // Event listener para hora de inicio
+            horaInicio.addEventListener('change', function() {
+                console.log('Hora de inicio seleccionada:', this.value);
+                if (this.value) {
+                    updateEndTimeOptions(this.value);
+                    document.getElementById('error-hora-inicio').classList.add('hidden');
+                } else {
+                    horaFin.disabled = true;
+                    horaFin.innerHTML = '<option value="">Primero selecciona hora de inicio</option>';
+                }
+            });
+            
+            // Event listener para hora de fin
+            horaFin.addEventListener('change', function() {
+                if (this.value) {
+                    document.getElementById('error-hora-fin').classList.add('hidden');
+                }
+            });
+            
+            // Navigation buttons
+            document.getElementById('prev-month-1').addEventListener('click', function() {
+                currentMonth1.setMonth(currentMonth1.getMonth() - 1);
+                updateCalendar(1, currentMonth1);
+            });
+            
+            document.getElementById('next-month-2').addEventListener('click', function() {
+                currentMonth2.setMonth(currentMonth2.getMonth() + 1);
+                updateCalendar(2, currentMonth2);
+            });
+            
+            // Clear dates button
+            document.getElementById('clear-dates').addEventListener('click', function() {
+                if (confirm('¿Estás seguro de que quieres limpiar las fechas seleccionadas?')) {
+                    clearDates();
+                }
+            });
+            
+            // Limpiar todo button
+            document.getElementById('btn-limpiar-fechas').addEventListener('click', function() {
+                if (confirm('¿Estás seguro de que quieres limpiar toda la información de fechas y horarios? Esta acción no se puede deshacer.')) {
+                    clearAllData();
+                }
+            });
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                if (!validateForm()) {
+                    e.preventDefault();
+                }
+            });
+        }
+
         function updateEndTimeOptions(startTime) {
             const horaFin = document.getElementById('hora_fin');
             const times = [];
@@ -389,8 +469,10 @@
                     horaFin.appendChild(option);
                 }
                 horaFin.disabled = false;
+                console.log('✅ Hora de fin habilitada con', times.length - startIndex - 1, 'opciones');
             } else {
                 horaFin.disabled = true;
+                console.log('❌ No hay horas disponibles después de', startTime);
             }
         }
 
@@ -409,13 +491,13 @@
             
             const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
             const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-            const startDate = firstDay.getDay(); // Día de la semana del primer día
+            const startOfWeek = firstDay.getDay();
             
             const today = new Date();
             today.setHours(0, 0, 0, 0);
             
             // Días vacíos al inicio
-            for (let i = 0; i < startDate; i++) {
+            for (let i = 0; i < startOfWeek; i++) {
                 const emptyDay = document.createElement('div');
                 emptyDay.className = 'h-10';
                 calendarDays.appendChild(emptyDay);
@@ -427,14 +509,14 @@
                 const currentDate = new Date(date.getFullYear(), date.getMonth(), day);
                 const dateString = currentDate.toISOString().split('T')[0];
                 
-                dayElement.className = 'h-10 flex items-center justify-center text-sm rounded cursor-pointer transition-colors';
+                dayElement.className = 'h-10 flex items-center justify-center text-sm rounded cursor-pointer transition-all duration-200 font-medium';
                 dayElement.textContent = day;
                 
                 // Estilos según el estado
                 if (currentDate < today) {
                     dayElement.className += ' date-disabled';
                 } else {
-                    dayElement.className += ' text-text hover:bg-accent hover:text-white';
+                    dayElement.className += ' text-text hover:bg-accent hover:text-white hover:scale-105';
                     
                     // Verificar si está seleccionado
                     if (startDate && dateString === startDate) {
@@ -455,70 +537,37 @@
         function selectDate(dateString) {
             console.log('Fecha seleccionada:', dateString);
             
-            if (isSingleDay) {
-                // Para evento de un día
+            if (isSelectingStart || !startDate) {
+                // Primera selección
                 startDate = dateString;
-                endDate = dateString;
-                isSelectingStart = true;
+                endDate = null;
+                isSelectingStart = false;
+                isSingleDay = false;
             } else {
-                // Para eventos de múltiples días
-                if (isSelectingStart || !startDate) {
-                    startDate = dateString;
-                    endDate = null;
-                    isSelectingStart = false;
+                // Segunda selección
+                if (dateString === startDate) {
+                    // Misma fecha = evento de un día
+                    endDate = startDate;
+                    isSingleDay = true;
+                    isSelectingStart = true;
+                } else if (dateString > startDate) {
+                    // Rango válido
+                    endDate = dateString;
+                    isSingleDay = false;
+                    isSelectingStart = true;
                 } else {
-                    if (dateString >= startDate) {
-                        endDate = dateString;
-                        isSelectingStart = true;
-                    } else {
-                        // Si selecciona una fecha anterior, intercambiar
-                        endDate = startDate;
-                        startDate = dateString;
-                        isSelectingStart = true;
-                    }
+                    // Fecha anterior, intercambiar
+                    endDate = startDate;
+                    startDate = dateString;
+                    isSingleDay = false;
+                    isSelectingStart = true;
                 }
             }
             
             updateDateDisplay();
             updateCalendars();
             updateHiddenFields();
-        }
-
-        function updateDateDisplay() {
-            const display = document.getElementById('fechas-display');
-            
-            if (!startDate) {
-                display.textContent = 'Sin fechas seleccionadas';
-                return;
-            }
-            
-            const formatDate = (dateStr) => {
-                const date = new Date(dateStr + 'T00:00:00');
-                return date.toLocaleDateString('es-ES', {
-                    weekday: 'short',
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric'
-                });
-            };
-            
-            if (isSingleDay || startDate === endDate) {
-                display.innerHTML = `
-                    <div class="text-lg font-semibold">${formatDate(startDate)}</div>
-                    <div class="text-sm text-gray-400">Evento de un día</div>
-                `;
-            } else if (endDate) {
-                const daysDiff = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)) + 1;
-                display.innerHTML = `
-                    <div class="text-lg font-semibold">${formatDate(startDate)} - ${formatDate(endDate)}</div>
-                    <div class="text-sm text-gray-400">${daysDiff} días de duración</div>
-                `;
-            } else {
-                display.innerHTML = `
-                    <div class="text-lg font-semibold">Inicio: ${formatDate(startDate)}</div>
-                    <div class="text-sm text-gray-400">Selecciona la fecha de fin</div>
-                `;
-            }
+            updateRepeatOption();
         }
 
         function updateCalendars() {
@@ -526,193 +575,195 @@
             updateCalendar(2, currentMonth2);
         }
 
-        function updateHiddenFields() {
-            document.getElementById('fecha_inicio').value = startDate || '';
-            document.getElementById('fecha_fin').value = (isSingleDay ? startDate : endDate) || '';
+        function updateDateDisplay() {
+            const display = document.getElementById('fechas-display');
+            const tipoDisplay = document.getElementById('evento-tipo-display');
+            
+            if (!startDate) {
+                display.textContent = 'Sin fechas seleccionadas';
+                tipoDisplay.innerHTML = '<span class="text-warning">👆 Selecciona una fecha para comenzar</span>';
+                return;
+            }
+            
+            const formatDate = (dateStr) => {
+                const date = new Date(dateStr + 'T00:00:00');
+                return date.toLocaleDateString('es-ES', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            };
+            
+            if (!endDate) {
+                // Solo fecha de inicio seleccionada
+                display.innerHTML = `
+                    <div class="text-lg font-semibold">${formatDate(startDate)}</div>
+                `;
+                tipoDisplay.innerHTML = '<span class="text-info">👆 Selecciona la fecha de fin o la misma fecha para evento de un día</span>';
+            } else if (startDate === endDate || isSingleDay) {
+                // Evento de un día
+                display.innerHTML = `
+                    <div class="text-lg font-semibold">${formatDate(startDate)}</div>
+                `;
+                tipoDisplay.innerHTML = '<span class="text-success">📅 Evento de un solo día</span>';
+            } else {
+                // Evento de múltiples días
+                const daysDiff = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)) + 1;
+                display.innerHTML = `
+                    <div class="text-lg font-semibold">${formatDate(startDate)}</div>
+                    <div class="text-base text-textMuted">hasta</div>
+                    <div class="text-lg font-semibold">${formatDate(endDate)}</div>
+                `;
+                tipoDisplay.innerHTML = `<span class="text-secondary">🗓️ Evento de ${daysDiff} días</span>`;
+            }
         }
 
-        function setupEventListeners() {
-            console.log('Configurando event listeners...');
+        function updateRepeatOption() {
+            const repetirHorario = document.getElementById('repetir_horario');
             
-            // Selectores de hora
-            document.getElementById('hora_inicio').addEventListener('change', function() {
-                if (this.value) {
-                    updateEndTimeOptions(this.value);
-                    document.getElementById('hora_fin').value = '';
-                }
-            });
+            if (isSingleDay) {
+                // Para eventos de un día, deshabilitar y desmarcar repetir horario
+                repetirHorario.checked = false;
+                repetirHorario.disabled = true;
+                repetirHorario.parentElement.style.opacity = '0.5';
+                repetirHorario.parentElement.style.pointerEvents = 'none';
+            } else {
+                // Para eventos de múltiples días, habilitar la opción
+                repetirHorario.disabled = false;
+                repetirHorario.parentElement.style.opacity = '1';
+                repetirHorario.parentElement.style.pointerEvents = 'auto';
+            }
+        }
+
+        function updateHiddenFields() {
+            document.getElementById('fecha_inicio').value = startDate || '';
+            document.getElementById('fecha_fin').value = endDate || '';
+        }
+
+        function clearDates() {
+            startDate = null;
+            endDate = null;
+            isSelectingStart = true;
+            isSingleDay = false;
             
-            // Checkbox evento de un día
-            document.getElementById('evento_un_dia').addEventListener('change', function() {
-                isSingleDay = this.checked;
-                
-                // Ajustar el segundo calendario
-                const calendar2 = document.getElementById('calendar-2');
-                if (isSingleDay) {
-                    calendar2.classList.add('calendar-hidden');
-                    // Si ya había fechas seleccionadas, ajustar
-                    if (startDate) {
-                        endDate = startDate;
-                        updateDateDisplay();
-                        updateHiddenFields();
-                    }
-                } else {
-                    calendar2.classList.remove('calendar-hidden');
-                }
-                
-                // Deshabilitar repetir horario para eventos de un día
-                const repetirHorario = document.getElementById('repetir_horario');
-                if (isSingleDay) {
-                    repetirHorario.checked = false;
-                    repetirHorario.disabled = true;
-                } else {
-                    repetirHorario.disabled = false;
-                }
-                
-                updateCalendars();
-            });
+            updateDateDisplay();
+            updateCalendars();
+            updateHiddenFields();
+            updateRepeatOption();
             
-            // Navegación de calendarios
-            document.getElementById('prev-month-1').addEventListener('click', function() {
-                currentMonth1.setMonth(currentMonth1.getMonth() - 1);
-                updateCalendar(1, currentMonth1);
-            });
-            
-            document.getElementById('next-month-2').addEventListener('click', function() {
-                currentMonth2.setMonth(currentMonth2.getMonth() + 1);
-                updateCalendar(2, currentMonth2);
-            });
-            
+            console.log('✅ Fechas limpiadas');
+        }
+
+        function clearAllData() {
             // Limpiar fechas
-            document.getElementById('clear-dates').addEventListener('click', function() {
-                startDate = null;
-                endDate = null;
-                isSelectingStart = true;
-                updateDateDisplay();
-                updateCalendars();
-                updateHiddenFields();
-            });
+            clearDates();
             
-            // Botón limpiar todo
-            document.getElementById('btn-limpiar-fechas').addEventListener('click', function() {
-                if (confirm('¿Estás seguro de que quieres limpiar todas las fechas y horarios? Esta acción no se puede deshacer.')) {
-                    // Limpiar todo
-                    startDate = null;
-                    endDate = null;
-                    isSelectingStart = true;
-                    isSingleDay = false;
-                    
-                    // Resetear formulario
-                    document.getElementById('hora_inicio').value = '';
-                    document.getElementById('hora_fin').value = '';
-                    document.getElementById('hora_fin').disabled = true;
-                    document.getElementById('evento_un_dia').checked = false;
-                    document.getElementById('repetir_horario').checked = false;
-                    document.getElementById('repetir_horario').disabled = false;
-                    
-                    // Mostrar segundo calendario
-                    document.getElementById('calendar-2').classList.remove('calendar-hidden');
-                    
-                    updateDateDisplay();
-                    updateCalendars();
-                    updateHiddenFields();
-                    
-                    // Solo limpiar sesión si la ruta existe
-                    @if(Route::has('event.clearDate'))
-                        fetch('{{ route("event.clearDate") }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            }
-                        }).then(() => {
-                            console.log('Sesión limpiada');
-                            alert('✅ Fechas y horarios limpiados correctamente');
-                        }).catch(error => {
-                            console.error('Error al limpiar sesión:', error);
-                            alert('✅ Fechas y horarios limpiados localmente');
-                        });
-                    @else
-                        alert('✅ Fechas y horarios limpiados correctamente');
-                    @endif
-                }
-            });
+            // Limpiar horarios
+            document.getElementById('hora_inicio').value = '';
+            document.getElementById('hora_fin').value = '';
+            document.getElementById('hora_fin').disabled = true;
+            document.getElementById('hora_fin').innerHTML = '<option value="">Primero selecciona hora de inicio</option>';
             
-            // Validación del formulario
-            document.getElementById('date-form').addEventListener('submit', function(e) {
-                let isValid = true;
-                
-                // Validar horas
-                const horaInicio = document.getElementById('hora_inicio').value;
-                const horaFin = document.getElementById('hora_fin').value;
-                
-                if (!horaInicio) {
-                    document.getElementById('error-hora-inicio').classList.remove('hidden');
-                    isValid = false;
-                } else {
-                    document.getElementById('error-hora-inicio').classList.add('hidden');
-                }
-                
-                if (!horaFin) {
-                    document.getElementById('error-hora-fin').classList.remove('hidden');
-                    isValid = false;
-                } else {
-                    document.getElementById('error-hora-fin').classList.add('hidden');
-                }
-                
-                // Validar fechas
-                if (!startDate) {
-                    document.getElementById('error-fechas').classList.remove('hidden');
-                    isValid = false;
-                } else {
-                    document.getElementById('error-fechas').classList.add('hidden');
-                }
-                
-                if (!isValid) {
-                    e.preventDefault();
-                    console.log('Formulario inválido');
-                    return false;
-                }
-                
-                console.log('Formulario válido, enviando...');
-            });
+            // Limpiar checkbox
+            document.getElementById('repetir_horario').checked = false;
+            
+            // Limpiar errores
+            document.getElementById('error-hora-inicio').classList.add('hidden');
+            document.getElementById('error-hora-fin').classList.add('hidden');
+            document.getElementById('error-fechas').classList.add('hidden');
+            
+            // Limpiar sesión del servidor si la ruta existe
+            @if(Route::has('event.clearDate'))
+                fetch('{{ route("event.clearDate") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                }).then(() => {
+                    console.log('✅ Datos de fechas limpiados del servidor');
+                    alert('✅ Información de fechas y horarios limpiada correctamente');
+                }).catch(error => {
+                    console.error('Error al limpiar fechas:', error);
+                    alert('✅ Información limpiada localmente');
+                });
+            @else
+                console.log('Ruta clearDate no disponible, solo limpieza local');
+                alert('✅ Información de fechas y horarios limpiada correctamente');
+            @endif
         }
 
         function restoreExistingData(data) {
-            console.log('Restaurando datos existentes...');
+            console.log('🔄 Restaurando datos existentes...');
             
-            // Restaurar horas
+            // Restaurar horarios
             if (data.hora_inicio) {
                 document.getElementById('hora_inicio').value = data.hora_inicio;
-                if (data.hora_fin) {
-                    updateEndTimeOptions(data.hora_inicio);
-                    setTimeout(() => {
-                        document.getElementById('hora_fin').value = data.hora_fin;
-                    }, 100);
-                }
+                updateEndTimeOptions(data.hora_inicio);
+            }
+            
+            if (data.hora_fin) {
+                document.getElementById('hora_fin').value = data.hora_fin;
+            }
+            
+            if (data.repetir_horario) {
+                document.getElementById('repetir_horario').checked = true;
             }
             
             // Restaurar fechas
             if (data.fecha_inicio) {
                 startDate = data.fecha_inicio;
-                endDate = data.fecha_fin || data.fecha_inicio;
-                
-                // Detectar si es evento de un día
-                if (data.fecha_inicio === data.fecha_fin) {
-                    isSingleDay = true;
-                    document.getElementById('evento_un_dia').checked = true;
-                    document.getElementById('calendar-2').classList.add('calendar-hidden');
+                if (data.fecha_fin) {
+                    endDate = data.fecha_fin;
+                    isSingleDay = (data.fecha_inicio === data.fecha_fin);
                 }
                 
                 updateDateDisplay();
                 updateCalendars();
                 updateHiddenFields();
+                updateRepeatOption();
+                
+                console.log('✅ Fechas restauradas:', { startDate, endDate, isSingleDay });
+            }
+        }
+
+        function validateForm() {
+            let isValid = true;
+            
+            // Validar hora de inicio
+            const horaInicio = document.getElementById('hora_inicio').value;
+            if (!horaInicio) {
+                document.getElementById('error-hora-inicio').classList.remove('hidden');
+                isValid = false;
+            } else {
+                document.getElementById('error-hora-inicio').classList.add('hidden');
             }
             
-            // Restaurar checkbox repetir horario
-            if (data.repetir_horario) {
-                document.getElementById('repetir_horario').checked = true;
+            // Validar hora de fin
+            const horaFin = document.getElementById('hora_fin').value;
+            if (!horaFin) {
+                document.getElementById('error-hora-fin').classList.remove('hidden');
+                isValid = false;
+            } else {
+                document.getElementById('error-hora-fin').classList.add('hidden');
             }
+            
+            // Validar fechas
+            if (!startDate || !endDate) {
+                document.getElementById('error-fechas').classList.remove('hidden');
+                isValid = false;
+            } else {
+                document.getElementById('error-fechas').classList.add('hidden');
+            }
+            
+            if (!isValid) {
+                console.log('❌ Validación fallida');
+                return false;
+            }
+            
+            console.log('✅ Formulario válido, enviando...');
+            return true;
         }
     </script>
 </body>

@@ -353,36 +353,32 @@ class EventController extends Controller
     }
     
     /**
-     * Limpiar TODOS los datos del evento y empezar desde cero
+     * Limpiar TODA la información del evento de la sesión
      */
-    public function clearAll()
+    public function clearAll(Request $request)
     {
-        // Limpiar todas las claves de sesión relacionadas con eventos
-        $sessionKeys = [
-            'event_basic',
-            'event_date', 
-            'event_date_data',
-            'event_location',
-            'event_media',
-            // Por si hay otras claves que se agreguen en el futuro
-            'event_temp',
-            'event_draft'
-        ];
-        
-        foreach ($sessionKeys as $key) {
-            Session::forget($key);
+        try {
+            // Limpiar todas las sesiones relacionadas con eventos
+            $request->session()->forget([
+                'event_basic',
+                'event_date', 
+                'event_location',
+                'event_media'
+            ]);
+            
+            // Opcional: limpiar toda la sesión si prefieres
+            // $request->session()->flush();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Toda la información del evento ha sido limpiada correctamente'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al limpiar la información: ' . $e->getMessage()
+            ], 500);
         }
-        
-        // Log para debug
-        \Log::info('🆕 Nuevo evento - Todas las sesiones limpiadas', [
-            'keys_cleared' => $sessionKeys,
-            'timestamp' => now()
-        ]);
-        
-        return response()->json([
-            'success' => true, 
-            'message' => 'Todos los datos del evento limpiados - Listo para nuevo evento',
-            'cleared_keys' => count($sessionKeys)
-        ]);
     }
 }
