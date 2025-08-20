@@ -61,6 +61,9 @@ Route::prefix('event')->name('event.')->controller(EventController::class)->grou
     Route::post('/clear/all', 'clearAll')->name('clearAll');
 });
 
+// Ruta para limpiar toda la sesión del evento
+Route::post('/event/clear-all', [EventController::class, 'clearAll'])->name('event.clearAll');
+
 // Rutas para modificación de eventos
 Route::get('/events/modify', function () {
     return view('event_modification_list');

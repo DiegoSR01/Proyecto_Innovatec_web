@@ -16,26 +16,54 @@
         theme: {
           extend: {
             colors: {
-              // Nueva paleta modo oscuro elegante con vibra festival
-              background: '#0a0a0f',           // Negro azulado muy oscuro
-              card: '#16213e',                // Azul naval profundo
-              cardLight: '#1e2749',           // Azul naval más claro
-              accent: '#ff4081',              // Rosa vibrante
-              secondary: '#00e5ff',           // Cyan eléctrico
-              tertiary: '#7c4dff',            // Púrpura vibrante
-              success: '#00c853',             // Verde brillante
-              warning: '#ffc107',             // Ámbar dorado
-              info: '#2196f3',                // Azul brillante
-              purple: '#9c27b0',              // Magenta
-              text: '#ffffff',                // Blanco puro
-              textMuted: '#b0bec5',           // Gris azulado claro
-              textDark: '#78909c',            // Gris azulado medio
-              glow: '#ff4081'                 // Color para efectos glow
+              background: '#0a0a0f',
+              card: '#16213e',
+              cardLight: '#1e2749',
+              accent: '#ff4081',
+              secondary: '#00e5ff',
+              tertiary: '#7c4dff',
+              success: '#00c853',
+              warning: '#ffc107',
+              info: '#2196f3',
+              purple: '#9c27b0',
+              text: '#ffffff',
+              textMuted: '#b0bec5',
+              textDark: '#78909c',
+              glow: '#ff4081'
             }
           }
         }
       }
     </script>
+    
+    <style>
+      .header {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+        border-bottom: 1px solid rgba(255, 64, 129, 0.2);
+        backdrop-filter: blur(20px);
+      }
+      .nav-link {
+        color: #ffffff;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        font-weight: 500;
+        opacity: 0.8;
+      }
+      .nav-link:hover {
+        color: #ff4081;
+        opacity: 1;
+        background: rgba(255, 64, 129, 0.1);
+      }
+      .nav-link.active {
+        color: #ff4081;
+        opacity: 1;
+        background: rgba(255, 64, 129, 0.15);
+        font-weight: 600;
+      }
+    </style>
 </head>
 <body class="bg-background text-text min-h-screen relative overflow-x-hidden">
     <!-- Efectos de fondo con gradientes sutiles -->
@@ -47,32 +75,33 @@
 
     @php
         $eventBasic = session('event_basic', []);
+        $isEditing = !empty($eventBasic);
     @endphp
 
     <div class="relative flex size-full min-h-screen flex-col bg-background z-10">
-        <!-- Header -->
-        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-cardLight/30 px-10 py-4 bg-card/80 backdrop-blur-xl">
-            <div class="flex items-center gap-4 text-text">
-                <div class="size-6 text-accent drop-shadow-lg">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" 
-                              d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" 
-                              fill="currentColor"></path>
-                    </svg>
+        <!-- Header minimalista como la imagen -->
+        <header class="header">
+            <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 40px;">
+                <!-- Logo -->
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 28px; height: 28px; color: #ff4081;">
+                        <svg viewBox="0 0 48 48" fill="currentColor">
+                            <path d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z"></path>
+                        </svg>
+                    </div>
+                    <h1 style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</h1>
                 </div>
-                <h2 class="text-text text-xl font-bold leading-tight tracking-[-0.015em] bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent drop-shadow-lg">
-                    FestiSpot
-                </h2>
-            </div>
-            <div class="flex flex-1 justify-end gap-8">
-                <div class="flex items-center gap-9">
-                    <a class="text-textMuted text-sm font-medium leading-normal hover:text-accent hover:drop-shadow-lg transition-all duration-300" href="#">Panel</a>
-                    <a class="text-textMuted text-sm font-medium leading-normal hover:text-secondary hover:drop-shadow-lg transition-all duration-300" href="#">Eventos</a>
-                    <a class="text-textMuted text-sm font-medium leading-normal hover:text-tertiary hover:drop-shadow-lg transition-all duration-300" href="#">Analíticas</a>
-                    <a class="text-textMuted text-sm font-medium leading-normal hover:text-success hover:drop-shadow-lg transition-all duration-300" href="#">Soporte</a>
-                </div>
-                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" 
-                     style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBLCsTZpxKXCAKoDY9xg8CTUN_CUYfM6jTFLmg3YTg5xI2UJQcbEx0zzDAk-Pn2cXIa7F3B0J0XPi3mLxWRRDcEJNFN5Hp474_Dlp1nneZeBOaXn6T33SkaRLdYUZ0p4hyg4N_CSATsBm-0sNp2ganJdu6782Gm_e4Y5rBwPlpL6gS8NI6GVmpZugdXscLW4ICwuVrsIvLA099FGDQ97rn7VvJtICeeTPnM7t0-je_xEumfPYUeJNKzn_TtmVN7cp4eFAu5_FlVCxE");'>
+                
+                <!-- Navigation central -->
+                <nav style="display: flex; gap: 8px;">
+                    <a href="/" class="nav-link">Inicio</a>
+                    <a href="/event/create" class="nav-link active">Crear evento</a>
+                    <a href="/subscription/plans" class="nav-link">Suscripción</a>
+                </nav>
+                
+                <!-- User avatar minimalista -->
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #ff4081, #00e5ff); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; box-shadow: 0 4px 12px rgba(255, 64, 129, 0.3);">
+                    U
                 </div>
             </div>
         </header>
@@ -91,13 +120,19 @@
                     </p>
                 </div>
 
-                <!-- Mostrar mensaje si se está editando -->
-                @if(!empty($eventBasic))
+                <!-- Mostrar mensaje solo si realmente se está editando -->
+                @if($isEditing)
                     <div class="mb-8 p-6 bg-gradient-to-r from-info/20 to-tertiary/20 border-2 border-info/40 text-info rounded-2xl backdrop-blur-lg shadow-2xl shadow-info/20">
-                        <div class="font-bold text-xl flex items-center">
-                            ✨ <span class="ml-3">Editando evento existente</span>
-                        </div>
-                        <div class="text-base mt-3 text-textMuted">Los campos ya contienen la información guardada anteriormente</div>
+                        <div class="font-bold text-xl">✨ Editando evento existente</div>
+                        <div class="text-base mt-2 text-textMuted">Los campos ya contienen la información guardada anteriormente</div>
+                        <button type="button" onclick="limpiarYEmpezarNuevo()" class="mt-3 px-4 py-2 bg-info/20 hover:bg-info/30 rounded-lg text-sm font-medium transition-all">
+                            🗑️ Limpiar y empezar nuevo evento
+                        </button>
+                    </div>
+                @else
+                    <div class="mb-8 p-6 bg-gradient-to-r from-success/20 to-accent/20 border-2 border-success/40 text-success rounded-2xl backdrop-blur-lg shadow-2xl shadow-success/20">
+                        <div class="font-bold text-xl">🆕 Creando nuevo evento</div>
+                        <div class="text-base mt-2 text-textMuted">Comienza desde cero con tu nueva experiencia</div>
                     </div>
                 @endif
 
@@ -113,7 +148,7 @@
                 @endif
 
                 <!-- Form -->
-                <form method="POST" action="{{ route('event.storeName') }}" class="space-y-10">
+                <form method="POST" action="{{ route('event.storeName') }}" class="space-y-10" id="event-form">
                     @csrf
                     
                     <!-- Event Name -->
@@ -191,7 +226,7 @@
                             </button>
                         </div>
                         
-                        <button type="submit" 
+                        <button type="submit" id="submit-btn"
                                 class="px-14 py-5 bg-gradient-to-r from-accent to-secondary text-white rounded-2xl font-bold hover:from-secondary hover:to-accent transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-3xl hover:shadow-accent/50 backdrop-blur-sm text-xl">
                             Siguiente: Fechas → <span class="text-2xl ml-2">🗓️</span>
                         </button>
@@ -203,107 +238,127 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Actualizar contador de caracteres con colores más elegantes
-            const textarea = document.querySelector('textarea[name="event_description"]');
+            console.log('🎨 Inicializando formulario de creación...');
+            
+            // Verificar si hay datos existentes
+            const eventData = @json($eventBasic);
+            const isEditing = @json($isEditing);
+            
+            console.log('¿Editando?', isEditing);
+            console.log('Datos del evento:', eventData);
+            
+            if (!isEditing) {
+                console.log('✅ Nuevo evento - formulario limpio');
+            } else {
+                console.log('📝 Editando evento existente');
+            }
+
+            setupFormValidation();
+            setupCharacterCounters();
+        });
+
+        function limpiarYEmpezarNuevo() {
+            if (confirm('¿Estás seguro de que quieres eliminar toda la información actual y empezar un evento completamente nuevo?')) {
+                // Mostrar loading
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Limpiando...';
+                btn.disabled = true;
+                
+                fetch('/event/clear-all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('✅ Datos limpiados correctamente');
+                        location.reload(); // Recargar la página para mostrar el formulario limpio
+                    } else {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ Error al limpiar datos:', error);
+                    alert('Error al limpiar los datos. Por favor, intenta nuevamente.');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+            }
+        }
+
+        function setupFormValidation() {
+            const form = document.getElementById('event-form');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            form.addEventListener('submit', function(e) {
+                console.log('📝 Enviando formulario...');
+                
+                // Deshabilitar botón para evitar envíos múltiples
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
+                
+                // El formulario se enviará normalmente
+            });
+        }
+
+        function setupCharacterCounters() {
+            // Contador para descripción
+            const descriptionTextarea = document.querySelector('textarea[name="event_description"]');
             const charCount = document.getElementById('char-count');
             const charDisplay = document.getElementById('char-display');
             
-            if (textarea && charCount && charDisplay) {
-                function updateCount() {
-                    const count = textarea.value.length;
-                    charCount.textContent = count;
+            if (descriptionTextarea && charCount) {
+                descriptionTextarea.addEventListener('input', function() {
+                    const length = Math.min(this.value.length, 250);
+                    charCount.textContent = length;
                     
-                    // Cambiar colores según el progreso con la nueva paleta
-                    if (count > 200) {
-                        charDisplay.className = 'text-base font-bold px-4 py-2 rounded-full bg-accent/20 text-accent border-2 border-accent/40 shadow-lg shadow-accent/20';
-                    } else if (count > 150) {
-                        charDisplay.className = 'text-base font-bold px-4 py-2 rounded-full bg-warning/20 text-warning border-2 border-warning/40 shadow-lg shadow-warning/20';
-                    } else if (count > 50) {
-                        charDisplay.className = 'text-base font-bold px-4 py-2 rounded-full bg-secondary/20 text-secondary border-2 border-secondary/40 shadow-lg shadow-secondary/20';
+                    // Cambiar color del contador según la longitud
+                    if (length >= 200) {
+                        charDisplay.className = 'text-base font-bold px-4 py-2 rounded-full transition-all duration-300 text-accent bg-accent/10';
+                    } else if (length >= 150) {
+                        charDisplay.className = 'text-base font-bold px-4 py-2 rounded-full transition-all duration-300 text-warning bg-warning/10';
                     } else {
-                        charDisplay.className = 'text-base font-bold px-4 py-2 rounded-full bg-textDark/20 text-textDark border-2 border-textDark/30';
+                        charDisplay.className = 'text-base font-bold px-4 py-2 rounded-full transition-all duration-300 text-textMuted';
                     }
-                }
-                
-                textarea.addEventListener('input', function() {
+                    
                     if (this.value.length > 250) {
                         this.value = this.value.substring(0, 250);
                     }
-                    updateCount();
                 });
                 
-                updateCount();
-            }
-
-            // Log para verificar datos existentes
-            const eventBasic = @json($eventBasic);
-            if (Object.keys(eventBasic).length > 0) {
-                console.log('✅ Datos existentes del evento cargados:', eventBasic);
-            } else {
-                console.log('📝 Creando nuevo evento');
+                // Actualizar contador inicial
+                charCount.textContent = descriptionTextarea.value.length;
             }
             
-            // Botón para nuevo evento (reset completo)
+            // Botón para nuevo evento
             document.getElementById('btn-nuevo-evento').addEventListener('click', function() {
-                if (confirm('¿Quieres crear un evento completamente nuevo? Esto borrará TODA la información del evento actual (datos básicos, fechas, ubicación y media) y empezará desde cero.')) {
-                    // Mostrar loading
+                if (confirm('¿Quieres crear un evento completamente nuevo? Esto borrará TODA la información actual y empezará desde cero.')) {
                     const btn = this;
                     const originalText = btn.innerHTML;
-                    btn.innerHTML = '⏳ Limpiando...';
+                    btn.innerHTML = '<span class="text-xl">⏳</span> Limpiando...';
                     btn.disabled = true;
                     
-                    // Limpiar formulario actual primero
-                    document.querySelector('input[name="event_name"]').value = '';
-                    document.querySelector('textarea[name="event_description"]').value = '';
-                    document.querySelector('select[name="event_category"]').value = '';
-                    
-                    // Actualizar contador
-                    const charCount = document.getElementById('char-count');
-                    if (charCount) charCount.textContent = '0';
-                    
-                    // Limpiar TODA la sesión del servidor
-                    fetch('{{ route("event.clearAll") }}', {
+                    fetch('/event/clear-all', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
-                    }).then(response => response.json())
-                      .then(data => {
-                          console.log('✅ Todos los datos del evento limpiados');
-                          
-                          // Mostrar mensaje de éxito
-                          const messageDiv = document.createElement('div');
-                          messageDiv.className = 'mb-6 p-4 bg-green-500/20 border border-green-500/30 text-green-400 rounded-lg animate-pulse';
-                          messageDiv.innerHTML = `
-                              <div class="font-semibold">🎉 ¡Listo para un nuevo evento!</div>
-                              <div class="text-sm mt-1">Toda la información anterior ha sido eliminada. Puedes empezar desde cero.</div>
-                          `;
-                          
-                          // Remover mensaje de "editando" si existe
-                          const editingMessage = document.querySelector('.bg-blue-500\\/20');
-                          if (editingMessage) {
-                              editingMessage.remove();
-                          }
-                          
-                          // Agregar mensaje de éxito
-                          document.querySelector('.max-w-4xl').insertBefore(messageDiv, document.querySelector('form'));
-                          
-                          // Remover mensaje después de 5 segundos
-                          setTimeout(() => {
-                              messageDiv.remove();
-                          }, 5000);
-                          
-                          // Restaurar botón
-                          btn.innerHTML = originalText;
-                          btn.disabled = false;
-                      })
-                      .catch(error => {
-                          console.error('Error al limpiar datos:', error);
-                          alert('❌ Error al limpiar los datos. Por favor intenta de nuevo.');
-                          btn.innerHTML = originalText;
-                          btn.disabled = false;
-                      });
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('✅ Todos los datos limpiados');
+                        location.reload();
+                    })
+                    .catch(error => {
+                        console.error('❌ Error al limpiar datos:', error);
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                        alert('Error al limpiar los datos. Por favor, intenta nuevamente.');
+                    });
                 }
             });
             
@@ -320,7 +375,7 @@
                     if (charCount) charCount.textContent = '0';
                     
                     // Limpiar sesión del servidor
-                    fetch('{{ route("event.clearBasic") }}', {
+                    fetch('/event/clear-basic', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -328,19 +383,14 @@
                         }
                     }).then(() => {
                         console.log('Datos básicos limpiados del servidor');
-                        // Mostrar mensaje de confirmación
-                        const messageDiv = document.createElement('div');
-                        messageDiv.className = 'mb-6 p-4 bg-green-500/20 border border-green-500/30 text-green-400 rounded-lg';
-                        messageDiv.innerHTML = `
-                            <div class="font-semibold">✅ Datos básicos limpiados</div>
-                            <div class="text-sm mt-1">Puedes empezar desde cero</div>
-                        `;
-                        document.querySelector('.max-w-4xl').insertBefore(messageDiv, document.querySelector('form'));
-                        setTimeout(() => messageDiv.remove(), 3000);
+                        alert('✅ Datos básicos limpiados correctamente');
+                    }).catch(error => {
+                        console.error('Error al limpiar datos básicos:', error);
+                        alert('✅ Datos limpiados localmente');
                     });
                 }
             });
-        });
+        }
     </script>
 </body>
 </html>
