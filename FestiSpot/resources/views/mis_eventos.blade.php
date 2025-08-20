@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="min-h-screen bg-background text-text px-4 py-8 relative">
+<div class="bg-background text-text px-4 py-8 relative">
     <!-- Efectos de fondo -->
     <div class="fixed inset-0 opacity-10 pointer-events-none z-0">
         <div class="absolute top-0 left-0 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
