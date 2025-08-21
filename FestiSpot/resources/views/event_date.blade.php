@@ -518,13 +518,16 @@
                 } else {
                     dayElement.className += ' text-text hover:bg-accent hover:text-white hover:scale-105';
                     
-                    // Verificar si está seleccionado
-                    if (startDate && dateString === startDate) {
-                        dayElement.className += ' date-selected';
-                    } else if (endDate && dateString === endDate && !isSingleDay) {
-                        dayElement.className += ' date-selected';
-                    } else if (startDate && endDate && !isSingleDay && dateString > startDate && dateString < endDate) {
-                        dayElement.className += ' date-in-range';
+                    // Aplicar estilos de selección
+                    if (startDate && endDate) {
+                        if (dateString === startDate || dateString === endDate) {
+                            // Fecha de inicio o fin
+                            dayElement.className += ' date-selected';
+                            console.log('Fecha seleccionada aplicada:', dateString);
+                        } else if (!isSingleDay && dateString > startDate && dateString < endDate) {
+                            // Fechas en el rango (solo si no es un evento de un día)
+                            dayElement.className += ' date-in-range';
+                        }
                     }
                     
                     dayElement.addEventListener('click', () => selectDate(dateString));
@@ -537,42 +540,96 @@
         function selectDate(dateString) {
             console.log('Fecha seleccionada:', dateString);
             
-            if (isSelectingStart || !startDate) {
-                // Primera selección
+            if (!startDate) {
+                // Primera selección - automáticamente es un evento de un día
                 startDate = dateString;
-                endDate = null;
+                endDate = dateString; // Establecer como mismo día por defecto
+                isSingleDay = true;
+                isSelectingStart = false; // Permitir cambiar a rango si selecciona otra fecha
+                console.log('Primera fecha seleccionada:', startDate);
+            } else if (dateString === startDate) {
+                // Clickear la misma fecha - mantener como evento de un día
+                endDate = startDate;
+                isSingleDay = true;
                 isSelectingStart = false;
-                isSingleDay = false;
+                console.log('Misma fecha clickeada, manteniendo evento de un día');
             } else {
-                // Segunda selección
-                if (dateString === startDate) {
-                    // Misma fecha = evento de un día
-                    endDate = startDate;
-                    isSingleDay = true;
-                    isSelectingStart = true;
-                } else if (dateString > startDate) {
-                    // Rango válido
+                // Segunda selección diferente - convertir a rango de fechas
+                if (dateString > startDate) {
+                    // Fecha posterior - rango normal
                     endDate = dateString;
-                    isSingleDay = false;
-                    isSelectingStart = true;
                 } else {
-                    // Fecha anterior, intercambiar
+                    // Fecha anterior - intercambiar
                     endDate = startDate;
                     startDate = dateString;
-                    isSingleDay = false;
-                    isSelectingStart = true;
                 }
+                isSingleDay = false;
+                isSelectingStart = true; // Resetear para próxima selección
+                console.log('Rango de fechas creado:', { startDate, endDate });
             }
             
             updateDateDisplay();
-            updateCalendars();
             updateHiddenFields();
             updateRepeatOption();
-        }
-
-        function updateCalendars() {
+            
+            // Importante: Re-renderizar ambos calendarios para mostrar la selección
             updateCalendar(1, currentMonth1);
             updateCalendar(2, currentMonth2);
+        }
+
+        function updateCalendar(calendarNum, date) {
+            const monthHeader = document.getElementById(`month-header-${calendarNum}`);
+            const calendarDays = document.getElementById(`calendar-days-${calendarNum}`);
+            
+            monthHeader.textContent = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+            calendarDays.innerHTML = '';
+            
+            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            const startOfWeek = firstDay.getDay();
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // Días vacíos al inicio
+            for (let i = 0; i < startOfWeek; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'h-10';
+                calendarDays.appendChild(emptyDay);
+            }
+            
+            // Días del mes
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dayElement = document.createElement('div');
+                const currentDate = new Date(date.getFullYear(), date.getMonth(), day);
+                const dateString = currentDate.toISOString().split('T')[0];
+                
+                dayElement.className = 'h-10 flex items-center justify-center text-sm rounded cursor-pointer transition-all duration-200 font-medium';
+                dayElement.textContent = day;
+                
+                // Estilos según el estado
+                if (currentDate < today) {
+                    dayElement.className += ' date-disabled';
+                } else {
+                    dayElement.className += ' text-text hover:bg-accent hover:text-white hover:scale-105';
+                    
+                    // Aplicar estilos de selección
+                    if (startDate && endDate) {
+                        if (dateString === startDate || dateString === endDate) {
+                            // Fecha de inicio o fin
+                            dayElement.className += ' date-selected';
+                            console.log('Fecha seleccionada aplicada:', dateString);
+                        } else if (!isSingleDay && dateString > startDate && dateString < endDate) {
+                            // Fechas en el rango (solo si no es un evento de un día)
+                            dayElement.className += ' date-in-range';
+                        }
+                    }
+                    
+                    dayElement.addEventListener('click', () => selectDate(dateString));
+                }
+                
+                calendarDays.appendChild(dayElement);
+            }
         }
 
         function updateDateDisplay() {
@@ -595,27 +652,29 @@
                 });
             };
             
-            if (!endDate) {
-                // Solo fecha de inicio seleccionada
-                display.innerHTML = `
-                    <div class="text-lg font-semibold">${formatDate(startDate)}</div>
-                `;
-                tipoDisplay.innerHTML = '<span class="text-info">👆 Selecciona la fecha de fin o la misma fecha para evento de un día</span>';
-            } else if (startDate === endDate || isSingleDay) {
+            if (isSingleDay || startDate === endDate) {
                 // Evento de un día
                 display.innerHTML = `
-                    <div class="text-lg font-semibold">${formatDate(startDate)}</div>
+                    <div class="text-lg font-semibold text-success">📅 ${formatDate(startDate)}</div>
                 `;
-                tipoDisplay.innerHTML = '<span class="text-success">📅 Evento de un solo día</span>';
+                tipoDisplay.innerHTML = `
+                    <span class="text-success font-bold">✅ Evento de un solo día</span>
+                    <br>
+                    <span class="text-info text-sm">💡 Selecciona otra fecha para crear un evento de varios días</span>
+                `;
             } else {
                 // Evento de múltiples días
                 const daysDiff = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)) + 1;
                 display.innerHTML = `
-                    <div class="text-lg font-semibold">${formatDate(startDate)}</div>
-                    <div class="text-base text-textMuted">hasta</div>
-                    <div class="text-lg font-semibold">${formatDate(endDate)}</div>
+                    <div class="text-lg font-semibold text-secondary">🗓️ ${formatDate(startDate)}</div>
+                    <div class="text-base text-textMuted font-medium">hasta</div>
+                    <div class="text-lg font-semibold text-secondary">${formatDate(endDate)}</div>
                 `;
-                tipoDisplay.innerHTML = `<span class="text-secondary">🗓️ Evento de ${daysDiff} días</span>`;
+                tipoDisplay.innerHTML = `
+                    <span class="text-secondary font-bold">✅ Evento de ${daysDiff} días</span>
+                    <br>
+                    <span class="text-info text-sm">💡 Selecciona nuevas fechas para cambiar el rango</span>
+                `;
             }
         }
 
@@ -642,15 +701,19 @@
         }
 
         function clearDates() {
+            console.log('Limpiando fechas...');
             startDate = null;
             endDate = null;
             isSelectingStart = true;
             isSingleDay = false;
             
             updateDateDisplay();
-            updateCalendars();
             updateHiddenFields();
             updateRepeatOption();
+            
+            // Re-renderizar calendarios para quitar las selecciones
+            updateCalendar(1, currentMonth1);
+            updateCalendar(2, currentMonth2);
             
             console.log('✅ Fechas limpiadas');
         }
@@ -749,8 +812,8 @@
                 document.getElementById('error-hora-fin').classList.add('hidden');
             }
             
-            // Validar fechas
-            if (!startDate || !endDate) {
+            // Validar fechas - ahora solo necesita startDate ya que endDate se establece automáticamente
+            if (!startDate) {
                 document.getElementById('error-fechas').classList.remove('hidden');
                 isValid = false;
             } else {
