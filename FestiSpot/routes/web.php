@@ -97,3 +97,8 @@ Route::post('/subscription/checkout', function () {
 Route::get('/subscription/success', function () {
     return view('subscription_success');
 })->name('subscription.success');
+
+// Ruta para la página de configuración
+Route::get('/configuration', function () {
+    return view('configuration');
+})->name('configuration');

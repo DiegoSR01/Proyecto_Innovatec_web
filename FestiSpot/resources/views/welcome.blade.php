@@ -63,7 +63,7 @@
       <a href="/subscription/plans" class="flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-base hover:bg-purple/10 transition-all text-purple">
         <i class="fa-solid fa-crown"></i> Suscripción
       </a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-base hover:bg-warning/10 transition-all text-warning">
+      <a href="/configuration" class="flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-base hover:bg-warning/10 transition-all text-warning">
         <i class="fa-solid fa-gear"></i> Configuración
       </a>
     </nav>
@@ -180,7 +180,7 @@
               <td class="px-6 py-4">22/08/2025</td>
               <td class="px-6 py-4">Auditorio Nacional</td>
               <td class="px-6 py-4 flex gap-2">
-                <a href="#" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all">
+                <a href="#" onclick="editarEvento('festival-jazz')" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all">
                   <i class="fa-solid fa-pen"></i> Editar
                 </a>
                 <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all">
@@ -193,7 +193,7 @@
               <td class="px-6 py-4">05/09/2025</td>
               <td class="px-6 py-4">Centro de Convenciones</td>
               <td class="px-6 py-4 flex gap-2">
-                <a href="#" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all">
+                <a href="#" onclick="editarEvento('tech-summit')" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all">
                   <i class="fa-solid fa-pen"></i> Editar
                 </a>
                 <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all">
@@ -206,7 +206,7 @@
               <td class="px-6 py-4">15/09/2025</td>
               <td class="px-6 py-4">Museo de Arte</td>
               <td class="px-6 py-4 flex gap-2">
-                <a href="#" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all">
+                <a href="#" onclick="editarEvento('expo-cultura')" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all">
                   <i class="fa-solid fa-pen"></i> Editar
                 </a>
                 <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all">
@@ -219,6 +219,70 @@
       </div>
     </section>
   </main>
+
+  <!-- Modal para opciones de evento -->
+  <div id="modalOpcionesEvento" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div class="bg-gradient-to-br from-card/95 to-cardLight/90 backdrop-blur-xl rounded-3xl p-8 border border-cardLight/30 max-w-sm w-full mx-4 shadow-2xl">
+      <!-- Header del evento -->
+      <div class="text-center mb-6">
+        <h2 class="text-2xl font-bold text-accent mb-2" id="modalEventTitle">Festival de Música Electrónica</h2>
+        <h3 class="text-xl text-secondary mb-4" id="modalEventYear">2024</h3>
+        
+        <div class="space-y-2 text-sm text-textMuted">
+          <div class="flex items-center justify-center gap-2">
+            <i class="fa-solid fa-calendar text-accent"></i>
+            <span id="modalEventDate">jueves, 21 de agosto de 2025</span>
+          </div>
+          <div class="flex items-center justify-center gap-2">
+            <i class="fa-solid fa-map-marker-alt text-tertiary"></i>
+            <span id="modalEventLocation">Explanada Central, Ciudad de México</span>
+          </div>
+          <div class="flex items-center justify-center gap-2">
+            <i class="fa-solid fa-users text-secondary"></i>
+            <span id="modalEventAttendees">245 asistentes confirmados</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Título acciones -->
+      <div class="text-center mb-6">
+        <h4 class="text-lg font-bold text-text">Acciones rápidas</h4>
+        <p class="text-sm text-textMuted">Gestiona tu evento fácilmente</p>
+      </div>
+      
+      <!-- Botones de acción -->
+      <div class="grid grid-cols-3 gap-4 mb-6">
+        <button onclick="modificarEvento()" class="flex flex-col items-center p-4 bg-gradient-to-br from-accent/20 to-accent/10 hover:from-accent/30 hover:to-accent/20 rounded-2xl border border-accent/30 transition-all duration-300 transform hover:scale-105">
+          <div class="w-12 h-12 bg-accent rounded-2xl flex items-center justify-center mb-2 shadow-lg">
+            <i class="fa-solid fa-edit text-white text-lg"></i>
+          </div>
+          <span class="text-accent font-bold text-sm">Modificar</span>
+          <span class="text-accent/70 text-xs">evento</span>
+        </button>
+        
+        <button onclick="crearAnuncios()" class="flex flex-col items-center p-4 bg-gradient-to-br from-secondary/20 to-secondary/10 hover:from-secondary/30 hover:to-secondary/20 rounded-2xl border border-secondary/30 transition-all duration-300 transform hover:scale-105">
+          <div class="w-12 h-12 bg-secondary rounded-2xl flex items-center justify-center mb-2 shadow-lg">
+            <i class="fa-solid fa-bullhorn text-white text-lg"></i>
+          </div>
+          <span class="text-secondary font-bold text-sm">Crear</span>
+          <span class="text-secondary/70 text-xs">anuncios</span>
+        </button>
+        
+        <button onclick="verReseñas()" class="flex flex-col items-center p-4 bg-gradient-to-br from-tertiary/20 to-tertiary/10 hover:from-tertiary/30 hover:to-tertiary/20 rounded-2xl border border-tertiary/30 transition-all duration-300 transform hover:scale-105">
+          <div class="w-12 h-12 bg-tertiary rounded-2xl flex items-center justify-center mb-2 shadow-lg">
+            <i class="fa-solid fa-star text-white text-lg"></i>
+          </div>
+          <span class="text-tertiary font-bold text-sm">Ver</span>
+          <span class="text-tertiary/70 text-xs">reseñas</span>
+        </button>
+      </div>
+      
+      <!-- Botón cerrar -->
+      <button onclick="cerrarModal()" class="w-full py-3 bg-gradient-to-r from-card/60 to-cardLight/40 text-accent border-2 border-accent/30 rounded-2xl font-bold hover:bg-accent/10 transition-all duration-300">
+        Cerrar gestión
+      </button>
+    </div>
+  </div>
 
   <!-- Efectos de fondo -->
   <div class="fixed inset-0 opacity-10 pointer-events-none z-0">
@@ -295,6 +359,155 @@
         }
       }, 5000);
     }
+
+    // Variable global para el evento actual
+    let eventoActualSeleccionado = null;
+
+    // Función para editar evento - ahora muestra el modal
+    function editarEvento(eventoId) {
+      // Datos de ejemplo para cada evento
+      const eventosData = {
+        'festival-jazz': {
+          id: 1,
+          nombre: "Festival Jazz",
+          year: "2025",
+          categoria: "Música",
+          tipo: "Presencial",
+          descripcion: "Festival de jazz con artistas internacionales en el Auditorio Nacional.",
+          fecha_inicio: "2025-08-22",
+          fecha_fin: "2025-08-22",
+          hora_inicio: "19:00",
+          hora_fin: "23:30",
+          lugar: "Auditorio Nacional",
+          direccion: "Paseo de la Reforma 50, Bosque de Chapultepec I Secc",
+          ciudad: "Ciudad de México",
+          estado_evento: "published",
+          asistentes: 245,
+          dias_restantes: 15,
+          puede_modificar_fecha: true,
+          puede_modificar_ubicacion: false
+        },
+        'tech-summit': {
+          id: 2,
+          nombre: "Tech Summit",
+          year: "2025",
+          categoria: "Tecnología",
+          tipo: "Híbrido",
+          descripcion: "Cumbre tecnológica con las últimas innovaciones y tendencias.",
+          fecha_inicio: "2025-09-05",
+          fecha_fin: "2025-09-06",
+          hora_inicio: "09:00",
+          hora_fin: "18:00",
+          lugar: "Centro de Convenciones",
+          direccion: "Av. Conscripto 311, Lomas de Sotelo",
+          ciudad: "Ciudad de México",
+          estado_evento: "published",
+          asistentes: 180,
+          dias_restantes: 25,
+          puede_modificar_fecha: true,
+          puede_modificar_ubicacion: true
+        },
+        'expo-cultura': {
+          id: 3,
+          nombre: "Expo Cultura",
+          year: "2025",
+          categoria: "Arte",
+          tipo: "Presencial",
+          descripcion: "Exposición cultural con obras de artistas locales e internacionales.",
+          fecha_inicio: "2025-09-15",
+          fecha_fin: "2025-09-17",
+          hora_inicio: "10:00",
+          hora_fin: "20:00",
+          lugar: "Museo de Arte",
+          direccion: "Av. Paseo de la Reforma 51, Bosque de Chapultepec",
+          ciudad: "Ciudad de México",
+          estado_evento: "published",
+          asistentes: 95,
+          dias_restantes: 35,
+          puede_modificar_fecha: false,
+          puede_modificar_ubicacion: false
+        }
+      };
+
+      const evento = eventosData[eventoId];
+      if (evento) {
+        // Guardar evento actual
+        eventoActualSeleccionado = evento;
+        
+        // Actualizar contenido del modal
+        document.getElementById('modalEventTitle').textContent = evento.nombre;
+        document.getElementById('modalEventYear').textContent = evento.year;
+        
+        // Formatear fecha
+        const fecha = new Date(evento.fecha_inicio);
+        const fechaFormateada = fecha.toLocaleDateString('es-ES', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+        document.getElementById('modalEventDate').textContent = fechaFormateada;
+        document.getElementById('modalEventLocation').textContent = `${evento.lugar}, ${evento.ciudad}`;
+        document.getElementById('modalEventAttendees').textContent = `${evento.asistentes} asistentes confirmados`;
+        
+        // Mostrar modal
+        document.getElementById('modalOpcionesEvento').classList.remove('hidden');
+      } else {
+        alert('Evento no encontrado');
+      }
+    }
+
+    // Funciones del modal
+    function modificarEvento() {
+      if (eventoActualSeleccionado) {
+        // Guardar datos del evento en localStorage para la página de modificación
+        localStorage.setItem('eventoActual', JSON.stringify(eventoActualSeleccionado));
+        
+        // Cerrar modal y redirigir
+        cerrarModal();
+        
+        // Mostrar mensaje de carga
+        const loadingMessage = document.createElement('div');
+        loadingMessage.innerHTML = `
+          <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+            <div class="bg-card/90 backdrop-blur-xl rounded-2xl p-8 border border-cardLight/30 text-center">
+              <div class="text-4xl mb-4">⏳</div>
+              <div class="text-xl font-bold text-accent mb-2">Cargando evento...</div>
+              <div class="text-textMuted">Preparando interfaz de modificación</div>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(loadingMessage);
+        
+        // Redirigir después de un breve delay
+        setTimeout(() => {
+          window.location.href = '/event/modify';
+        }, 800);
+      }
+    }
+
+    function crearAnuncios() {
+      cerrarModal();
+      alert('🔔 Funcionalidad de crear anuncios próximamente disponible');
+    }
+
+    function verReseñas() {
+      cerrarModal();
+      alert('⭐ Funcionalidad de ver reseñas próximamente disponible');
+    }
+
+    function cerrarModal() {
+      document.getElementById('modalOpcionesEvento').classList.add('hidden');
+      eventoActualSeleccionado = null;
+    }
+
+    // Cerrar modal al hacer clic fuera
+    document.addEventListener('click', function(e) {
+      const modal = document.getElementById('modalOpcionesEvento');
+      if (e.target === modal) {
+        cerrarModal();
+      }
+    });
   </script>
 </body>
 </html>
