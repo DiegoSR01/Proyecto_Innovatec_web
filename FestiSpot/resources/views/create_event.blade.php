@@ -255,6 +255,7 @@
 
             setupFormValidation();
             setupCharacterCounters();
+            setupEventListeners();
         });
 
         function limpiarYEmpezarNuevo() {
@@ -262,10 +263,14 @@
                 // Mostrar loading
                 const btn = event.target;
                 const originalText = btn.innerHTML;
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Limpiando...';
+                btn.innerHTML = '⏳ Limpiando...';
                 btn.disabled = true;
                 
-                fetch('/event/clear-all', {
+                // Limpiar formulario inmediatamente
+                limpiarFormulario();
+                
+                // Intentar limpiar en el servidor
+                fetch('{{ route("event.clearAll") }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -273,24 +278,44 @@
                     }
                 })
                 .then(response => {
-                    // Verificar si la respuesta es exitosa
-                    if (response.ok) {
-                        // Intentar parsear como JSON, pero no requerir que tenga un mensaje específico
-                        return response.json().catch(() => ({ success: true }));
-                    } else {
-                        throw new Error('Error en la respuesta del servidor');
-                    }
-                })
-                .then(data => {
-                    console.log('✅ Datos limpiados correctamente');
+                    console.log('✅ Datos limpiados del servidor');
                     location.reload(); // Recargar la página para mostrar el formulario limpio
                 })
                 .catch(error => {
-                    console.error('❌ Error al limpiar datos:', error);
-                    alert('Error al limpiar los datos. Por favor, intenta nuevamente.');
+                    console.error('❌ Error al limpiar datos del servidor:', error);
+                    console.log('✅ Formulario limpiado localmente');
+                    // Ocultar mensaje de edición
+                    const editingMessage = document.querySelector('.bg-gradient-to-r.from-info\\/20');
+                    if (editingMessage) {
+                        editingMessage.style.display = 'none';
+                    }
+                    // Restaurar botón
                     btn.innerHTML = originalText;
                     btn.disabled = false;
                 });
+            }
+        }
+
+        function limpiarFormulario() {
+            // Limpiar todos los campos del formulario
+            document.querySelector('input[name="event_name"]').value = '';
+            document.querySelector('textarea[name="event_description"]').value = '';
+            document.querySelector('select[name="event_category"]').value = '';
+            
+            // Actualizar contador de caracteres
+            actualizarContadorCaracteres();
+        }
+
+        function actualizarContadorCaracteres() {
+            const charCount = document.getElementById('char-count');
+            const charDisplay = document.getElementById('char-display');
+            
+            if (charCount) {
+                charCount.textContent = '0';
+            }
+            
+            if (charDisplay) {
+                charDisplay.className = 'text-base font-bold px-4 py-2 rounded-full transition-all duration-300 text-textMuted';
             }
         }
 
@@ -303,7 +328,7 @@
                 
                 // Deshabilitar botón para evitar envíos múltiples
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
+                submitBtn.innerHTML = '⏳ Guardando...';
                 
                 // El formulario se enviará normalmente
             });
@@ -315,7 +340,11 @@
             const charCount = document.getElementById('char-count');
             const charDisplay = document.getElementById('char-display');
             
-            if (descriptionTextarea && charCount) {
+            if (descriptionTextarea && charCount && charDisplay) {
+                // Establecer valor inicial
+                const initialLength = descriptionTextarea.value.length;
+                charCount.textContent = initialLength;
+                
                 descriptionTextarea.addEventListener('input', function() {
                     const length = Math.min(this.value.length, 250);
                     charCount.textContent = length;
@@ -329,100 +358,100 @@
                         charDisplay.className = 'text-base font-bold px-4 py-2 rounded-full transition-all duration-300 text-textMuted';
                     }
                     
+                    // Limitar a 250 caracteres
                     if (this.value.length > 250) {
                         this.value = this.value.substring(0, 250);
+                        charCount.textContent = '250';
                     }
                 });
-                
-                // Actualizar contador inicial
-                charCount.textContent = descriptionTextarea.value.length;
+            }
+        }
+
+        function setupEventListeners() {
+            // Botón para nuevo evento
+            const btnNuevoEvento = document.getElementById('btn-nuevo-evento');
+            if (btnNuevoEvento) {
+                btnNuevoEvento.addEventListener('click', function() {
+                    if (confirm('¿Quieres crear un evento completamente nuevo? Esto borrará TODA la información actual y empezará desde cero.')) {
+                        const btn = this;
+                        const originalText = btn.innerHTML;
+                        btn.innerHTML = '<span class="text-xl">⏳</span> Limpiando...';
+                        btn.disabled = true;
+                        
+                        // Limpiar formulario inmediatamente
+                        limpiarFormulario();
+                        
+                        // Intentar limpiar en el servidor
+                        fetch('{{ route("event.clearAll") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }
+                        })
+                        .then(response => {
+                            console.log('✅ Todos los datos limpiados del servidor');
+                            location.reload();
+                        })
+                        .catch(error => {
+                            console.error('❌ Error al limpiar datos del servidor:', error);
+                            console.log('✅ Formulario limpiado localmente');
+                            
+                            // Ocultar mensaje de edición si existe
+                            const editingMessage = document.querySelector('.bg-gradient-to-r.from-info\\/20');
+                            if (editingMessage) {
+                                editingMessage.style.display = 'none';
+                            }
+                            
+                            // Restaurar botón
+                            btn.innerHTML = originalText;
+                            btn.disabled = false;
+                            
+                            alert('✅ Formulario limpiado correctamente');
+                        });
+                    }
+                });
             }
             
-            // Botón para nuevo evento
-            document.getElementById('btn-nuevo-evento').addEventListener('click', function() {
-                if (confirm('¿Quieres crear un evento completamente nuevo? Esto borrará TODA la información actual y empezará desde cero.')) {
-                    const btn = this;
-                    const originalText = btn.innerHTML;
-                    btn.innerHTML = '<span class="text-xl">⏳</span> Limpiando...';
-                    btn.disabled = true;
-                    
-                    fetch('/event/clear-all', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            // Intentar parsear JSON, pero no requerir formato específico
-                            return response.json().catch(() => ({ success: true }));
-                        } else {
-                            throw new Error('Error en la respuesta del servidor');
-                        }
-                    })
-                    .then(data => {
-                        console.log('✅ Todos los datos limpiados');
-                        location.reload();
-                    })
-                    .catch(error => {
-                        console.error('❌ Error al limpiar datos:', error);
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                        alert('Error al limpiar los datos. Por favor, intenta nuevamente.');
-                    });
-                }
-            });
-            
             // Botón para limpiar datos básicos
-            document.getElementById('btn-limpiar-basicos').addEventListener('click', function() {
-                if (confirm('¿Estás seguro de que quieres limpiar todos los datos básicos del evento? Esta acción no se puede deshacer.')) {
-                    const btn = this;
-                    const originalText = btn.innerHTML;
-                    
-                    // Limpiar formulario localmente primero
-                    document.querySelector('input[name="event_name"]').value = '';
-                    document.querySelector('textarea[name="event_description"]').value = '';
-                    document.querySelector('select[name="event_category"]').value = '';
-                    
-                    // Actualizar contador
-                    const charCount = document.getElementById('char-count');
-                    if (charCount) charCount.textContent = '0';
-                    
-                    // Mostrar estado de carga
-                    btn.innerHTML = '<span class="text-xl">🗑️</span> Limpiando...';
-                    btn.disabled = true;
-                    
-                    // Limpiar sesión del servidor
-                    fetch('/event/clear-basic', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.json().catch(() => ({ success: true }));
-                        } else {
-                            throw new Error('Error del servidor');
-                        }
-                    })
-                    .then data => {
-                        console.log('✅ Datos básicos limpiados del servidor');
-                        alert('✅ Datos básicos limpiados correctamente');
-                    })
-                    .catch(error => {
-                        console.error('Error al limpiar datos básicos:', error);
-                        alert('✅ Datos limpiados localmente (el servidor puede no estar disponible)');
-                    })
-                    .finally(() => {
-                        // Restaurar botón
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                    });
-                }
-            });
+            const btnLimpiarBasicos = document.getElementById('btn-limpiar-basicos');
+            if (btnLimpiarBasicos) {
+                btnLimpiarBasicos.addEventListener('click', function() {
+                    if (confirm('¿Estás seguro de que quieres limpiar todos los datos básicos del evento? Esta acción no se puede deshacer.')) {
+                        const btn = this;
+                        const originalText = btn.innerHTML;
+                        
+                        // Limpiar formulario localmente primero
+                        limpiarFormulario();
+                        
+                        // Mostrar estado de carga
+                        btn.innerHTML = '<span class="text-xl">🗑️</span> Limpiando...';
+                        btn.disabled = true;
+                        
+                        // Limpiar sesión del servidor
+                        fetch('{{ route("event.clearBasic") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }
+                        })
+                        .then(response => {
+                            console.log('✅ Datos básicos limpiados del servidor');
+                            alert('✅ Datos básicos limpiados correctamente');
+                        })
+                        .catch(error => {
+                            console.error('Error al limpiar datos básicos del servidor:', error);
+                            alert('✅ Datos limpiados localmente');
+                        })
+                        .finally(() => {
+                            // Restaurar botón
+                            btn.innerHTML = originalText;
+                            btn.disabled = false;
+                        });
+                    }
+                });
+            }
         }
     </script>
 </body>

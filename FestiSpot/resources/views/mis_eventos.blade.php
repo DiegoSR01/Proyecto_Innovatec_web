@@ -11,7 +11,7 @@
     <div class="relative z-10">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
             <h1 class="text-3xl font-black bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent drop-shadow-lg">Mis Eventos</h1>
-            <a href="/event/create" class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold text-lg shadow-lg hover:from-info hover:to-secondary transition-all duration-300 transform hover:scale-105 hover:shadow-secondary/50"><i class="fa-solid fa-plus"></i> Nuevo Evento</a>
+            <a href="#" onclick="crearNuevoEventoMisEventos(event)" id="btn-nuevo-evento-mis-eventos" class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold text-lg shadow-lg hover:from-info hover:to-secondary transition-all duration-300 transform hover:scale-105 hover:shadow-secondary/50"><i class="fa-solid fa-plus"></i> Nuevo Evento</a>
         </div>
 
         <!-- Calendario visual -->
@@ -1065,6 +1065,52 @@
             updateCalendar();
         });
     });
+
+    // Función para crear nuevo evento desde mis eventos
+    function crearNuevoEventoMisEventos(event) {
+        event.preventDefault();
+        
+        const btn = document.getElementById('btn-nuevo-evento-mis-eventos');
+        const originalText = btn.innerHTML;
+        
+        // Mostrar estado de carga
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparando...';
+        btn.disabled = true;
+        
+        // Obtener token CSRF
+        const token = document.querySelector('meta[name="csrf-token"]');
+        const csrfToken = token ? token.getAttribute('content') : '{{ csrf_token() }}';
+        
+        // Limpiar datos del servidor antes de redirigir
+        fetch('/event/clear-all', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => {
+            console.log('✅ Datos limpiados del servidor desde mis eventos');
+            // Redirigir después de limpiar
+            window.location.href = '/event/create';
+        })
+        .catch(error => {
+            console.error('❌ Error al limpiar datos del servidor:', error);
+            // Redirigir de todas formas aunque falle la limpieza
+            console.log('🔄 Redirigiendo de todas formas...');
+            window.location.href = '/event/create';
+        })
+        .finally(() => {
+            // Restaurar botón después de un tiempo por si no se redirige
+            setTimeout(() => {
+                if (btn) {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            }, 3000);
+        });
+    }
 </script>
 
 <style>

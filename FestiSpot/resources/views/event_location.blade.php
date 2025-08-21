@@ -235,7 +235,7 @@
                                        value="{{ old('direccion_completa', $eventLocation['direccion_completa'] ?? '') }}">
                             </div>
 
-                            <!-- City and State - Sin país -->
+                            <!-- City and State -->
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div class="bg-gradient-to-br from-card/50 to-tertiary/5 backdrop-blur-sm rounded-2xl p-6 border border-cardLight/50">
                                     <label class="block text-text font-bold mb-3 text-lg">🌆 Ciudad *</label>
@@ -267,37 +267,6 @@
                                            class="w-full px-6 py-4 bg-cardLight/70 border-2 border-cardLight/50 rounded-xl text-text placeholder-textDark focus:border-warning focus:ring-4 focus:ring-warning/20 focus:outline-none transition-all duration-200 backdrop-blur-sm text-lg"
                                            placeholder="Ej: 09440"
                                            value="{{ old('codigo_postal', $eventLocation['codigo_postal'] ?? '') }}">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="bg-gradient-to-br from-card/50 to-info/5 backdrop-blur-sm rounded-2xl p-6 border border-cardLight/50">
-                                    <label class="block text-text font-bold mb-3 text-lg">🌎 País</label>
-                                    <select name="pais" id="pais"
-                                            class="w-full px-6 py-4 bg-cardLight/70 border-2 border-cardLight/50 rounded-xl text-text focus:border-info focus:ring-4 focus:ring-info/20 focus:outline-none transition-all duration-200 backdrop-blur-sm text-lg">
-                                        <option value="México" {{ (old('pais', $eventLocation['pais'] ?? '') == 'México') ? 'selected' : '' }}>México</option>
-                                        <option value="Estados Unidos" {{ (old('pais', $eventLocation['pais'] ?? '') == 'Estados Unidos') ? 'selected' : '' }}>Estados Unidos</option>
-                                        <option value="Canadá" {{ (old('pais', $eventLocation['pais'] ?? '') == 'Canadá') ? 'selected' : '' }}>Canadá</option>
-                                        <option value="Guatemala" {{ (old('pais', $eventLocation['pais'] ?? '') == 'Guatemala') ? 'selected' : '' }}>Guatemala</option>
-                                        <option value="Otro" {{ (old('pais', $eventLocation['pais'] ?? '') == 'Otro') ? 'selected' : '' }}>Otro</option>
-                                    </select>
-                                </div>
-                                <div class="bg-gradient-to-br from-card/50 to-warning/5 backdrop-blur-sm rounded-2xl p-6 border border-cardLight/50">
-                                    <label class="block text-text font-bold mb-3 text-lg">📮 Código Postal</label>
-                                    <input type="text" name="codigo_postal" id="codigo_postal" maxlength="5"
-                                           class="w-full px-6 py-4 bg-cardLight/70 border-2 border-cardLight/50 rounded-xl text-text placeholder-textDark focus:border-warning focus:ring-4 focus:ring-warning/20 focus:outline-none transition-all duration-200 backdrop-blur-sm text-lg"
-                                           placeholder="Ej: 09440"
-                                           value="{{ old('codigo_postal', $eventLocation['codigo_postal'] ?? '') }}">
-                                </div>
-                            </div>
-
-                            <div class="bg-gradient-to-br from-card/50 to-accent/5 backdrop-blur-sm rounded-2xl p-6 border border-cardLight/50">
-                                <label class="block text-text font-bold mb-3 text-lg">📝 Detalles adicionales</label>
-                                <textarea name="detalles_ubicacion" id="detalles_ubicacion" rows="3" maxlength="200"
-                                          class="w-full px-6 py-4 bg-cardLight/70 border-2 border-cardLight/50 rounded-xl text-text placeholder-textDark focus:border-accent focus:ring-4 focus:ring-accent/20 focus:outline-none transition-all duration-200 backdrop-blur-sm text-lg"
-                                          placeholder="Ej: Salón principal, 2do piso, referencias para llegar, estacionamiento disponible...">{{ old('detalles_ubicacion', $eventLocation['detalles_ubicacion'] ?? '') }}</textarea>
-                                <div class="text-right text-xs text-textMuted mt-1">
-                                    <span id="detalles-count">0</span> / 200
                                 </div>
                             </div>
 
@@ -515,7 +484,10 @@
                     'Jalisco': 'Guadalajara',
                     'Nuevo León': 'Monterrey',
                     'Puebla': 'Puebla',
-                    'Veracruz': 'Veracruz'
+                    'Veracruz': 'Veracruz',
+                    'Estado de México': 'Toluca',
+                    'Guanajuato': 'León',
+                    'Yucatan': 'Mérida'
                 };
                 
                 estadoSelect.addEventListener('change', function() {
@@ -700,7 +672,7 @@
                     
                     // Limpiar todos los campos del formulario
                     const campos = [
-                        'nombre_lugar', 'direccion_completa', 'ciudad', 'estado', 'pais', 'codigo_postal',
+                        'nombre_lugar', 'direccion_completa', 'ciudad', 'estado', 'codigo_postal',
                         'detalles_ubicacion', 'capacidad', 'plataforma_virtual', 'codigo_acceso',
                         'event_link', 'password_virtual', 'instrucciones_virtuales'
                     ];
@@ -731,6 +703,34 @@
                     physicalSection.classList.add('section-hidden');
                     physicalSection.classList.remove('section-visible');
                     virtualSection.classList.add('section-hidden');
+                    virtualSection.classList.remove('section-visible');
+                    
+                    // Resetear mensaje de estado
+                    statusMessage.innerHTML = `
+                        <div class="text-text font-medium">⚙️ Selecciona el tipo de evento para continuar</div>
+                        <div class="text-xs text-gray-400 mt-1">Los campos se mostrarán según tu selección</div>
+                    `;
+                    
+                    // Deshabilitar botón siguiente
+                    submitBtn.disabled = true;
+                    
+                    // Limpiar sesión del servidor
+                    fetch('{{ route("event.clearLocation") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    }).then(() => {
+                        console.log('Datos de ubicación limpiados del servidor');
+                        alert('✅ Información de ubicación limpiada correctamente');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
                     virtualSection.classList.remove('section-visible');
                     
                     // Resetear mensaje de estado

@@ -520,13 +520,13 @@
                 const timeEnd = document.getElementById('timeEnd');
                 
                 // Only validate time if it's the same day
-                if (dateStart.value === dateEnd.value && timeStart.value && timeEnd.value) {
+                if (dateStart && dateEnd && dateStart.value === dateEnd.value && timeStart.value && timeEnd.value) {
                     if (timeStart.value >= timeEnd.value) {
                         timeEnd.setCustomValidity('La hora de fin debe ser posterior a la hora de inicio');
                     } else {
                         timeEnd.setCustomValidity('');
                     }
-                } else {
+                } else if (timeEnd) {
                     timeEnd.setCustomValidity('');
                 }
             }
@@ -621,6 +621,7 @@
         let eventModification;
         document.addEventListener('DOMContentLoaded', function() {
             eventModification = new EventModification();
+            console.log('✅ Event modification form initialized');
         });
     </script>
 </body>

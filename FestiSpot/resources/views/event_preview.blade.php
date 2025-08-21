@@ -125,6 +125,22 @@
 
                 <!-- Event Card Preview -->
                 <div class="bg-gradient-to-br from-card/80 to-cardLight/60 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden mb-8 border border-cardLight/30">
+                    
+                    <!-- Event Image (if available) -->
+                    @if(isset($eventMedia['banner_path']) && !empty($eventMedia['banner_path']))
+                        <div class="relative h-64 md:h-80 overflow-hidden">
+                            <img src="{{ asset('storage/' . $eventMedia['banner_path']) }}" 
+                                 alt="{{ $eventBasic['event_name'] ?? 'Imagen del evento' }}"
+                                 class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-4 left-6 right-6">
+                                <div class="bg-white/10 backdrop-blur-md rounded-lg px-4 py-2 border border-white/20">
+                                    <div class="text-white text-sm font-medium">🖼️ Imagen Principal del Evento</div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- Event Header -->
                     <div class="bg-gradient-to-r from-accent to-secondary p-8 text-white">
                         <h2 class="text-3xl font-bold mb-3 drop-shadow-lg">
@@ -268,11 +284,16 @@
                             <div class="bg-gradient-to-br from-cardLight/40 to-card/60 rounded-2xl p-6 backdrop-blur-lg border border-cardLight/20">
                                 <h3 class="text-xl font-bold text-text mb-4 bg-gradient-to-r from-warning to-accent bg-clip-text text-transparent">🎬 Multimedia</h3>
                                 <div class="grid md:grid-cols-3 gap-6">
-                                    @if(isset($eventMedia['has_banner']) && $eventMedia['has_banner'])
+                                    @if(isset($eventMedia['banner_path']) && !empty($eventMedia['banner_path']))
                                         <div class="bg-gradient-to-br from-success/20 to-success/5 border border-success/30 rounded-xl p-6 text-center backdrop-blur-sm">
                                             <div class="text-4xl mb-3">🖼️</div>
                                             <div class="font-bold text-success text-lg">Imagen Principal</div>
                                             <div class="text-sm text-textMuted">Subida correctamente</div>
+                                            <div class="mt-3">
+                                                <img src="{{ asset('storage/' . $eventMedia['banner_path']) }}" 
+                                                     alt="Vista previa" 
+                                                     class="w-full h-20 object-cover rounded-lg border border-success/30">
+                                            </div>
                                         </div>
                                     @endif
                                     
@@ -292,7 +313,7 @@
                                         </div>
                                     @endif
                                     
-                                    @if(empty($eventMedia['has_banner']) && empty($eventMedia['gallery_count']) && empty($eventMedia['video_count']))
+                                    @if(empty($eventMedia['banner_path']) && empty($eventMedia['gallery_count']) && empty($eventMedia['video_count']))
                                         <div class="bg-gradient-to-br from-warning/20 to-warning/5 border border-warning/30 rounded-xl p-6 text-center backdrop-blur-sm">
                                             <div class="text-4xl mb-3">⚠️</div>
                                             <div class="font-bold text-warning text-lg">Sin Multimedia</div>
