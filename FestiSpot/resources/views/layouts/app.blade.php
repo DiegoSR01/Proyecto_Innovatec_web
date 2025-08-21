@@ -42,33 +42,38 @@
         <div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl"></div>
         <div class="absolute top-1/2 left-1/2 w-96 h-96 bg-tertiary rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
     </div>
-  <!-- Menú de navegación -->
-  <nav class="relative z-20 w-full flex items-center justify-between px-8 py-4 bg-gradient-to-r from-card to-purple/20 border-b border-cardLight/30 shadow-lg">
-    <div class="flex items-center gap-3">
-      <span class="text-2xl font-black bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent tracking-tight">FestiSpot</span>
+    
+    <!-- Menú de navegación - Solo mostrar si no está definida la sección no_global_header -->
+    @if(!View::hasSection('no_global_header'))
+    <nav class="relative z-20 w-full flex items-center justify-between px-8 py-4 bg-gradient-to-r from-card to-purple/20 border-b border-cardLight/30 shadow-lg">
+        <div class="flex items-center gap-3">
+            <span class="text-2xl font-black bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent tracking-tight">FestiSpot</span>
+        </div>
+        <div class="flex gap-6 text-lg font-semibold">
+            <a href="/" class="nav-link transition-colors duration-200 hover:text-accent">Inicio</a>
+            <a href="/mis-eventos" class="nav-link transition-colors duration-200 hover:text-accent">Mis Eventos</a>
+            <a href="/solicitudes-productores" class="nav-link transition-colors duration-200 hover:text-accent">Solicitudes</a>
+        </div>
+    </nav>
+    @endif
+    
+    <div class="relative z-10">
+        @yield('content')
     </div>
-    <div class="flex gap-6 text-lg font-semibold">
-      <a href="/" class="nav-link transition-colors duration-200 hover:text-accent">Inicio</a>
-      <a href="/mis-eventos" class="nav-link transition-colors duration-200 hover:text-accent">Mis Eventos</a>
-      <a href="/solicitudes-productores" class="nav-link transition-colors duration-200 hover:text-accent">Solicitudes</a>
-    </div>
-  </nav>
-  <div class="relative z-10">
-    @yield('content')
-  </div>
-  <script>
-  // Resaltar enlace activo
-  document.addEventListener('DOMContentLoaded', function() {
-    const path = window.location.pathname.replace(/\/$/, '');
-    document.querySelectorAll('.nav-link').forEach(link => {
-      if (
-        (path === '' && link.getAttribute('href') === '/') ||
-        (link.getAttribute('href') !== '/' && path.startsWith(link.getAttribute('href')))
-      ) {
-        link.classList.add('text-accent');
-      }
-    });
-  });
-  </script>
+    
+    <script>
+        // Resaltar enlace activo
+        document.addEventListener('DOMContentLoaded', function() {
+            const path = window.location.pathname.replace(/\/$/, '');
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (
+                    (path === '' && link.getAttribute('href') === '/') ||
+                    (link.getAttribute('href') !== '/' && path.startsWith(link.getAttribute('href')))
+                ) {
+                    link.classList.add('text-accent');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

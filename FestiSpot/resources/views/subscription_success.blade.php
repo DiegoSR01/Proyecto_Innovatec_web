@@ -38,6 +38,26 @@
     </script>
 </head>
 <body class="bg-background text-text min-h-screen">
+    <!-- Encabezado unificado -->
+    <header class="w-full bg-gradient-to-r from-card to-cardLight/80 border-b border-cardLight/30 shadow-lg backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between px-4 md:px-10 py-4 gap-2">
+            <div class="flex items-center gap-6">
+                <span class="text-2xl font-black bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent tracking-tight select-none">FestiSpot</span>
+                <nav class="flex items-center gap-2 text-textMuted text-base font-medium">
+                    <a href="/" class="hover:text-accent transition-colors flex items-center gap-1">
+                        <i class="fa-solid fa-house"></i> <span class="hidden sm:inline">Inicio</span>
+                    </a>
+                    <span class="mx-2 text-accent">/</span>
+                    <span class="text-text font-bold">Suscripción</span>
+                </nav>
+            </div>
+            <a href="/perfil" class="flex items-center gap-2 text-text hover:text-accent font-semibold transition-colors">
+                <i class="fa-solid fa-user-circle text-2xl"></i>
+                <span class="hidden sm:inline">Mi perfil</span>
+            </a>
+        </div>
+    </header>
+
     <!-- Efectos de fondo con gradientes sutiles -->
     <div class="fixed inset-0 opacity-10 pointer-events-none">
         <div class="absolute top-0 left-0 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
