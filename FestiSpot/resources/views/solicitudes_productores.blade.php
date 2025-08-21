@@ -1,27 +1,12 @@
 @extends('layouts.app')
-@section('no_global_header', true)
 @section('content')
-<!-- Encabezado unificado -->
-<div class="w-full bg-gradient-to-r from-card to-cardLight/80 border-b border-cardLight/30 shadow-lg backdrop-blur-xl mb-8">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between px-4 md:px-10 py-4 gap-2">
-        <div class="flex items-center gap-6">
-            <span class="text-2xl font-black bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent tracking-tight select-none">FestiSpot</span>
-            <nav class="flex items-center gap-2 text-textMuted text-base font-medium">
-                <a href="/" class="hover:text-accent transition-colors flex items-center gap-1">
-                    <i class="fa-solid fa-house"></i> <span class="hidden sm:inline">Inicio</span>
-                </a>
-                <span class="mx-2 text-accent">/</span>
-                <span class="text-text font-bold">Solicitudes</span>
-            </nav>
-        </div>
-        <a href="/perfil" class="flex items-center gap-2 text-text hover:text-accent font-semibold transition-colors">
-            <i class="fa-solid fa-user-circle text-2xl"></i>
-            <span class="hidden sm:inline">Mi perfil</span>
-        </a>
-    </div>
-</div>
-
 <div class="bg-background text-text px-4 py-8 relative">
+    <!-- Efectos de fondo -->
+    <div class="fixed inset-0 opacity-10 pointer-events-none z-0">
+        <div class="absolute top-0 left-0 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 left-1/2 w-96 h-96 bg-tertiary rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+    </div>
     <div class="relative z-10 max-w-5xl mx-auto">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
             <h1 class="text-3xl font-black bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent drop-shadow-lg">Solicitudes de Productores</h1>
@@ -43,7 +28,6 @@
                 <button type="button" id="btn-borrar-filtros" class="px-6 py-2 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </form>
         </div>
-        
         <!-- Lista de solicitudes -->
         <div id="solicitudes-lista" class="space-y-6">
             <!-- Solicitud 1 -->
@@ -66,7 +50,6 @@
                     <button class="btn-rechazar px-4 py-2 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-xmark"></i> Rechazar</button>
                 </div>
             </div>
-            
             <!-- Solicitud 2 -->
             <div class="solicitud bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col md:flex-row items-center gap-6 p-6"
                 data-productor="María López" data-producto="Comida Vegana" data-evento="Tech Summit" data-estado="Pendiente">
@@ -87,7 +70,6 @@
                     <button class="btn-rechazar px-4 py-2 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-xmark"></i> Rechazar</button>
                 </div>
             </div>
-            
             <!-- Solicitud 3 -->
             <div class="solicitud bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col md:flex-row items-center gap-6 p-6"
                 data-productor="Carlos Ruiz" data-producto="Sonido e Iluminación" data-evento="Expo Cultura" data-estado="Pendiente">
@@ -111,8 +93,8 @@
         </div>
     </div>
 </div>
-
 <script>
+// Funcionalidad completa de solicitudes
 document.addEventListener('DOMContentLoaded', function() {
     // Borrar filtros funcional
     document.getElementById('btn-borrar-filtros').addEventListener('click', function() {
@@ -169,9 +151,9 @@ document.addEventListener('DOMContentLoaded', function() {
             filtrarSolicitudes();
         });
     });
-    
     // Inicial: mostrar todas
     filtrarSolicitudes();
 });
 </script>
+
 @endsection
