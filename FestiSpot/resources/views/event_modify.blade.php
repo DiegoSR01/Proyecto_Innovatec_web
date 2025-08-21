@@ -24,7 +24,7 @@
               secondary: '#00e5ff',            // Cyan eléctrico
               tertiary: '#7c4dff',            // Púrpura vibrante
               success: '#00c853',             // Verde brillante
-              warning: '#ffc107',             // Ámbar dorado
+              warning: '#ff6b35',             // Naranja amigable
               info: '#2196f3',                // Azul brillante
               purple: '#9c27b0',              // Magenta
               text: '#ffffff',                // Blanco puro
@@ -62,10 +62,8 @@
             </div>
             <div class="flex flex-1 justify-end gap-8">
                 <div class="flex items-center gap-9">
-                    <a class="text-textMuted text-sm font-medium leading-normal hover:text-accent hover:drop-shadow-lg transition-all duration-300" href="#">Panel</a>
-                    <a class="text-accent text-sm font-medium leading-normal hover:text-secondary hover:drop-shadow-lg transition-all duration-300" href="/events/modify">Eventos</a>
-                    <a class="text-textMuted text-sm font-medium leading-normal hover:text-tertiary hover:drop-shadow-lg transition-all duration-300" href="#">Analíticas</a>
-                    <a class="text-textMuted text-sm font-medium leading-normal hover:text-success hover:drop-shadow-lg transition-all duration-300" href="#">Soporte</a>
+                    <a class="text-textMuted text-sm font-medium leading-normal hover:text-accent hover:drop-shadow-lg transition-all duration-300" href="/">Inicio</a>
+                    <a class="text-accent text-sm font-medium leading-normal hover:text-secondary hover:drop-shadow-lg transition-all duration-300" href="/mis-eventos">Mis Eventos</a>
                 </div>
                 <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" 
                      style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBLCsTZpxKXCAKoDY9xg8CTUN_CUYfM6jTFLmg3YTg5xI2UJQcbEx0zzDAk-Pn2cXIa7F3B0J0XPi3mLxWRRDcEJNFN5Hp474_Dlp1nneZeBOaXn6T33SkaRLdYUZ0p4hyg4N_CSATsBm-0sNp2ganJdu6782Gm_e4Y5rBwPlpL6gS8NI6GVmpZugdXscLW4ICwuVrsIvLA099FGDQ97rn7VvJtICeeTPnM7t0-je_xEumfPYUeJNKzn_TtmVN7cp4eFAu5_FlVCxE");'>
@@ -80,7 +78,7 @@
                 <!-- Breadcrumb -->
                 <div class="mb-6">
                     <nav class="flex text-textMuted text-sm">
-                        <a href="/events/modify" class="hover:text-accent transition-colors">← Volver a lista de eventos</a>
+                        <a href="/mis-eventos" class="hover:text-accent transition-colors">← Volver a mis eventos</a>
                     </nav>
                 </div>
 
@@ -331,9 +329,9 @@
                                     <option value="schedule">📅 Cambio de fecha/horario</option>
                                     <option value="location">📍 Cambio de ubicación</option>
                                     <option value="content">📝 Cambio de contenido/descripción</option>
-                                    <option value="cancellation">❌ Cancelación</option>
-                                    <option value="postponement">⏸️ Posposición</option>
                                     <option value="technical">🔧 Ajustes técnicos</option>
+                                    <option value="capacity">👥 Cambio de capacidad</option>
+                                    <option value="requirements">📋 Actualización de requisitos</option>
                                     <option value="other">📦 Otro motivo</option>
                                 </select>
                             </div>
@@ -397,16 +395,12 @@
 
                     <!-- Submit Section -->
                     <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                        <button type="button" onclick="window.history.back()" 
-                                class="px-10 py-4 border-2 border-textMuted text-textMuted rounded-xl font-bold hover:bg-textMuted hover:text-background transition-all duration-300 text-lg">
-                            ← Cancelar
-                        </button>
                         <button type="button" onclick="previewChanges()" 
                                 class="px-10 py-4 border-2 border-info text-info rounded-xl font-bold hover:bg-info hover:text-white transition-all duration-300 shadow-lg hover:shadow-info/30 text-lg">
                                 👁️ Vista Previa
                         </button>
                         <button type="submit" 
-                                class="px-10 py-4 bg-gradient-to-r from-accent to-secondary text-white rounded-xl font-bold hover:from-secondary hover:to-accent transition-all duration-300 shadow-2xl hover:shadow-accent/40 text-lg transform hover:scale-105">
+                                class="px-10 py-4 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold hover:from-info hover:to-secondary transition-all duration-300 shadow-2xl hover:shadow-secondary/40 text-lg transform hover:scale-105">
                             💾 Guardar Cambios y Notificar
                         </button>
                     </div>
@@ -612,7 +606,7 @@
                     alert('✅ Cambios guardados exitosamente. Se han enviado las notificaciones correspondientes.');
                     
                     // Redirect to events list
-                    window.location.href = '/events/modify';
+                    window.location.href = '/mis-eventos';
                     
                 } catch (error) {
                     throw error;

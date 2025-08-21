@@ -24,7 +24,7 @@
               secondary: '#00e5ff',            // Cyan eléctrico
               tertiary: '#7c4dff',            // Púrpura vibrante
               success: '#00c853',             // Verde brillante
-              warning: '#ffc107',             // Ámbar dorado
+              warning: '#ff6b35',             // Naranja amigable
               info: '#2196f3',                // Azul brillante
               purple: '#9c27b0',              // Magenta
               text: '#ffffff',                // Blanco puro
@@ -321,7 +321,7 @@
                                 Omitir por ahora
                             </button>
                             <button type="submit" id="submit-media" 
-                                    class="px-14 py-5 bg-gradient-to-r from-secondary to-tertiary text-white rounded-2xl font-bold hover:from-tertiary hover:to-secondary transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-3xl hover:shadow-secondary/50 text-xl">
+                                    class="px-14 py-5 bg-gradient-to-r from-secondary to-info text-white rounded-2xl font-bold hover:from-info hover:to-secondary transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-3xl hover:shadow-secondary/50 text-xl">
                                 Continuar: Resumen → <span class="text-2xl ml-2">📋</span>
                             </button>
                         </div>

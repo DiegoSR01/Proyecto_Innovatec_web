@@ -23,7 +23,7 @@
               secondary: '#00e5ff',
               tertiary: '#7c4dff',
               success: '#00c853',
-              warning: '#ffc107',
+              warning: '#ff6b35',
               info: '#2196f3',
               purple: '#9c27b0',
               text: '#ffffff',
@@ -227,7 +227,7 @@
                         </div>
                         
                         <button type="submit" id="submit-btn"
-                                class="px-14 py-5 bg-gradient-to-r from-accent to-secondary text-white rounded-2xl font-bold hover:from-secondary hover:to-accent transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-3xl hover:shadow-accent/50 backdrop-blur-sm text-xl">
+                                class="px-14 py-5 bg-gradient-to-r from-secondary to-info text-white rounded-2xl font-bold hover:from-info hover:to-secondary transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-3xl hover:shadow-secondary/50 backdrop-blur-sm text-xl">
                             Siguiente: Fechas → <span class="text-2xl ml-2">🗓️</span>
                         </button>
                     </div>
@@ -273,12 +273,17 @@
                     }
                 })
                 .then(response => {
+                    // Verificar si la respuesta es exitosa
                     if (response.ok) {
-                        console.log('✅ Datos limpiados correctamente');
-                        location.reload(); // Recargar la página para mostrar el formulario limpio
+                        // Intentar parsear como JSON, pero no requerir que tenga un mensaje específico
+                        return response.json().catch(() => ({ success: true }));
                     } else {
                         throw new Error('Error en la respuesta del servidor');
                     }
+                })
+                .then(data => {
+                    console.log('✅ Datos limpiados correctamente');
+                    location.reload(); // Recargar la página para mostrar el formulario limpio
                 })
                 .catch(error => {
                     console.error('❌ Error al limpiar datos:', error);
@@ -348,7 +353,14 @@
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (response.ok) {
+                            // Intentar parsear JSON, pero no requerir formato específico
+                            return response.json().catch(() => ({ success: true }));
+                        } else {
+                            throw new Error('Error en la respuesta del servidor');
+                        }
+                    })
                     .then(data => {
                         console.log('✅ Todos los datos limpiados');
                         location.reload();
@@ -365,7 +377,10 @@
             // Botón para limpiar datos básicos
             document.getElementById('btn-limpiar-basicos').addEventListener('click', function() {
                 if (confirm('¿Estás seguro de que quieres limpiar todos los datos básicos del evento? Esta acción no se puede deshacer.')) {
-                    // Limpiar formulario
+                    const btn = this;
+                    const originalText = btn.innerHTML;
+                    
+                    // Limpiar formulario localmente primero
                     document.querySelector('input[name="event_name"]').value = '';
                     document.querySelector('textarea[name="event_description"]').value = '';
                     document.querySelector('select[name="event_category"]').value = '';
@@ -374,6 +389,10 @@
                     const charCount = document.getElementById('char-count');
                     if (charCount) charCount.textContent = '0';
                     
+                    // Mostrar estado de carga
+                    btn.innerHTML = '<span class="text-xl">🗑️</span> Limpiando...';
+                    btn.disabled = true;
+                    
                     // Limpiar sesión del servidor
                     fetch('/event/clear-basic', {
                         method: 'POST',
@@ -381,12 +400,26 @@
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
-                    }).then(() => {
-                        console.log('Datos básicos limpiados del servidor');
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json().catch(() => ({ success: true }));
+                        } else {
+                            throw new Error('Error del servidor');
+                        }
+                    })
+                    .then data => {
+                        console.log('✅ Datos básicos limpiados del servidor');
                         alert('✅ Datos básicos limpiados correctamente');
-                    }).catch(error => {
+                    })
+                    .catch(error => {
                         console.error('Error al limpiar datos básicos:', error);
-                        alert('✅ Datos limpiados localmente');
+                        alert('✅ Datos limpiados localmente (el servidor puede no estar disponible)');
+                    })
+                    .finally(() => {
+                        // Restaurar botón
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
                     });
                 }
             });

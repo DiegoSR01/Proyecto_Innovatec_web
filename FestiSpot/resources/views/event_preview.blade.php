@@ -24,7 +24,7 @@
               secondary: '#00e5ff',            // Cyan eléctrico
               tertiary: '#7c4dff',            // Púrpura vibrante
               success: '#00c853',             // Verde brillante
-              warning: '#ffc107',             // Ámbar dorado
+              warning: '#ff6b35',             // Naranja amigable
               info: '#2196f3',                // Azul brillante
               purple: '#9c27b0',              // Magenta
               text: '#ffffff',                // Blanco puro
@@ -321,7 +321,7 @@
                         💾 Guardar Borrador
                     </button>
                     <button id="btn-publicar" 
-                            class="px-10 py-4 bg-gradient-to-r from-accent to-secondary text-white rounded-xl font-bold hover:from-secondary hover:to-accent transition-all duration-300 shadow-2xl hover:shadow-accent/40 text-lg transform hover:scale-105">
+                            class="px-10 py-4 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold hover:from-info hover:to-secondary transition-all duration-300 shadow-2xl hover:shadow-secondary/40 text-lg transform hover:scale-105">
                         🚀 Publicar Evento
                     </button>
                 </div>

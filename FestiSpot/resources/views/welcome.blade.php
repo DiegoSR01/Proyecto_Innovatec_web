@@ -24,7 +24,7 @@
             secondary: '#00e5ff',
             tertiary: '#7c4dff',
             success: '#00c853',
-            warning: '#ffc107',
+            warning: '#ff6b35',
             info: '#2196f3',
             purple: '#9c27b0',
             text: '#ffffff',
@@ -70,7 +70,7 @@
     
     <!-- Create Event Button -->
     <div class="mt-auto px-6 pb-8">
-      <button onclick="crearNuevoEvento()" class="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-accent to-secondary text-white rounded-xl font-bold text-lg shadow-lg hover:from-secondary hover:to-accent transition-all duration-300 transform hover:scale-105 hover:shadow-accent/50">
+      <button onclick="crearNuevoEvento()" id="btn-crear-evento" class="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold text-lg shadow-lg hover:from-info hover:to-secondary transition-all duration-300 transform hover:scale-105 hover:shadow-secondary/50">
         <i class="fa-solid fa-plus"></i> Nuevo Evento
       </button>
     </div>
@@ -85,7 +85,7 @@
         <span class="font-black text-xl md:text-2xl bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent">FestiSpot</span>
       </div>
       <div class="flex gap-4">
-        <button onclick="crearNuevoEvento()" class="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-accent to-secondary text-white rounded-xl font-bold text-base shadow-lg hover:from-secondary hover:to-accent transition-all">
+        <button onclick="crearNuevoEvento()" id="btn-crear-evento-header" class="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold text-base shadow-lg hover:from-info hover:to-secondary transition-all">
           <i class="fa-solid fa-plus"></i> Crear Evento
         </button>
         <button class="flex items-center gap-2 px-5 py-2 bg-cardLight text-accent border border-accent/40 rounded-xl font-bold text-base shadow hover:bg-accent/10 transition-all">
@@ -260,35 +260,40 @@
 
     // Función para crear nuevo evento
     function crearNuevoEvento() {
-      const buttons = document.querySelectorAll('button[onclick="crearNuevoEvento()"]');
+      // Obtener el botón que fue clickeado (puede ser el del sidebar o header)
+      const btnSidebar = document.getElementById('btn-crear-evento');
+      const btnHeader = document.getElementById('btn-crear-evento-header');
       
-      buttons.forEach(btn => {
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Limpiando...';
-        btn.disabled = true;
-      });
-
-      // Asegurar limpieza completa antes de redirigir
-      fetch('/event/clear-all', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          console.log('✅ Sesión limpiada correctamente');
-          window.location.href = '/event/create';
-        } else {
-          throw new Error(data.message);
-        }
-      })
-      .catch(error => {
-        console.error('❌ Error al limpiar sesión:', error);
-        // Intentar redirigir de todas formas
+      // Determinar cuál botón fue clickeado
+      let btn = null;
+      if (event && event.target) {
+        btn = event.target.closest('button');
+      }
+      
+      if (!btn) {
+        btn = btnSidebar || btnHeader;
+      }
+      
+      if (!btn) return;
+      
+      const originalText = btn.innerHTML;
+      
+      // Mostrar estado de carga
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creando...';
+      btn.disabled = true;
+      
+      // Redirigir directamente
+      setTimeout(() => {
         window.location.href = '/event/create';
-      });
+      }, 500);
+      
+      // Restaurar botón en caso de que no se redirija
+      setTimeout(() => {
+        if (btn) {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }
+      }, 5000);
     }
   </script>
 </body>

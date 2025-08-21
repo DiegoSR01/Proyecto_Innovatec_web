@@ -22,7 +22,7 @@
               secondary: '#00e5ff',
               tertiary: '#7c4dff',
               success: '#00c853',
-              warning: '#ffc107',
+              warning: '#ff6b35',
               info: '#2196f3',
               purple: '#9c27b0',
               text: '#ffffff',

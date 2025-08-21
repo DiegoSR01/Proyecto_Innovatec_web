@@ -24,7 +24,7 @@
               secondary: '#00e5ff',            // Cyan eléctrico
               tertiary: '#7c4dff',            // Púrpura vibrante
               success: '#00c853',             // Verde brillante
-              warning: '#ffc107',             // Ámbar dorado
+              warning: '#ff6b35',             // Naranja amigable
               info: '#2196f3',                // Azul brillante
               purple: '#9c27b0',              // Magenta
               text: '#ffffff',                // Blanco puro
@@ -449,7 +449,7 @@
                         </button>
                         
                         <button type="submit" id="submit-btn" 
-                                class="px-12 py-4 bg-gradient-to-r from-info to-purple text-white rounded-xl font-bold hover:from-purple hover:to-info transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-info/40 disabled:opacity-50 disabled:cursor-not-allowed" 
+                                class="px-12 py-4 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold hover:from-info hover:to-secondary transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-secondary/40 disabled:opacity-50 disabled:cursor-not-allowed" 
                                 disabled>
                             Siguiente → 🎬
                         </button>

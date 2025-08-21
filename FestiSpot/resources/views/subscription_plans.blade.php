@@ -24,7 +24,7 @@
               secondary: '#00e5ff',            // Cyan eléctrico
               tertiary: '#7c4dff',            // Púrpura vibrante
               success: '#00c853',             // Verde brillante
-              warning: '#ffc107',             // Ámbar dorado
+              warning: '#ff6b35',             // Naranja amigable
               info: '#2196f3',                // Azul brillante
               purple: '#9c27b0',              // Magenta
               text: '#ffffff',                // Blanco puro

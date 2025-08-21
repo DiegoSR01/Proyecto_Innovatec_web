@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/event-modify-new', function () {
+    return view('event_modify_new');
+});
+
 Route::get('/mis-eventos', function () {
     return view('mis_eventos');
 })->name('mis.eventos');

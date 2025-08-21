@@ -11,7 +11,7 @@
     <div class="relative z-10">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
             <h1 class="text-3xl font-black bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent drop-shadow-lg">Mis Eventos</h1>
-            <a href="/event/create" class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-accent to-secondary text-white rounded-xl font-bold text-lg shadow-lg hover:from-secondary hover:to-accent transition-all duration-300 transform hover:scale-105 hover:shadow-accent/50"><i class="fa-solid fa-plus"></i> Nuevo Evento</a>
+            <a href="/event/create" class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold text-lg shadow-lg hover:from-info hover:to-secondary transition-all duration-300 transform hover:scale-105 hover:shadow-secondary/50"><i class="fa-solid fa-plus"></i> Nuevo Evento</a>
         </div>
 
         <!-- Calendario visual -->
@@ -57,68 +57,53 @@
         <!-- Lista de eventos (grid de tarjetas) -->
     <div id="eventos-lista" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Evento 1 -->
-            <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300 cursor-pointer" data-fecha="2025-08-22">
+            <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300 cursor-pointer" data-evento-id="1" data-fecha="2025-08-22">
                 <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Evento" class="rounded-t-2xl h-40 w-full object-cover">
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="px-3 py-1 bg-accent/20 text-accent rounded-full text-xs font-bold">Festival</span>
                         <span class="px-3 py-1 bg-success/20 text-success rounded-full text-xs font-bold">Activo</span>
                     </div>
-                    <h2 class="text-xl font-bold mb-1">Festival Jazz</h2>
+                    <h2 class="text-xl font-bold mb-1">Festival de Música Electrónica 2024</h2>
                     <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-calendar-days mr-1"></i> 22/08/2025</div>
-                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-location-dot mr-1"></i> Auditorio Nacional</div>
+                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-location-dot mr-1"></i> Explanada Central, CDMX</div>
                     <div class="flex items-center gap-2 mt-auto">
                         <span class="text-info"><i class="fa-solid fa-users"></i></span>
-                        <span class="font-semibold">120 asistentes</span>
-                    </div>
-                    <div class="flex gap-2 mt-4">
-                        <a href="#" class="px-3 py-1 border-2 border-[#00e5ff] text-[#00e5ff] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#00e5ff] hover:text-white"><i class="fa-solid fa-pen"></i> Editar</a>
-                        <a href="#" class="px-3 py-1 border-2 border-[#00e5ff] text-[#00e5ff] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#00e5ff] hover:text-white"><i class="fa-solid fa-trash"></i> Eliminar</a>
-                        <a href="#" class="px-3 py-1 border-2 border-[#00e5ff] text-[#00e5ff] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#00e5ff] hover:text-white"><i class="fa-solid fa-chart-line"></i> Estadísticas</a>
+                        <span class="font-semibold">245 asistentes</span>
                     </div>
                 </div>
             </div>
             <!-- Evento 2 -->
-            <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300 cursor-pointer" data-fecha="2025-09-05">
+            <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300 cursor-pointer" data-evento-id="2" data-fecha="2025-09-05">
                 <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80" alt="Evento" class="rounded-t-2xl h-40 w-full object-cover">
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="px-3 py-1 bg-tertiary/20 text-tertiary rounded-full text-xs font-bold">Conferencia</span>
-                        <span class="px-3 py-1 bg-warning/20 text-warning rounded-full text-xs font-bold">Finalizado</span>
+                        <span class="px-3 py-1 bg-success/20 text-success rounded-full text-xs font-bold">Activo</span>
                     </div>
-                    <h2 class="text-xl font-bold mb-1">Tech Summit</h2>
+                    <h2 class="text-xl font-bold mb-1">Conferencia de Tecnología Web</h2>
                     <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-calendar-days mr-1"></i> 05/09/2025</div>
-                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-location-dot mr-1"></i> Centro de Convenciones</div>
+                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-location-dot mr-1"></i> Centro de Convenciones / Virtual</div>
                     <div class="flex items-center gap-2 mt-auto">
                         <span class="text-info"><i class="fa-solid fa-users"></i></span>
-                        <span class="font-semibold">80 asistentes</span>
-                    </div>
-                    <div class="flex gap-2 mt-4">
-                        <a href="#" class="px-3 py-1 border-2 border-[#7c4dff] text-[#7c4dff] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#7c4dff] hover:text-white"><i class="fa-solid fa-pen"></i> Editar</a>
-                        <a href="#" class="px-3 py-1 border-2 border-[#7c4dff] text-[#7c4dff] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#7c4dff] hover:text-white"><i class="fa-solid fa-trash"></i> Eliminar</a>
-                        <a href="#" class="px-3 py-1 border-2 border-[#7c4dff] text-[#7c4dff] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#7c4dff] hover:text-white"><i class="fa-solid fa-chart-line"></i> Estadísticas</a>
+                        <span class="font-semibold">89 asistentes</span>
                     </div>
                 </div>
             </div>
             <!-- Evento 3 -->
-            <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300 cursor-pointer" data-fecha="2025-09-15">
+            <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300 cursor-pointer" data-evento-id="3" data-fecha="2024-12-15">
                 <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=80" alt="Evento" class="rounded-t-2xl h-40 w-full object-cover">
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-center gap-2 mb-2">
-                        <span class="px-3 py-1 bg-secondary/20 text-secondary rounded-full text-xs font-bold">Cultural</span>
-                        <span class="px-3 py-1 bg-success/20 text-success rounded-full text-xs font-bold">Activo</span>
+                        <span class="px-3 py-1 bg-secondary/20 text-secondary rounded-full text-xs font-bold">Teatro</span>
+                        <span class="px-3 py-1 bg-success/20 text-success rounded-full text-xs font-bold">Finalizado</span>
                     </div>
-                    <h2 class="text-xl font-bold mb-1">Expo Cultura</h2>
-                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-calendar-days mr-1"></i> 15/09/2025</div>
-                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-location-dot mr-1"></i> Museo de Arte</div>
+                    <h2 class="text-xl font-bold mb-1">Obra de Teatro: El Sueño de una Noche</h2>
+                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-calendar-days mr-1"></i> 15/12/2024</div>
+                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-location-dot mr-1"></i> Teatro Nacional, Monterrey</div>
                     <div class="flex items-center gap-2 mt-auto">
                         <span class="text-info"><i class="fa-solid fa-users"></i></span>
-                        <span class="font-semibold">60 asistentes</span>
-                    </div>
-                    <div class="flex gap-2 mt-4">
-                        <a href="#" class="px-3 py-1 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-pen"></i> Editar</a>
-                        <a href="#" class="px-3 py-1 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-trash"></i> Eliminar</a>
-                        <a href="#" class="px-3 py-1 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg text-sm font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-chart-line"></i> Estadísticas</a>
+                        <span class="font-semibold">156 asistentes</span>
                     </div>
                 </div>
             </div>
@@ -312,19 +297,158 @@
     }
 </style>
 <script>
+    // Base de datos de eventos
+    const eventosData = {
+        1: {
+            id: 1,
+            nombre: "Festival de Música Electrónica 2024",
+            categoria: "Festival",
+            tipo: "Presencial",
+            descripcion: "Un festival increíble con los mejores DJs del mundo. Ven a disfrutar de una noche llena de música electrónica, luces espectaculares y una experiencia única que recordarás para siempre.",
+            fecha_inicio: "2025-08-22",
+            fecha_fin: "2025-08-22",
+            hora_inicio: "20:00",
+            hora_fin: "02:00",
+            lugar: "Explanada Central",
+            direccion: "Av. Insurgentes Sur 1457, Col. San José Insurgentes",
+            ciudad: "Ciudad de México",
+            estado: "CDMX",
+            pais: "México",
+            capacidad: "5000",
+            asistentes: 245,
+            estado_evento: "published",
+            dias_restantes: 7,
+            puede_modificar_fecha: true,
+            puede_modificar_ubicacion: false,
+            puede_modificar_basico: true,
+            evento_pasado: false
+        },
+        2: {
+            id: 2,
+            nombre: "Conferencia de Tecnología Web",
+            categoria: "Conferencia",
+            tipo: "Híbrido",
+            descripcion: "Conferencia sobre las últimas tendencias en desarrollo web, frameworks modernos y mejores prácticas. Incluye talleres prácticos y networking.",
+            fecha_inicio: "2025-09-05",
+            fecha_fin: "2025-09-05",
+            hora_inicio: "09:00",
+            hora_fin: "18:00",
+            lugar: "Centro de Convenciones",
+            direccion: "Av. López Mateos 2375, Col. Providencia",
+            ciudad: "Guadalajara",
+            estado: "Jalisco",
+            pais: "México",
+            enlace_virtual: "https://meet.google.com/abc-defg-hij",
+            plataforma: "google-meet",
+            capacidad: "300",
+            asistentes: 89,
+            estado_evento: "published",
+            dias_restantes: 14,
+            puede_modificar_fecha: true,
+            puede_modificar_ubicacion: true,
+            puede_modificar_basico: true,
+            evento_pasado: false
+        },
+        3: {
+            id: 3,
+            nombre: "Obra de Teatro: El Sueño de una Noche",
+            categoria: "Teatro",
+            tipo: "Presencial",
+            descripcion: "Una adaptación moderna de la clásica obra de Shakespeare. Una experiencia teatral única que combina tradición y vanguardia.",
+            fecha_inicio: "2024-12-15",
+            fecha_fin: "2024-12-15",
+            hora_inicio: "19:30",
+            hora_fin: "22:00",
+            lugar: "Teatro Nacional",
+            direccion: "Av. Constitución 435, Col. Centro",
+            ciudad: "Monterrey",
+            estado: "Nuevo León",
+            pais: "México",
+            capacidad: "500",
+            asistentes: 156,
+            estado_evento: "finished",
+            dias_restantes: -30,
+            puede_modificar_fecha: false,
+            puede_modificar_ubicacion: false,
+            puede_modificar_basico: true,
+            evento_pasado: true,
+            resenas: [
+                {
+                    id: 1,
+                    usuario: "María García",
+                    calificacion: 5,
+                    comentario: "¡Increíble adaptación! Los actores estuvieron espectaculares y la puesta en escena fue sublime. Definitivamente recomiendo este tipo de eventos.",
+                    fecha: "2024-12-16"
+                },
+                {
+                    id: 2,
+                    usuario: "Carlos Mendoza",
+                    calificacion: 4,
+                    comentario: "Muy buena obra, aunque el sonido podría mejorar un poco. La interpretación fue excelente y la historia muy bien contada.",
+                    fecha: "2024-12-16"
+                },
+                {
+                    id: 3,
+                    usuario: "Ana López",
+                    calificacion: 5,
+                    comentario: "Una experiencia teatral única. Me encantó cómo modernizaron la obra sin perder su esencia. El venue también es perfecto.",
+                    fecha: "2024-12-17"
+                },
+                {
+                    id: 4,
+                    usuario: "Roberto Silva",
+                    calificacion: 4,
+                    comentario: "Excelente producción. Los efectos visuales y la música fueron muy bien ejecutados. Solo el tiempo de espera fue un poco largo.",
+                    fecha: "2024-12-18"
+                }
+            ]
+        }
+    };
+
+    // Función para limpiar completamente el estado de los eventos
+    function limpiarEstadoEventos() {
+        // Limpiar todas las tarjetas expandidas
+        document.querySelectorAll('.evento-card').forEach(card => {
+            card.classList.remove('expanded');
+        });
+        
+        // Reset de variables globales
+        if (typeof expandedCard !== 'undefined') {
+            expandedCard = null;
+        }
+        if (typeof window.expandedCard !== 'undefined') {
+            window.expandedCard = null;
+        }
+        
+        // Remover cualquier modal que pueda quedar
+        const modals = document.querySelectorAll('#evento-modal-bg, #resenas-modal-bg, #anuncios-modal-bg');
+        modals.forEach(modal => modal.remove());
+    }
+
     // Expansión de evento y gestión
     document.addEventListener('DOMContentLoaded', function() {
         let expandedCard = null;
+        
+        // Hacer expandedCard accesible globalmente
+        window.expandedCard = expandedCard;
+        
         document.querySelectorAll('.evento-card').forEach(card => {
             card.addEventListener('click', function(e) {
                 // Evitar expansión si ya está expandido
                 if (card.classList.contains('expanded')) return;
-                // Cerrar otro expandido
-                if (expandedCard && expandedCard !== card) {
-                    expandedCard.classList.remove('expanded');
-                }
+                
+                // Limpiar estado previo completamente
+                limpiarEstadoEventos();
+                
+                // Expandir nueva tarjeta
                 card.classList.add('expanded');
                 expandedCard = card;
+                window.expandedCard = expandedCard; // Actualizar referencia global
+                
+                // Obtener ID del evento
+                const eventoId = card.getAttribute('data-evento-id');
+                const evento = eventosData[eventoId];
+                
                 // Crear modal
                 if (!document.getElementById('evento-modal-bg')) {
                     const modalBg = document.createElement('div');
@@ -332,13 +456,19 @@
                     modalBg.id = 'evento-modal-bg';
                     const modal = document.createElement('div');
                     modal.className = 'evento-modal';
+                    
                     // Obtener info del evento
-                    const titulo = card.querySelector('h2')?.textContent || 'Evento';
-                    const fecha = card.querySelector('.fa-calendar-days')?.parentElement?.textContent?.trim() || '';
-                    const lugar = card.querySelector('.fa-location-dot')?.parentElement?.textContent?.trim() || '';
-                    const asistentes = card.querySelector('.fa-users')?.parentElement?.nextElementSibling?.textContent?.trim() || '';
+                    const titulo = evento.nombre;
+                    const fecha = new Date(evento.fecha_inicio).toLocaleDateString('es-ES', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    const lugar = `${evento.lugar}, ${evento.ciudad}`;
+                    const asistentes = `${evento.asistentes} asistentes confirmados`;
+                    
                     modal.innerHTML = `
-                        <!-- Ícono de calendario eliminado para evitar corte visual -->
                         <h2 class="bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent">${titulo}</h2>
                         <div class="evento-datos">
                             <span><i class="fa-solid fa-calendar-days"></i> ${fecha}</span>
@@ -348,35 +478,482 @@
                         <div class="acciones-titulo">Acciones rápidas</div>
                         <div class="acciones-desc">Gestiona tu evento fácilmente</div>
                         <div class="evento-acciones">
-                            <a href="#" class="border-2 border-[#00e5ff] text-[#00e5ff] bg-transparent font-bold rounded-xl px-4 py-6 text-lg shadow-lg transition-all flex flex-col items-center justify-center hover:bg-[#00e5ff] hover:text-white"><i class="fa-solid fa-pen-to-square mb-2"></i>Modificación<br>del evento</a>
-                            <a href="#" class="border-2 border-[#7c4dff] text-[#7c4dff] bg-transparent font-bold rounded-xl px-4 py-6 text-lg shadow-lg transition-all flex flex-col items-center justify-center hover:bg-[#7c4dff] hover:text-white"><i class="fa-solid fa-bullhorn mb-2"></i>Creación<br>de anuncios</a>
-                            <a href="#" class="border-2 border-[#ff4081] text-[#ff4081] bg-transparent font-bold rounded-xl px-4 py-6 text-lg shadow-lg transition-all flex flex-col items-center justify-center hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-star mb-2"></i>Reseñas</a>
+                            <a href="#" onclick="event.preventDefault(); modificarEvento(${eventoId})" class="border-2 border-[#00e5ff] text-[#00e5ff] bg-transparent font-bold rounded-xl px-4 py-6 text-lg shadow-lg transition-all flex flex-col items-center justify-center hover:bg-[#00e5ff] hover:text-white"><i class="fa-solid fa-pen-to-square mb-2"></i>Modificar<br>evento</a>
+                            <a href="#" onclick="event.preventDefault(); crearAnuncio(${eventoId})" class="border-2 border-[#7c4dff] text-[#7c4dff] bg-transparent font-bold rounded-xl px-4 py-6 text-lg shadow-lg transition-all flex flex-col items-center justify-center hover:bg-[#7c4dff] hover:text-white"><i class="fa-solid fa-bullhorn mb-2"></i>Crear<br>anuncios</a>
+                            <a href="#" onclick="event.preventDefault(); verResenas(${eventoId})" class="border-2 border-[#ff4081] text-[#ff4081] bg-transparent font-bold rounded-xl px-4 py-6 text-lg shadow-lg transition-all flex flex-col items-center justify-center hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-star mb-2"></i>Ver<br>reseñas</a>
                         </div>
                         <button class="cerrar-modal-btn">Cerrar gestión</button>
                     `;
                     modalBg.appendChild(modal);
                     document.body.appendChild(modalBg);
-                    // Cerrar modal
+                    
+                    // Cerrar modal principal
                     modal.querySelector('button').addEventListener('click', function(ev) {
                         ev.stopPropagation();
-                        card.classList.remove('expanded');
-                        modalBg.remove();
-                        expandedCard = null;
+                        limpiarEstadoEventos();
                     });
+                    
                     // Cerrar al hacer clic fuera
                     modalBg.addEventListener('click', function(ev) {
                         if (ev.target === modalBg) {
-                            card.classList.remove('expanded');
-                            modalBg.remove();
-                            expandedCard = null;
+                            limpiarEstadoEventos();
                         }
                     });
                 }
             });
         });
-        // Cerrar gestión al hacer clic fuera
-    // Ya no se cierra con click fuera de la tarjeta, solo con el modal
     });
+
+    // Función para modificar evento
+    function modificarEvento(eventoId) {
+        console.log('Modificando evento:', eventoId);
+        const evento = eventosData[eventoId];
+        
+        if (evento) {
+            // Guardar datos del evento en localStorage para la página de modificación
+            localStorage.setItem('eventoActual', JSON.stringify(evento));
+            
+            // Redirigir a la página de modificación nueva
+            window.location.href = `/event-modify-new`;
+        } else {
+            alert('Error: No se encontraron los datos del evento');
+        }
+    }
+
+    // Función para ver reseñas
+    function verResenas(eventoId) {
+        console.log('Viendo reseñas del evento:', eventoId);
+        const evento = eventosData[eventoId];
+        
+        if (!evento) {
+            alert('Error: No se encontraron los datos del evento');
+            return;
+        }
+        
+        // Cerrar modal actual y limpiar estado expandido
+        const modalBg = document.getElementById('evento-modal-bg');
+        if (modalBg) {
+            modalBg.remove();
+        }
+        
+        // Limpiar estado expandido de todas las tarjetas
+        document.querySelectorAll('.evento-card').forEach(card => {
+            card.classList.remove('expanded');
+        });
+        
+        // Reset del expandedCard global
+        if (typeof expandedCard !== 'undefined') {
+            expandedCard = null;
+        }
+        
+        // Crear modal de reseñas
+        mostrarModalResenas(evento);
+    }
+    
+    function mostrarModalResenas(evento) {
+        const modalBg = document.createElement('div');
+        modalBg.className = 'evento-modal-bg';
+        modalBg.id = 'resenas-modal-bg';
+        
+        const modal = document.createElement('div');
+        modal.className = 'resenas-modal';
+        
+        let contenidoResenas = '';
+        
+        if (!evento.evento_pasado) {
+            // Evento futuro - no hay reseñas
+            contenidoResenas = `
+                <div class="text-center py-12">
+                    <div class="text-6xl mb-4">⏳</div>
+                    <h3 class="text-2xl font-bold text-warning mb-4">Evento Próximo</h3>
+                    <p class="text-textMuted text-lg">
+                        Las reseñas estarán disponibles después de que el evento haya terminado.
+                    </p>
+                    <div class="mt-6 p-4 bg-info/10 rounded-xl">
+                        <p class="text-info font-medium">
+                            📅 Fecha del evento: ${new Date(evento.fecha_inicio).toLocaleDateString('es-ES', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}
+                        </p>
+                    </div>
+                </div>
+            `;
+        } else if (!evento.resenas || evento.resenas.length === 0) {
+            // Evento pasado sin reseñas
+            contenidoResenas = `
+                <div class="text-center py-12">
+                    <div class="text-6xl mb-4">📝</div>
+                    <h3 class="text-2xl font-bold text-textMuted mb-4">Sin Reseñas</h3>
+                    <p class="text-textMuted text-lg">
+                        Aún no hay reseñas para este evento.
+                    </p>
+                </div>
+            `;
+        } else {
+            // Evento pasado con reseñas
+            const promedioCalificacion = evento.resenas.reduce((sum, r) => sum + r.calificacion, 0) / evento.resenas.length;
+            const estrellas = '⭐'.repeat(Math.round(promedioCalificacion));
+            
+            contenidoResenas = `
+                <div class="mb-6 text-center">
+                    <div class="text-4xl mb-2">${estrellas}</div>
+                    <div class="text-2xl font-bold text-success">${promedioCalificacion.toFixed(1)}/5</div>
+                    <div class="text-textMuted">Basado en ${evento.resenas.length} reseña(s)</div>
+                </div>
+                
+                <div class="space-y-4 max-h-96 overflow-y-auto">
+                    ${evento.resenas.map(resena => `
+                        <div class="bg-cardLight/30 rounded-xl p-4 border border-cardLight/20">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="font-bold text-text">${resena.usuario}</div>
+                                <div class="flex items-center gap-2">
+                                    <div class="text-warning">${'⭐'.repeat(resena.calificacion)}</div>
+                                    <div class="text-xs text-textMuted">${new Date(resena.fecha).toLocaleDateString('es-ES')}</div>
+                                </div>
+                            </div>
+                            <p class="text-textMuted leading-relaxed">${resena.comentario}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        modal.innerHTML = `
+            <div class="p-8">
+                <h2 class="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent">
+                    Reseñas - ${evento.nombre}
+                </h2>
+                
+                ${contenidoResenas}
+                
+                <button class="cerrar-resenas-btn">Cerrar</button>
+            </div>
+        `;
+        
+        modalBg.appendChild(modal);
+        document.body.appendChild(modalBg);
+        
+        // Event listeners para cerrar y limpiar estado
+        modal.querySelector('.cerrar-resenas-btn').addEventListener('click', function() {
+            modalBg.remove();
+            // Asegurar que el estado se limpia completamente
+            limpiarEstadoEventos();
+        });
+        
+        modalBg.addEventListener('click', function(ev) {
+            if (ev.target === modalBg) {
+                modalBg.remove();
+                // Asegurar que el estado se limpia completamente
+                limpiarEstadoEventos();
+            }
+        });
+    }
+
+    // Función para crear anuncio
+    function crearAnuncio(eventoId) {
+        console.log('Creando anuncio para evento:', eventoId);
+        const evento = eventosData[eventoId];
+        
+        if (!evento) {
+            alert('Error: No se encontraron los datos del evento');
+            return;
+        }
+        
+        // Cerrar modal actual y limpiar estado expandido
+        const modalBg = document.getElementById('evento-modal-bg');
+        if (modalBg) {
+            modalBg.remove();
+        }
+        
+        // Limpiar estado expandido de todas las tarjetas
+        document.querySelectorAll('.evento-card').forEach(card => {
+            card.classList.remove('expanded');
+        });
+        
+        // Reset del expandedCard global
+        if (typeof expandedCard !== 'undefined') {
+            expandedCard = null;
+        }
+        
+        // Crear modal de anuncios
+        mostrarModalAnuncios(evento);
+    }
+    
+    function mostrarModalAnuncios(evento) {
+        const modalBg = document.createElement('div');
+        modalBg.className = 'evento-modal-bg';
+        modalBg.id = 'anuncios-modal-bg';
+        
+        const modal = document.createElement('div');
+        modal.className = 'anuncios-modal';
+        
+        // Datos de suscripción simulados (en el futuro vendrán del backend)
+        const suscripcionUsuario = {
+            tipo: 'basic', // basic, premium, professional
+            anunciosRestantes: 3,
+            anunciosMaximos: 5,
+            caracteristicasPermitidas: ['texto', 'imagen'],
+            caracteristicasRestringidas: ['video', 'promociones_especiales', 'audiencia_avanzada']
+        };
+        
+        let contenidoModal = '';
+        
+        // Header del modal
+        contenidoModal += `
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent mb-2">
+                    📢 Crear Anuncio
+                </h2>
+                <p class="text-lg font-semibold text-tertiary">${evento.nombre}</p>
+                <div class="mt-4 flex items-center justify-center gap-4 text-sm">
+                    <div class="flex items-center gap-2 bg-info/10 px-3 py-1 rounded-lg">
+                        <span class="text-info">📊</span>
+                        <span class="text-textMuted">Suscripción: <span class="font-bold text-info">${suscripcionUsuario.tipo.charAt(0).toUpperCase() + suscripcionUsuario.tipo.slice(1)}</span></span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-warning/10 px-3 py-1 rounded-lg">
+                        <span class="text-warning">🎯</span>
+                        <span class="text-textMuted">Restantes: <span class="font-bold text-warning">${suscripcionUsuario.anunciosRestantes}/${suscripcionUsuario.anunciosMaximos}</span></span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Verificar si puede crear anuncios
+        if (suscripcionUsuario.anunciosRestantes <= 0) {
+            contenidoModal += `
+                <div class="text-center py-8">
+                    <div class="text-6xl mb-4">⚠️</div>
+                    <h3 class="text-2xl font-bold text-warning mb-4">Límite Alcanzado</h3>
+                    <p class="text-textMuted text-lg mb-6">
+                        Has alcanzado el límite de anuncios para tu suscripción ${suscripcionUsuario.tipo}.
+                    </p>
+                    <div class="space-y-3">
+                        <button onclick="window.location.href='/subscription/plans'" 
+                                class="w-full px-6 py-3 bg-gradient-to-r from-accent to-secondary text-white rounded-xl font-bold hover:from-secondary hover:to-accent transition-all duration-300">
+                            ⬆️ Mejorar Suscripción
+                        </button>
+                        <div class="text-xs text-textMuted">
+                            💡 Las suscripciones Premium y Professional incluyen más anuncios y características avanzadas
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else {
+            // Formulario para crear anuncio
+            contenidoModal += `
+                <form id="anuncio-form" class="space-y-6">
+                    <!-- Tipo de Anuncio -->
+                    <div>
+                        <label class="block text-textMuted text-sm font-medium mb-3">
+                            📋 Tipo de Anuncio *
+                        </label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="flex items-center p-4 border-2 border-cardLight/30 rounded-xl cursor-pointer hover:border-accent/50 transition-all bg-cardLight/20">
+                                <input type="radio" name="tipo_anuncio" value="promocional" class="mr-3 text-accent" required>
+                                <div>
+                                    <div class="font-bold text-accent">🎉 Promocional</div>
+                                    <div class="text-xs text-textMuted">Promociona tu evento</div>
+                                </div>
+                            </label>
+                            <label class="flex items-center p-4 border-2 border-cardLight/30 rounded-xl cursor-pointer hover:border-info/50 transition-all bg-cardLight/20">
+                                <input type="radio" name="tipo_anuncio" value="informativo" class="mr-3 text-info" required>
+                                <div>
+                                    <div class="font-bold text-info">📢 Informativo</div>
+                                    <div class="text-xs text-textMuted">Comparte información</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Título del Anuncio -->
+                    <div>
+                        <label class="block text-textMuted text-sm font-medium mb-2">
+                            📝 Título del Anuncio *
+                        </label>
+                        <input type="text" name="titulo" required maxlength="50"
+                               placeholder="Ej: ¡Últimas entradas disponibles!"
+                               class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text placeholder-textMuted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent">
+                        <div class="text-xs text-textMuted mt-1">Máximo 50 caracteres</div>
+                    </div>
+                    
+                    <!-- Contenido del Anuncio -->
+                    <div>
+                        <label class="block text-textMuted text-sm font-medium mb-2">
+                            📄 Contenido del Anuncio *
+                        </label>
+                        <textarea name="contenido" required rows="4" maxlength="200"
+                                  placeholder="Escribe el mensaje de tu anuncio..."
+                                  class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text placeholder-textMuted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent resize-none"></textarea>
+                        <div class="text-xs text-textMuted mt-1">Máximo 200 caracteres</div>
+                    </div>
+                    
+                    <!-- Imagen (disponible en plan básico) -->
+                    <div>
+                        <label class="block text-textMuted text-sm font-medium mb-2">
+                            🖼️ Imagen del Anuncio
+                        </label>
+                        <div class="border-2 border-dashed border-cardLight/50 rounded-xl p-6 text-center hover:border-accent/50 transition-all">
+                            <input type="file" name="imagen" accept="image/*" class="hidden" id="imagen-upload">
+                            <label for="imagen-upload" class="cursor-pointer">
+                                <div class="text-4xl mb-2">📸</div>
+                                <div class="text-textMuted">Haz clic para subir una imagen</div>
+                                <div class="text-xs text-textMuted mt-1">JPG, PNG o GIF (máx. 2MB)</div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Características restringidas -->
+                    <div class="bg-warning/10 border border-warning/30 rounded-xl p-4">
+                        <h4 class="font-bold text-warning mb-2 flex items-center">
+                            <span class="mr-2">🔒</span> Características Premium
+                        </h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2 text-textMuted">
+                                <span class="text-warning">🎬</span>
+                                <span>Videos promocionales</span>
+                                <span class="text-xs bg-accent/20 text-accent px-2 py-1 rounded">Premium+</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-textMuted">
+                                <span class="text-warning">🎯</span>
+                                <span>Audiencia segmentada avanzada</span>
+                                <span class="text-xs bg-tertiary/20 text-tertiary px-2 py-1 rounded">Professional</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-textMuted">
+                                <span class="text-warning">💰</span>
+                                <span>Promociones y descuentos</span>
+                                <span class="text-xs bg-tertiary/20 text-tertiary px-2 py-1 rounded">Professional</span>
+                            </div>
+                        </div>
+                        <button type="button" onclick="window.location.href='/subscription/plans'" 
+                                class="mt-3 px-4 py-2 bg-warning/20 hover:bg-warning/30 text-warning rounded-lg text-sm font-medium transition-all">
+                            ⬆️ Mejorar para desbloquear
+                        </button>
+                    </div>
+                    
+                    <!-- Audiencia -->
+                    <div>
+                        <label class="block text-textMuted text-sm font-medium mb-2">
+                            🎯 Audiencia Objetivo
+                        </label>
+                        <select name="audiencia" class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent">
+                            <option value="asistentes">👥 Asistentes confirmados (${evento.asistentes})</option>
+                            <option value="seguidores">👤 Seguidores del evento</option>
+                            <option value="publico_general" disabled>🌍 Público general (Premium+)</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Programación -->
+                    <div>
+                        <label class="block text-textMuted text-sm font-medium mb-2">
+                            ⏰ Programación
+                        </label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="flex items-center p-3 border border-cardLight/30 rounded-lg cursor-pointer hover:border-accent/50 transition-all">
+                                <input type="radio" name="programacion" value="inmediato" class="mr-2 text-accent" checked>
+                                <span class="text-sm">📤 Enviar ahora</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-cardLight/30 rounded-lg cursor-pointer hover:border-info/50 transition-all">
+                                <input type="radio" name="programacion" value="programado" class="mr-2 text-info">
+                                <span class="text-sm">⏲️ Programar</span>
+                            </label>
+                        </div>
+                        <div id="fecha-programada" class="hidden mt-3">
+                            <input type="datetime-local" name="fecha_envio" 
+                                   class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text focus:outline-none focus:ring-2 focus:ring-info/50 focus:border-info">
+                        </div>
+                    </div>
+                </form>
+            `;
+        }
+        
+        modal.innerHTML = `
+            <div class="p-6 max-h-[80vh] overflow-y-auto">
+                ${contenidoModal}
+                
+                <div class="flex gap-3 mt-6 pt-4 border-t border-cardLight/30">
+                    <button class="cerrar-anuncios-btn flex-1 px-4 py-3 border-2 border-textMuted text-textMuted rounded-xl font-bold hover:bg-textMuted hover:text-background transition-all">
+                        ✕ Cancelar
+                    </button>
+                    ${suscripcionUsuario.anunciosRestantes > 0 ? `
+                        <button type="submit" form="anuncio-form" class="flex-1 px-4 py-3 bg-gradient-to-r from-tertiary to-purple text-white rounded-xl font-bold hover:from-purple hover:to-tertiary transition-all shadow-lg">
+                            📢 Crear Anuncio
+                        </button>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+        
+        modalBg.appendChild(modal);
+        document.body.appendChild(modalBg);
+        
+        // Event listeners
+        modal.querySelector('.cerrar-anuncios-btn').addEventListener('click', function() {
+            modalBg.remove();
+            limpiarEstadoEventos();
+        });
+        
+        modalBg.addEventListener('click', function(ev) {
+            if (ev.target === modalBg) {
+                modalBg.remove();
+                limpiarEstadoEventos();
+            }
+        });
+        
+        // Event listener para programación
+        const programacionRadios = modal.querySelectorAll('input[name="programacion"]');
+        const fechaProgramada = modal.getElementById('fecha-programada');
+        
+        programacionRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'programado') {
+                    fechaProgramada.classList.remove('hidden');
+                } else {
+                    fechaProgramada.classList.add('hidden');
+                }
+            });
+        });
+        
+        // Event listener para el formulario
+        if (suscripcionUsuario.anunciosRestantes > 0) {
+            const form = modal.querySelector('#anuncio-form');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                crearAnuncioSubmit(evento, new FormData(form));
+            });
+        }
+    }
+    
+    function crearAnuncioSubmit(evento, formData) {
+        // Mostrar loading
+        const submitBtn = document.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '⏳ Creando...';
+        submitBtn.disabled = true;
+        
+        // Simular creación del anuncio
+        setTimeout(() => {
+            const tipoAnuncio = formData.get('tipo_anuncio');
+            const titulo = formData.get('titulo');
+            const programacion = formData.get('programacion');
+            
+            let mensaje = `✅ ¡Anuncio creado exitosamente!\n\n`;
+            mensaje += `📋 Tipo: ${tipoAnuncio === 'promocional' ? 'Promocional' : 'Informativo'}\n`;
+            mensaje += `📝 Título: "${titulo}"\n`;
+            mensaje += `👥 Audiencia: ${evento.asistentes} asistentes\n`;
+            mensaje += `⏰ Envío: ${programacion === 'inmediato' ? 'Inmediato' : 'Programado'}\n\n`;
+            mensaje += `📊 Te quedan 2 anuncios restantes en tu suscripción.`;
+            
+            alert(mensaje);
+            
+            // Cerrar modal
+            document.getElementById('anuncios-modal-bg').remove();
+            limpiarEstadoEventos();
+        }, 2000);
+    }
+
     // Calendario visual para mis eventos
     let calendarDate = new Date();
     let selectedDate = null;
@@ -489,4 +1066,65 @@
         });
     });
 </script>
+
+<style>
+    /* ...existing code... */
+    
+    .resenas-modal {
+        min-width: 400px;
+        max-width: 600px;
+        width: 90%;
+        border-radius: 2rem;
+        background: linear-gradient(135deg, rgba(22,33,62,0.98) 0%, rgba(30,39,73,0.96) 100%);
+        box-shadow: 0 8px 48px 0 #ff408155, 0 2px 16px 0 #00e5ff33;
+        border: 2px solid #ff408144;
+        overflow: hidden;
+        animation: fadeInGestion 0.3s;
+        position: relative;
+    }
+    
+    .cerrar-resenas-btn {
+        display: block;
+        padding: 0.8rem 2rem;
+        background: transparent;
+        color: #ff4081;
+        border: 2px solid #ff4081;
+        border-radius: 1rem;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px 0 #ff408133;
+        cursor: pointer;
+    }
+    
+    .cerrar-resenas-btn:hover {
+        background: #ff4081;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px 0 #ff408155;
+    }
+    
+    .anuncios-modal {
+        min-width: 500px;
+        max-width: 700px;
+        width: 95%;
+        border-radius: 2rem;
+        background: linear-gradient(135deg, rgba(22,33,62,0.98) 0%, rgba(30,39,73,0.96) 100%);
+        box-shadow: 0 8px 48px 0 #7c4dff55, 0 2px 16px 0 #ff408133;
+        border: 2px solid #7c4dff44;
+        overflow: hidden;
+        animation: fadeInGestion 0.3s;
+        position: relative;
+    }
+    
+    .cerrar-anuncios-btn {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .cerrar-anuncios-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px 0 rgba(255, 255, 255, 0.1);
+    }
+</style>
 @endsection
