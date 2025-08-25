@@ -240,6 +240,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🎨 Inicializando formulario de creación...');
             
+            // Restaurar estado del botón al cargar la página
+            restaurarEstadoBoton();
+            
             // Verificar si hay datos existentes
             const eventData = @json($eventBasic);
             const isEditing = @json($isEditing);
@@ -256,7 +259,29 @@
             setupFormValidation();
             setupCharacterCounters();
             setupEventListeners();
+            
+            // Evento para detectar cuando el usuario regresa con el botón atrás
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    console.log('🔄 Página restaurada desde caché, restaurando estado...');
+                    restaurarEstadoBoton();
+                }
+            });
         });
+
+        function restaurarEstadoBoton() {
+            const submitBtn = document.getElementById('submit-btn');
+            if (submitBtn) {
+                // Restaurar texto y habilitar botón
+                submitBtn.innerHTML = 'Siguiente: Fechas → <span class="text-2xl ml-2">🗓️</span>';
+                submitBtn.disabled = false;
+                
+                // Restaurar clases CSS
+                submitBtn.className = 'px-14 py-5 bg-gradient-to-r from-secondary to-info text-white rounded-2xl font-bold hover:from-info hover:to-secondary transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-3xl hover:shadow-secondary/50 backdrop-blur-sm text-xl';
+                
+                console.log('✅ Estado del botón restaurado');
+            }
+        }
 
         function limpiarYEmpezarNuevo() {
             if (confirm('¿Estás seguro de que quieres eliminar toda la información actual y empezar un evento completamente nuevo?')) {
@@ -326,11 +351,40 @@
             form.addEventListener('submit', function(e) {
                 console.log('📝 Enviando formulario...');
                 
-                // Deshabilitar botón para evitar envíos múltiples
+                // Validar campos antes de proceder
+                const eventName = document.querySelector('input[name="event_name"]').value.trim();
+                const eventDescription = document.querySelector('textarea[name="event_description"]').value.trim();
+                const eventCategory = document.querySelector('select[name="event_category"]').value;
+                
+                if (!eventName || !eventDescription || !eventCategory) {
+                    console.log('❌ Formulario incompleto');
+                    return; // No proceder si faltan campos
+                }
+                
+                // Cambiar estado del botón solo si la validación pasa
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '⏳ Guardando...';
+                submitBtn.className = 'px-14 py-5 bg-gray-500 text-white rounded-2xl font-bold cursor-not-allowed opacity-50 text-xl';
                 
-                // El formulario se enviará normalmente
+                console.log('✅ Formulario válido, enviando...');
+                
+                // Timeout de seguridad para restaurar el botón si algo sale mal
+                setTimeout(() => {
+                    if (submitBtn.disabled) {
+                        console.log('⚠️ Timeout de seguridad: restaurando botón');
+                        restaurarEstadoBoton();
+                    }
+                }, 10000); // 10 segundos
+            });
+            
+            // Prevenir envíos múltiples
+            form.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                    if (!submitBtn.disabled) {
+                        form.requestSubmit();
+                    }
+                }
             });
         }
 
@@ -452,6 +506,18 @@
                     }
                 });
             }
+            
+            // Detectar cambios en los campos para habilitar el botón si estaba deshabilitado
+            const formFields = document.querySelectorAll('input[name="event_name"], textarea[name="event_description"], select[name="event_category"]');
+            formFields.forEach(field => {
+                field.addEventListener('input', function() {
+                    const submitBtn = document.getElementById('submit-btn');
+                    if (submitBtn && submitBtn.disabled && submitBtn.innerHTML.includes('Guardando')) {
+                        console.log('🔄 Campo modificado, restaurando botón...');
+                        restaurarEstadoBoton();
+                    }
+                });
+            });
         }
     </script>
 </body>
