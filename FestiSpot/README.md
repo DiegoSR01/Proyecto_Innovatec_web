@@ -1,4 +1,3 @@
-
 # FestiSpot
 
 Plataforma de gestión y organización de eventos para organizadores y productores.
@@ -52,10 +51,14 @@ Plataforma de gestión y organización de eventos para organizadores y productor
 	```
 
 7. **Inicia el servidor:**
-	```bash
-	php artisan serve
-	```
-	Accede a [http://127.0.0.1:8000](http://127.0.0.1:8000)
+	- **Opción 1: Laravel (recomendado para desarrollo)**
+		```bash
+		php artisan serve
+		```
+		Accede a [http://127.0.0.1:8000](http://127.0.0.1:8000)
+	- **Opción 2: XAMPP/Apache**
+		1. Inicia Apache desde el panel de XAMPP.
+		2. Accede a [http://localhost/FestiSpot/public](http://localhost/FestiSpot/public) en tu navegador.
 
 ## Scripts útiles
 
@@ -81,10 +84,18 @@ Plataforma de gestión y organización de eventos para organizadores y productor
 ## Estructura principal
 
 - `app/` - Lógica de la aplicación (controladores, modelos, etc.)
-- `resources/views/` - Vistas Blade
+- `resources/views/` - Vistas Blade (aquí editas tus archivos de interfaz)
 - `routes/web.php` - Rutas web
 - `database/` - Migraciones, seeders y base de datos local
 
 ## Créditos
 
 Desarrollado por el equipo de Innovatec Regional.
+
+## Notas adicionales
+
+- **Las vistas Blade** se encuentran en `resources/views`.
+- **La caché de vistas** (Laravel) se guarda en `storage/framework/views`.  
+  Asegúrate de que esta carpeta tenga permisos de escritura para el servidor web.
+- Si usas XAMPP, la ruta podría ser algo como `c:\xampp\htdocs\Proyecto_Innovatec_web\FestiSpot\storage\framework\views`.
+- **Si usas XAMPP/Apache**, accede siempre por la ruta `/FestiSpot/public` y asegúrate de que el archivo `.htaccess` esté presente en la carpeta `public/`.
