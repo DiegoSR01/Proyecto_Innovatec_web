@@ -94,11 +94,11 @@
                 <nav style="display: flex; gap: 8px;">
                     <a href="/" class="nav-link">Inicio</a>
                     <a href="/event/create" class="nav-link">Crear evento</a>
-                    <a href="/subscription/plans" class="nav-link">Suscripción</a>
+                    <a href="/configuration" class="nav-link">Configuración</a>
                 </nav>
                 
                 <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #ff4081, #00e5ff); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; box-shadow: 0 4px 12px rgba(255, 64, 129, 0.3);">
-                    U
+                    <a href="/configuration" style="color: white; text-decoration: none; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 50%;">U</a>
                 </div>
             </div>
         </header>

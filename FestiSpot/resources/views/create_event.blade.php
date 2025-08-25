@@ -101,7 +101,7 @@
                 
                 <!-- User avatar minimalista -->
                 <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #ff4081, #00e5ff); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; box-shadow: 0 4px 12px rgba(255, 64, 129, 0.3);">
-                    U
+                    <a href="/configuration">U</a>
                 </div>
             </div>
         </header>
