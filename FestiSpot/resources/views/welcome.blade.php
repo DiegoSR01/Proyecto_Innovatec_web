@@ -98,7 +98,7 @@
     <section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 px-6 py-8">
       <div class="bg-card rounded-2xl p-6 flex flex-col items-center shadow-lg border border-cardLight/30">
         <span class="text-3xl text-accent mb-2"><i class="fa-solid fa-calendar-check"></i></span>
-        <div class="text-3xl font-bold">8</div>
+        <div class="text-3xl font-bold">9</div>
         <div class="text-textMuted mt-1 text-sm">Eventos Activos</div>
       </div>
       <div class="bg-card rounded-2xl p-6 flex flex-col items-center shadow-lg border border-cardLight/30">
