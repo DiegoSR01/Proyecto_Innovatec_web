@@ -36,6 +36,35 @@
         }
       }
     </script>
+    
+    <style>
+      .header {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+        border-bottom: 1px solid rgba(255, 64, 129, 0.2);
+        backdrop-filter: blur(20px);
+      }
+      .nav-link {
+        color: #ffffff;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        font-weight: 500;
+        opacity: 0.8;
+      }
+      .nav-link:hover {
+        color: #ff4081;
+        opacity: 1;
+        background: rgba(255, 64, 129, 0.1);
+      }
+      .nav-link.active {
+        color: #ff4081;
+        opacity: 1;
+        background: rgba(255, 64, 129, 0.15);
+        font-weight: 600;
+      }
+    </style>
 </head>
 <body class="bg-background text-text min-h-screen">
     <!-- Efectos de fondo con gradientes sutiles -->
@@ -47,18 +76,36 @@
 
     <div class="relative flex size-full min-h-screen flex-col bg-background z-10">
         <!-- Header -->
-        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-cardLight/30 px-10 py-4 bg-card/80 backdrop-blur-xl">
-            <div class="flex items-center gap-4 text-text">
-                <div class="size-6 text-accent drop-shadow-lg">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" 
-                              d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" 
-                              fill="currentColor"></path>
-                    </svg>
+        <header class="header">
+            <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 40px;">
+                <!-- Logo -->
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" style="width: 56px; height: 56px; border-radius: 50%;">
+                    <h1 style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</h1>
                 </div>
-                <h2 class="text-text text-xl font-bold leading-tight tracking-[-0.015em] bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent drop-shadow-lg">
-                    FestiSpot
-                </h2>
+                
+                <!-- Navigation central -->
+                <nav style="display: flex; gap: 8px;">
+                    <a href="/" class="nav-link">Inicio</a>
+                    <a href="/subscription/plans" class="nav-link">Suscripciones</a>
+                    <a href="/subscription/success" class="nav-link active">Éxito</a>
+                    <a href="/configuration" class="nav-link">Configuración</a>
+                </nav>
+                
+                <!-- User section -->
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="position: relative;">
+                        <button class="nav-link" style="padding: 8px 12px;">
+                            <i class="fas fa-bell" style="font-size: 16px;"></i>
+                        </button>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #ff4081, #00e5ff); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-weight: 600; font-size: 14px;">U</span>
+                        </div>
+                        <span style="color: #ffffff; font-weight: 500; font-size: 14px;">Usuario</span>
+                    </div>
+                </div>
             </div>
         </header>
 

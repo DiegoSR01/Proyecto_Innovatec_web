@@ -42,7 +42,7 @@
   <aside class="hidden md:flex flex-col w-64 min-h-screen bg-cardLight/90 border-r border-card/30 shadow-xl z-20">
     <!-- Logo -->
     <div class="flex items-center gap-3 px-8 py-8 border-b border-card/30">
-      <span class="text-accent text-3xl"><i class="fa-solid fa-bolt"></i></span>
+      <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" class="w-16 h-16 rounded-full">
       <span class="font-black text-2xl bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent">FestiSpot</span>
     </div>
     
@@ -81,7 +81,7 @@
     <!-- Header -->
     <header class="flex items-center justify-between border-b border-b-cardLight/30 px-6 py-6 bg-card/80 backdrop-blur-xl sticky top-0 z-10">
       <div class="flex items-center gap-4 text-text">
-        <span class="text-accent text-2xl md:hidden"><i class="fa-solid fa-bolt"></i></span>
+        <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" class="w-12 h-12 rounded-full md:hidden">
         <span class="font-black text-xl md:text-2xl bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent">FestiSpot</span>
       </div>
       <div class="flex gap-4">
