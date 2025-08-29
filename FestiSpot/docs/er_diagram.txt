@@ -1,0 +1,131 @@
+# Diagrama Entidad-Relación (ER) - FestiSpot (Modelo Simplificado)
+
+## Entidades principales (basado en el diagrama actual y requerimientos del proyecto)
+
+### ORGANIZADOR (User)
+- id (PK)
+- nombre
+- email (ÚNICO)
+- password_hash
+- suscripcion_id (FK → SUSCRIPCION)
+
+### SUSCRIPCION
+- id (PK)
+- tipo (ENUM: 'basico', 'pro')
+- estado (ENUM: 'activa', 'vencida', 'cancelada')
+- fecha_vencimiento
+- max_eventos
+- max_mb_imagenes
+
+### EVENTO
+- id (PK)
+- titulo
+- descripcion (LONGITUD 250)
+- ubicacion (Calle, Ciudad, CP)
+- fecha_hora
+- estado (ENUM: 'borrador', 'publicado', 'modificado', 'cancelado')
+- motivo_cambio
+- organizador_id (FK → ORGANIZADOR)
+
+### IMAGEN (Media)
+- id (PK)
+- url
+- tamaño_mb
+- formato (ENUM: 'jpg', 'png')
+- evento_id (FK → EVENTO)
+
+### PRODUCTOR (ProducerApplication)
+- id (PK)
+- nombre
+- categoria
+- estado (ENUM: 'pendiente', 'aprobado', 'rechazado')
+- evento_id (FK → EVENTO)
+
+### ASISTENTE (Attendee)
+- id (PK)
+- user_id (FK → ORGANIZADOR o tabla User si se generaliza)
+- evento_id (FK → EVENTO)
+- status (ENUM: 'interesado', 'confirmado', 'cancelado')
+- fecha_registro
+
+---
+
+## Relaciones clave
+
+- Un **Organizador** tiene una **Suscripción** (1:1)
+- Un **Organizador** puede crear muchos **Evento** (1:N)
+- Un **Evento** puede tener muchas **Imagen** (1:N, con restricción de suma de tamaño)
+- Un **Evento** puede tener muchos **Productor** (1:N)
+- Un **Evento** puede tener muchos **Asistente** (1:N)
+- Un **Asistente** puede estar en muchos **Evento** (N:M si se generaliza a usuarios externos)
+
+---
+
+## Notas
+
+- El modelo puede extenderse para incluir asistentes externos, comentarios, notificaciones, etc.
+- Los estados y tipos deben ser controlados por ENUM o listas restringidas.
+- La relación de imágenes debe validar el límite de almacenamiento por evento según la suscripción.
+- El campo `motivo_cambio` en evento permite registrar la razón de modificaciones/cancelaciones.
+- El modelo puede crecer para soportar roles adicionales (productor, admin, etc).
+
+---
+
+## Visual (texto)
+
+```
+ORGANIZADOR 1---1 SUSCRIPCION
+     |
+     | 1---N
+   EVENTO
+     | 1---N IMAGEN
+     | 1---N PRODUCTOR
+     | 1---N ASISTENTE
+```
+  - fecha
+
+- **Notification**
+  - id (PK)
+  - user_id (FK → User)
+  - event_id (FK → Event, nullable)
+  - tipo (cambio, recordatorio, comentario, etc)
+  - mensaje
+  - leido (bool)
+  - fecha
+
+## Relaciones clave
+
+- Un **User** puede crear muchos **Event** (1:N)
+- Un **Event** tiene una única **EventDate**, **EventLocation**, **EventMedia** (1:1)
+- Un **Event** puede tener muchos **Attendee** (N:M, pero aquí modelado como tabla intermedia)
+- Un **User** puede ser **Attendee** de muchos **Event** (N:M)
+- Un **User** puede aplicar como **ProducerApplication** a muchos **Event** (N:M)
+- Un **Event** puede tener muchas **ProducerApplication**
+- Un **User** puede comentar en muchos **Event** (N:M, tabla Comment)
+- Un **User** puede tener muchas **Notification**
+
+---
+
+## Resumen visual (texto)
+
+```
+User
+ ├──< Event
+ │     ├── EventDate
+ │     ├── EventLocation
+ │     ├── EventMedia
+ │     ├──< Attendee >── User
+ │     ├──< ProducerApplication >── User
+ │     ├──< Comment >── User
+ │     └──< Notification >── User
+ └──< Subscription
+```
+
+---
+
+## Notas
+
+- Puedes agregar tablas auxiliares para historial de cambios, logs, etc.
+- Los estados de eventos y solicitudes deben ser campos tipo ENUM o string controlados.
+- Las notificaciones pueden ser para asistentes, productores u organizadores.
+- La relación Attendee permite distinguir entre interesados y confirmados.
