@@ -42,7 +42,7 @@
   <aside class="hidden md:flex flex-col w-64 min-h-screen shadow-xl z-20" style="background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.9) 50%, rgba(15, 15, 35, 0.95) 100%); border-right: 1px solid rgba(255, 64, 129, 0.2); backdrop-filter: blur(20px);">
     <!-- Logo -->
     <div class="flex items-center gap-3 px-8 py-8">
-      <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" class="w-16 h-16 rounded-full">
+      <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" class="w-20 h-20 rounded-full">
       <span class="font-black text-2xl bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent">FestiSpot</span>
     </div>
     

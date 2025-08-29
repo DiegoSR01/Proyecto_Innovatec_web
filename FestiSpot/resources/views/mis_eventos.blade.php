@@ -41,7 +41,7 @@
         <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 40px;">
             <!-- Logo -->
             <div style="display: flex; align-items: center; gap: 12px;">
-                <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" style="width: 56px; height: 56px; border-radius: 50%;">
+                <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" style="width: 70px; height: 70px; border-radius: 50%;">
                 <h1 style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</h1>
             </div>
             
@@ -158,6 +158,112 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal de Modificación de Evento -->
+    <div id="modal-modificar-evento" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="bg-gradient-to-br from-card/95 to-cardLight/90 backdrop-blur-xl rounded-3xl p-8 border border-cardLight/30 max-w-4xl w-full mx-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <!-- Header del modal -->
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold text-accent mb-2">✏️ Modificar Evento</h2>
+                <p class="text-textMuted">Edita los detalles de tu evento</p>
+            </div>
+            
+            <!-- Formulario de modificación -->
+            <form id="form-modificar-evento" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Información básica -->
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-bold text-secondary mb-4">📝 Información Básica</h3>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-text mb-2">Nombre del Evento</label>
+                            <input type="text" id="edit-nombre" class="w-full px-4 py-3 bg-card border border-cardLight/30 rounded-xl text-text focus:border-accent focus:ring-2 focus:ring-accent/20" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-text mb-2">Descripción</label>
+                            <textarea id="edit-descripcion" rows="3" class="w-full px-4 py-3 bg-card border border-cardLight/30 rounded-xl text-text focus:border-accent focus:ring-2 focus:ring-accent/20"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-text mb-2">Categoría</label>
+                            <select id="edit-categoria" class="w-full px-4 py-3 bg-card border border-cardLight/30 rounded-xl text-text focus:border-accent focus:ring-2 focus:ring-accent/20">
+                                <option value="Festival">Festival</option>
+                                <option value="Conferencia">Conferencia</option>
+                                <option value="Teatro">Teatro</option>
+                                <option value="Deportivo">Deportivo</option>
+                                <option value="Cultural">Cultural</option>
+                                <option value="Tecnología">Tecnología</option>
+                                <option value="Música">Música</option>
+                                <option value="Arte">Arte</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-text mb-2">Tipo de Evento</label>
+                            <select id="edit-tipo" class="w-full px-4 py-3 bg-card border border-cardLight/30 rounded-xl text-text focus:border-accent focus:ring-2 focus:ring-accent/20">
+                                <option value="Presencial">Presencial</option>
+                                <option value="Virtual">Virtual</option>
+                                <option value="Híbrido">Híbrido</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Fecha y ubicación -->
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-bold text-tertiary mb-4">📅 Fecha y Ubicación</h3>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-bold text-text mb-2">Fecha Inicio</label>
+                                <input type="date" id="edit-fecha-inicio" class="w-full px-4 py-3 bg-card border border-cardLight/30 rounded-xl text-text focus:border-accent focus:ring-2 focus:ring-accent/20" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-text mb-2">Fecha Fin</label>
+                                <input type="date" id="edit-fecha-fin" class="w-full px-4 py-3 bg-card border border-cardLight/30 rounded-xl text-text focus:border-accent focus:ring-2 focus:ring-accent/20">
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-bold text-text mb-2">Hora Inicio</label>
+                                <input type="time" id="edit-hora-inicio" class="w-full px-4 py-3 bg-card border border-cardLight/30 rounded-xl text-text focus:border-accent focus:ring-2 focus:ring-accent/20" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-text mb-2">Hora Fin</label>
+                                <input type="time" id="edit-hora-fin" class="w-full px-4 py-3 bg-card border border-cardLight/30 rounded-xl text-text focus:border-accent focus:ring-2 focus:ring-accent/20">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-text mb-2">Lugar</label>
+                            <input type="text" id="edit-lugar" class="w-full px-4 py-3 bg-card border border-cardLight/30 rounded-xl text-text focus:border-accent focus:ring-2 focus:ring-accent/20" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-text mb-2">Dirección</label>
+                            <input type="text" id="edit-direccion" class="w-full px-4 py-3 bg-card border border-cardLight/30 rounded-xl text-text focus:border-accent focus:ring-2 focus:ring-accent/20">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-text mb-2">Ciudad</label>
+                            <input type="text" id="edit-ciudad" class="w-full px-4 py-3 bg-card border border-cardLight/30 rounded-xl text-text focus:border-accent focus:ring-2 focus:ring-accent/20" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Botones de acción -->
+                <div class="flex gap-4 pt-6 border-t border-cardLight/30">
+                    <button type="button" onclick="cerrarModal()" class="flex-1 py-3 bg-cardLight text-textMuted border border-cardLight/30 rounded-xl font-bold hover:bg-card hover:text-text transition-all">
+                        ❌ Cancelar
+                    </button>
+                    <button type="submit" class="flex-1 py-3 bg-gradient-to-r from-accent to-secondary text-white rounded-xl font-bold hover:from-secondary hover:to-accent transition-all shadow-lg">
+                        ✅ Guardar Cambios
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -555,20 +661,50 @@
         });
     });
 
-    // Función para modificar evento
+    // Función para modificar evento - ahora abre modal
     function modificarEvento(eventoId) {
         console.log('Modificando evento:', eventoId);
         const evento = eventosData[eventoId];
         
-        if (evento) {
-            // Guardar datos del evento en localStorage para la página de modificación
-            localStorage.setItem('eventoActual', JSON.stringify(evento));
-            
-            // Redirigir a la página de modificación nueva
-            window.location.href = `/event-modify-new`;
-        } else {
+        if (!evento) {
             alert('Error: No se encontraron los datos del evento');
+            return;
         }
+        
+        // Cerrar el modal anterior (de opciones del evento)
+        const modalBg = document.getElementById('evento-modal-bg');
+        if (modalBg) {
+            modalBg.remove();
+        }
+        
+        // Limpiar estado expandido de todas las tarjetas
+        document.querySelectorAll('.evento-card').forEach(card => {
+            card.classList.remove('expanded');
+        });
+        
+        // Reset del expandedCard global
+        if (typeof expandedCard !== 'undefined') {
+            expandedCard = null;
+        }
+        
+        // Llenar el formulario con los datos del evento
+        document.getElementById('edit-nombre').value = evento.nombre;
+        document.getElementById('edit-descripcion').value = evento.descripcion;
+        document.getElementById('edit-categoria').value = evento.categoria;
+        document.getElementById('edit-tipo').value = evento.tipo;
+        document.getElementById('edit-fecha-inicio').value = evento.fecha_inicio;
+        document.getElementById('edit-fecha-fin').value = evento.fecha_fin;
+        document.getElementById('edit-hora-inicio').value = evento.hora_inicio;
+        document.getElementById('edit-hora-fin').value = evento.hora_fin;
+        document.getElementById('edit-lugar').value = evento.lugar;
+        document.getElementById('edit-direccion').value = evento.direccion;
+        document.getElementById('edit-ciudad').value = evento.ciudad;
+        
+        // Guardar el ID del evento que se está editando
+        window.eventoEditandoId = eventoId;
+        
+        // Mostrar el modal
+        document.getElementById('modal-modificar-evento').classList.remove('hidden');
     }
 
     // Función para ver reseñas
@@ -1162,6 +1298,78 @@
             }, 3000);
         });
     }
+    
+    // Función para cerrar el modal de modificación
+    function cerrarModal() {
+        document.getElementById('modal-modificar-evento').classList.add('hidden');
+        window.eventoEditandoId = null;
+    }
+    
+    // Función para guardar cambios del evento
+    function guardarCambiosEvento() {
+        const eventoId = window.eventoEditandoId;
+        if (!eventoId) {
+            alert('Error: No se encontró el evento a modificar');
+            return;
+        }
+        
+        // Obtener los valores del formulario
+        const datosActualizados = {
+            nombre: document.getElementById('edit-nombre').value,
+            descripcion: document.getElementById('edit-descripcion').value,
+            categoria: document.getElementById('edit-categoria').value,
+            tipo: document.getElementById('edit-tipo').value,
+            fecha_inicio: document.getElementById('edit-fecha-inicio').value,
+            fecha_fin: document.getElementById('edit-fecha-fin').value,
+            hora_inicio: document.getElementById('edit-hora-inicio').value,
+            hora_fin: document.getElementById('edit-hora-fin').value,
+            lugar: document.getElementById('edit-lugar').value,
+            direccion: document.getElementById('edit-direccion').value,
+            ciudad: document.getElementById('edit-ciudad').value
+        };
+        
+        // Validaciones básicas
+        if (!datosActualizados.nombre.trim()) {
+            alert('El nombre del evento es obligatorio');
+            return;
+        }
+        
+        if (!datosActualizados.fecha_inicio) {
+            alert('La fecha de inicio es obligatoria');
+            return;
+        }
+        
+        // Aquí normalmente harías una petición AJAX al servidor
+        // Por ahora actualizamos los datos localmente
+        eventosData[eventoId] = { ...eventosData[eventoId], ...datosActualizados };
+        
+        // Cerrar modal
+        cerrarModal();
+        
+        // Mostrar mensaje de éxito
+        alert('Evento actualizado correctamente');
+        
+        // Recargar la página para mostrar los cambios
+        location.reload();
+    }
+    
+    // Event listener para cerrar modal al hacer click en el fondo
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('modal-modificar-evento');
+        const modalContent = modal.querySelector('.bg-gradient-to-br');
+        
+        modal.addEventListener('click', function(e) {
+            // Solo cerrar si se hace click en el fondo (no en el contenido)
+            if (e.target === modal) {
+                cerrarModal();
+            }
+        });
+        
+        // Prevenir que el click en el contenido del modal lo cierre
+        modalContent.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    });
 </script>
 
 <style>
@@ -1222,6 +1430,77 @@
     .cerrar-anuncios-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 16px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Estilos para el modal de modificación de eventos */
+    .modal-backdrop {
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+    
+    .modal-content {
+        background: linear-gradient(135deg, rgba(22,33,62,0.98) 0%, rgba(30,39,73,0.96) 100%);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 8px 32px rgba(255, 64, 129, 0.1);
+        border: 2px solid rgba(255, 64, 129, 0.2);
+        animation: modalSlideIn 0.3s ease-out;
+    }
+    
+    @keyframes modalSlideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    
+    .modal-content input,
+    .modal-content textarea,
+    .modal-content select {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+    }
+    
+    .modal-content input:focus,
+    .modal-content textarea:focus,
+    .modal-content select:focus {
+        border-color: #ff4081;
+        box-shadow: 0 0 0 3px rgba(255, 64, 129, 0.1);
+        outline: none;
+        background: rgba(255, 255, 255, 0.08);
+    }
+    
+    .modal-content input::placeholder,
+    .modal-content textarea::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .modal-btn-primary {
+        background: linear-gradient(135deg, #ff4081 0%, #e91e63 100%);
+        transition: all 0.3s ease;
+    }
+    
+    .modal-btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 64, 129, 0.3);
+    }
+    
+    .modal-btn-secondary {
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.8);
+        transition: all 0.3s ease;
+    }
+    
+    .modal-btn-secondary:hover {
+        border-color: rgba(255, 255, 255, 0.4);
+        color: white;
+        background: rgba(255, 255, 255, 0.05);
     }
 </style>
 @endsection
