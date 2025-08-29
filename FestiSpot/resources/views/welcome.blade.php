@@ -41,9 +41,8 @@
   <!-- Sidebar -->
   <aside class="hidden md:flex flex-col w-64 min-h-screen shadow-xl z-20" style="background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.9) 50%, rgba(15, 15, 35, 0.95) 100%); border-right: 1px solid rgba(255, 64, 129, 0.2); backdrop-filter: blur(20px);">
     <!-- Logo -->
-    <div class="flex items-center gap-3 px-8 py-8">
-      <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" class="w-20 h-20 rounded-full">
-      <span class="font-black text-2xl bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent">FestiSpot</span>
+    <div class="flex items-center justify-center px-8 py-8">
+      <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" class="w-32 h-32 rounded-full">
     </div>
     
     <!-- Navigation -->
@@ -81,8 +80,7 @@
     <!-- Header -->
     <header class="flex items-center justify-between border-b border-accent/20 px-6 py-6 bg-card/80 backdrop-blur-xl sticky top-0 z-10" style="border-bottom: 1px solid rgba(255, 64, 129, 0.2); background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.8) 50%, rgba(15, 15, 35, 0.9) 100%); backdrop-filter: blur(20px);">
       <div class="flex items-center gap-4 text-text">
-        <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" class="w-12 h-12 rounded-full md:hidden">
-        <span class="font-black text-xl md:text-2xl bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent">FestiSpot</span>
+        <span style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</span>
       </div>
       <div class="flex gap-4">
         <button onclick="crearNuevoEvento()" id="btn-crear-evento-header" class="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold text-base shadow-lg hover:from-info hover:to-secondary transition-all">
@@ -509,5 +507,7 @@
       }
     });
   </script>
+</body>
+</html>
 </body>
 </html>
