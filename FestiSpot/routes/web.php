@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,16 +22,13 @@ Route::get('/event-modify-new', function () {
     return view('event_modify_new');
 });
 
-Route::get('/mis-eventos', function () {
-    return view('mis_eventos');
-})->name('mis.eventos');
+Route::get('/mis-eventos', [EventController::class, 'myEvents'])->name('mis.eventos');
 
 Route::get('/solicitudes-productores', function () {
     return view('solicitudes_productores');
 })->name('solicitudes.productores');
 
 // Rutas para eventos (controlador)
-use App\Http\Controllers\EventController;
 
 Route::prefix('event')->name('event.')->controller(EventController::class)->group(function () {
     // Crear evento (formulario)
@@ -56,6 +54,13 @@ Route::prefix('event')->name('event.')->controller(EventController::class)->grou
     // Resumen y preview
     Route::get('/summary', 'showSummary')->name('summary');
     Route::get('/preview', 'showPreview')->name('preview');
+    
+    // Guardar evento final
+    Route::post('/store', 'store')->name('store');
+    
+    // Ver y eliminar eventos
+    Route::get('/{event}', 'show')->name('show');
+    Route::delete('/{event}', 'destroy')->name('destroy');
 
     // Rutas auxiliares para limpiar sesiones
     Route::post('/clear/basic', 'clearBasic')->name('clearBasic');

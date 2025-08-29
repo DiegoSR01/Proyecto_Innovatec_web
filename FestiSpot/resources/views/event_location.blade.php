@@ -612,11 +612,30 @@
                 
                 requiredFields.forEach(fieldId => {
                     const field = document.getElementById(fieldId);
+                    const fieldContainer = field.closest('.bg-gradient-to-br');
+                    
                     if (field && !field.value.trim()) {
-                        field.classList.add('border-red-400');
+                        field.classList.add('border-red-400', 'ring-2', 'ring-red-400/30');
+                        fieldContainer.classList.add('border-red-500/50');
+                        
+                        // Agregar mensaje de error si no existe
+                        let errorMsg = field.parentNode.querySelector('.error-message');
+                        if (!errorMsg) {
+                            errorMsg = document.createElement('div');
+                            errorMsg.className = 'error-message text-red-400 text-sm mt-2 font-bold bg-red-400/10 p-2 rounded-lg border border-red-400/30';
+                            errorMsg.innerHTML = '⚠️ Este campo es obligatorio';
+                            field.parentNode.appendChild(errorMsg);
+                        }
                         isValid = false;
                     } else if (field) {
-                        field.classList.remove('border-red-400');
+                        field.classList.remove('border-red-400', 'ring-2', 'ring-red-400/30');
+                        fieldContainer.classList.remove('border-red-500/50');
+                        
+                        // Remover mensaje de error
+                        const errorMsg = field.parentNode.querySelector('.error-message');
+                        if (errorMsg) {
+                            errorMsg.remove();
+                        }
                     }
                 });
                 
@@ -625,16 +644,36 @@
 
             function validateVirtualFields() {
                 const linkField = document.getElementById('event_link');
-                const linkError = document.getElementById('link-error');
+                const linkContainer = linkField.closest('.bg-gradient-to-br');
                 
                 if (!linkField.value.trim()) {
-                    linkField.classList.add('border-red-400');
-                    linkError.classList.remove('hidden');
+                    linkField.classList.add('border-red-400', 'ring-2', 'ring-red-400/30');
+                    linkContainer.classList.add('border-red-500/50');
+                    document.getElementById('link-error').classList.remove('hidden');
                     return false;
                 } else {
-                    linkField.classList.remove('border-red-400');
-                    linkError.classList.add('hidden');
-                    return true;
+                    linkField.classList.remove('border-red-400', 'ring-2', 'ring-red-400/30');
+                    linkContainer.classList.remove('border-red-500/50');
+                    
+                    // Validar formato de URL
+                    try {
+                        new URL(linkField.value);
+                        document.getElementById('link-error').classList.add('hidden');
+                        
+                        // Mostrar éxito visual
+                        linkField.classList.add('border-success', 'ring-2', 'ring-success/30');
+                        linkContainer.classList.add('border-success/50');
+                        setTimeout(() => {
+                            linkField.classList.remove('border-success', 'ring-2', 'ring-success/30');
+                            linkContainer.classList.remove('border-success/50');
+                        }, 2000);
+                        
+                        return true;
+                    } catch {
+                        document.getElementById('link-error').innerHTML = '⚠️ Ingresa una URL válida (ej: https://zoom.us/j/123456789)';
+                        document.getElementById('link-error').classList.remove('hidden');
+                        return false;
+                    }
                 }
             }
 
@@ -699,38 +738,6 @@
                     physicalSection.classList.add('section-hidden');
                     physicalSection.classList.remove('section-visible');
                     virtualSection.classList.add('section-hidden');
-                    virtualSection.classList.remove('section-visible');
-                    
-                    // Resetear mensaje de estado
-                    statusMessage.innerHTML = `
-                        <div class="text-text font-medium">⚙️ Selecciona el tipo de evento para continuar</div>
-                        <div class="text-xs text-gray-400 mt-1">Los campos se mostrarán según tu selección</div>
-                    `;
-                    
-                    // Deshabilitar botón siguiente
-                    submitBtn.disabled = true;
-                    
-                    // Limpiar sesión del servidor
-                    fetch('{{ route("event.clearLocation") }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    }).then(() => {
-                        console.log('Datos de ubicación limpiados del servidor');
-                        alert('✅ Información de ubicación limpiada correctamente');
-                    });
-                }
-            });
-        });
-    </script>
-</body>
-</html>
-        });
-    </script>
-</body>
-</html>
                     virtualSection.classList.remove('section-visible');
                     
                     // Resetear mensaje de estado

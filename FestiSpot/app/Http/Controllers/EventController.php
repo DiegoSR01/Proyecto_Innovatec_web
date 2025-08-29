@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use App\Models\Event;
 
 class EventController extends Controller
 {
@@ -378,6 +381,162 @@ class EventController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error al limpiar la información: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Guardar el evento final en la base de datos
+     */
+    public function store(Request $request)
+    {
+        try {
+            // Verificar que hay datos en sesión
+            $basicData = Session::get('event_basic', []);
+            $dateData = Session::get('event_date', []);
+            $locationData = Session::get('event_location', []);
+            $mediaData = Session::get('event_media', []);
+
+            if (empty($basicData) || empty($dateData) || empty($locationData)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Faltan datos del evento. Por favor completa todos los pasos.'
+                ], 400);
+            }
+
+            // Usar usuario fijo para pruebas (ID 1)
+            $userId = 1; // User::first()->id;
+
+            // Preparar los datos para guardar
+            $eventData = [
+                'user_id' => $userId,
+                'name' => $basicData['event_name'],
+                'description' => $basicData['event_description'],
+                'category' => $basicData['event_category'],
+                'start_date' => $dateData['fecha_inicio'],
+                'end_date' => $dateData['fecha_fin'],
+                'start_time' => $dateData['hora_inicio'],
+                'end_time' => $dateData['hora_fin'],
+                'repeat_schedule' => $dateData['repetir_horario'] ?? false,
+                'event_type' => $locationData['tipo_evento'],
+                'venue_name' => $locationData['nombre_lugar'] ?? null,
+                'full_address' => $locationData['direccion_completa'] ?? null,
+                'city' => $locationData['ciudad'] ?? null,
+                'state' => $locationData['estado'] ?? null,
+                'country' => $locationData['pais'] ?? null,
+                'postal_code' => $locationData['codigo_postal'] ?? null,
+                'location_details' => $locationData['detalles_ubicacion'] ?? null,
+                'capacity' => $locationData['capacidad'] ?? null,
+                'accessible' => $locationData['accesible'] ?? false,
+                'virtual_platform' => $locationData['plataforma_virtual'] ?? null,
+                'event_link' => $locationData['event_link'] ?? null,
+                'access_code' => $locationData['codigo_acceso'] ?? null,
+                'virtual_password' => $locationData['password_virtual'] ?? null,
+                'virtual_instructions' => $locationData['instrucciones_virtuales'] ?? null,
+                'status' => $request->input('status', 'published')
+            ];
+
+            // Procesar archivos de media si existen
+            if (!empty($mediaData)) {
+                $eventData['banner_image'] = $mediaData['banner_name'] ?? null;
+                $eventData['gallery_images'] = $mediaData['gallery_files'] ?? null;
+                $eventData['videos'] = $mediaData['video_files'] ?? null;
+            }
+
+            // Crear el evento
+            $event = Event::create($eventData);
+
+            // Limpiar las sesiones después de guardar exitosamente
+            Session::forget(['event_basic', 'event_date', 'event_location', 'event_media']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Evento creado exitosamente',
+                'event_id' => $event->id,
+                'redirect_url' => route('mis.eventos')
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Error al crear evento: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el evento: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Mostrar los eventos del usuario
+     */
+    public function myEvents()
+    {
+        // Usar usuario fijo para pruebas (ID 1)
+        $userId = 1;
+
+        // Obtener los eventos del usuario
+        $events = Event::byUser($userId)
+                      ->orderBy('created_at', 'desc')
+                      ->get();
+
+        return view('mis_eventos', compact('events'));
+    }
+
+    /**
+     * Mostrar un evento específico
+     */
+    public function show(Event $event)
+    {
+        // Verificar que el usuario puede ver este evento
+        if ($event->user_id !== Auth::id() && $event->status !== 'published') {
+            abort(403, 'No tienes permiso para ver este evento.');
+        }
+
+        return view('event_show', compact('event'));
+    }
+
+    /**
+     * Eliminar un evento
+     */
+    public function destroy(Event $event)
+    {
+        try {
+            // Verificar que el usuario es el propietario del evento (para pruebas usamos ID 1)
+            if ($event->user_id !== 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No tienes permiso para eliminar este evento.'
+                ], 403);
+            }
+
+            // Eliminar archivos asociados si existen
+            if ($event->banner_image) {
+                Storage::disk('public')->delete('events/banners/' . $event->banner_image);
+            }
+
+            if ($event->gallery_images) {
+                foreach ($event->gallery_images as $image) {
+                    Storage::disk('public')->delete('events/gallery/' . $image);
+                }
+            }
+
+            if ($event->videos) {
+                foreach ($event->videos as $video) {
+                    Storage::disk('public')->delete('events/videos/' . $video);
+                }
+            }
+
+            $event->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Evento eliminado exitosamente'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar el evento: ' . $e->getMessage()
             ], 500);
         }
     }

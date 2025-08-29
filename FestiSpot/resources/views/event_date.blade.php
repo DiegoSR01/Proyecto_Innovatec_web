@@ -70,29 +70,37 @@
         font-weight: bold;
         box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
         transform: scale(1.05);
+        animation: pulse 2s infinite;
       }
       .date-in-range {
         background: linear-gradient(135deg, rgba(255, 64, 129, 0.3) 0%, rgba(0, 229, 255, 0.3) 100%) !important;
         border: 1px solid rgba(255, 64, 129, 0.5);
+        animation: fadeIn 0.3s ease-out;
       }
-      .date-disabled {
-        color: #6b7280 !important;
-        cursor: not-allowed !important;
-        opacity: 0.3;
-      }
-      .calendar-hidden {
-        display: none !important;
+      .date-hover {
+        background: rgba(255, 64, 129, 0.2) !important;
+        transform: scale(1.02);
+        transition: all 0.2s ease;
       }
       
-      /* Estilos para media y preview en fechas */
-      .time-preview {
-        background: linear-gradient(135deg, rgba(22, 33, 62, 0.8) 0%, rgba(30, 39, 73, 0.6) 100%);
-        border: 1px solid rgba(0, 229, 255, 0.3);
-        backdrop-filter: blur(10px);
+      @keyframes pulse {
+        0%, 100% { 
+          box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
+        }
+        50% { 
+          box-shadow: 0 8px 25px rgba(255, 64, 129, 0.6);
+        }
       }
-      .schedule-card {
-        background: linear-gradient(135deg, rgba(124, 77, 255, 0.1) 0%, rgba(255, 64, 129, 0.05) 100%);
-        border: 1px solid rgba(124, 77, 255, 0.3);
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
       }
     </style>
 </head>
@@ -512,16 +520,24 @@
                 if (currentDate < today) {
                     dayElement.className += ' date-disabled';
                 } else {
-                    dayElement.className += ' text-text hover:bg-accent hover:text-white hover:scale-105';
+                    dayElement.className += ' text-text hover:bg-accent hover:text-white hover:scale-105 transition-all duration-200';
                     
-                    // Aplicar estilos de selección
+                    // Agregar hover effect
+                    dayElement.addEventListener('mouseenter', function() {
+                        if (!this.classList.contains('date-selected') && !this.classList.contains('date-in-range')) {
+                            this.classList.add('date-hover');
+                        }
+                    });
+                    
+                    dayElement.addEventListener('mouseleave', function() {
+                        this.classList.remove('date-hover');
+                    });
+                    
+                    // Aplicar estilos de selección con animación
                     if (startDate && endDate) {
                         if (dateString === startDate || dateString === endDate) {
-                            // Fecha de inicio o fin
                             dayElement.className += ' date-selected';
-                            console.log('Fecha seleccionada aplicada:', dateString);
                         } else if (!isSingleDay && dateString > startDate && dateString < endDate) {
-                            // Fechas en el rango (solo si no es un evento de un día)
                             dayElement.className += ' date-in-range';
                         }
                     }
@@ -607,16 +623,25 @@
                 if (currentDate < today) {
                     dayElement.className += ' date-disabled';
                 } else {
-                    dayElement.className += ' text-text hover:bg-accent hover:text-white hover:scale-105';
+                    dayElement.className += ' text-text hover:bg-accent hover:text-white hover:scale-105 transition-all duration-200';
                     
-                    // Aplicar estilos de selección
+                    // Agregar hover effect
+                    dayElement.addEventListener('mouseenter', function() {
+                        if (!this.classList.contains('date-selected') && !this.classList.contains('date-in-range')) {
+                            this.classList.add('date-hover');
+                        }
+                    });
+                    
+                    dayElement.addEventListener('mouseleave', function() {
+                        this.classList.remove('date-hover');
+                    });
+                    
+                    // Aplicar estilos de selección con animación
                     if (startDate && endDate) {
                         if (dateString === startDate || dateString === endDate) {
-                            // Fecha de inicio o fin
                             dayElement.className += ' date-selected';
                             console.log('Fecha seleccionada aplicada:', dateString);
                         } else if (!isSingleDay && dateString > startDate && dateString < endDate) {
-                            // Fechas en el rango (solo si no es un evento de un día)
                             dayElement.className += ' date-in-range';
                         }
                     }

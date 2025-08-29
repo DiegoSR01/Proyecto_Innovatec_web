@@ -64,6 +64,41 @@
         font-weight: 600;
       }
       
+      .toggle-switch {
+        width: 50px;
+        height: 24px;
+        background: #374151;
+        border-radius: 12px;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      .toggle-switch:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(255, 64, 129, 0.2);
+      }
+      .toggle-switch.active {
+        background: linear-gradient(135deg, #ff4081, #00e5ff);
+        box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
+      }
+      .toggle-switch::after {
+        content: '';
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      .toggle-switch.active::after {
+        transform: translateX(26px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+      
       .setting-card {
         background: linear-gradient(135deg, rgba(22, 33, 62, 0.8) 0%, rgba(30, 39, 73, 0.6) 100%);
         backdrop-filter: blur(20px);
@@ -76,31 +111,10 @@
         border-color: rgba(255, 64, 129, 0.3);
       }
       
-      .toggle-switch {
-        width: 50px;
-        height: 24px;
-        background: #374151;
-        border-radius: 12px;
-        position: relative;
-        cursor: pointer;
-        transition: background 0.3s ease;
-      }
-      .toggle-switch.active {
-        background: linear-gradient(135deg, #ff4081, #00e5ff);
-      }
-      .toggle-switch::after {
-        content: '';
-        width: 20px;
-        height: 20px;
-        background: white;
-        border-radius: 50%;
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        transition: transform 0.3s ease;
-      }
-      .toggle-switch.active::after {
-        transform: translateX(26px);
+      @keyframes switchToggle {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
       }
     </style>
 </head>
@@ -543,7 +557,33 @@
     <script>
         function toggleSwitch(element) {
             element.classList.toggle('active');
+            
+            // Agregar efecto de vibración
+            element.style.animation = 'none';
+            setTimeout(() => {
+                element.style.animation = 'switchToggle 0.3s ease';
+            }, 10);
+            
+            // Mostrar feedback visual temporal
+            const parentContainer = element.closest('.flex');
+            if (parentContainer) {
+                parentContainer.style.backgroundColor = 'rgba(255, 64, 129, 0.1)';
+                setTimeout(() => {
+                    parentContainer.style.backgroundColor = '';
+                }, 300);
+            }
         }
+
+        // Agregar animación CSS para el toggle
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes switchToggle {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
 
         document.addEventListener('DOMContentLoaded', function() {
             console.log('⚙️ Configuración cargada');

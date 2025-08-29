@@ -107,58 +107,101 @@
 
         <!-- Lista de eventos (grid de tarjetas) -->
     <div id="eventos-lista" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Evento 1 -->
-            <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300 cursor-pointer" data-evento-id="1" data-fecha="2025-08-22">
-                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Evento" class="rounded-t-2xl h-40 w-full object-cover">
+        @forelse($events as $event)
+            <!-- Evento ID: {{ $event->id }} -->
+            <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300 cursor-pointer" 
+                 data-evento-id="{{ $event->id }}" 
+                 data-fecha="{{ $event->start_date->format('Y-m-d') }}">
+                
+                @if($event->banner_image)
+                    <img src="{{ asset('storage/events/banners/' . $event->banner_image) }}" 
+                         alt="{{ $event->name }}" 
+                         class="rounded-t-2xl h-40 w-full object-cover">
+                @else
+                    <div class="rounded-t-2xl h-40 w-full bg-gradient-to-br from-card to-cardLight flex items-center justify-center">
+                        <i class="fas fa-calendar-alt text-4xl text-textMuted"></i>
+                    </div>
+                @endif
+                
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-center gap-2 mb-2">
-                        <span class="px-3 py-1 bg-accent/20 text-accent rounded-full text-xs font-bold">Festival</span>
-                        <span class="px-3 py-1 bg-success/20 text-success rounded-full text-xs font-bold">Activo</span>
+                        <span class="px-3 py-1 bg-accent/20 text-accent rounded-full text-xs font-bold">
+                            {{ $event->category }}
+                        </span>
+                        <span class="px-3 py-1 
+                            @if($event->status === 'published') bg-success/20 text-success
+                            @elseif($event->status === 'draft') bg-warning/20 text-warning
+                            @elseif($event->status === 'completed') bg-info/20 text-info
+                            @else bg-red-500/20 text-red-400
+                            @endif
+                            rounded-full text-xs font-bold">
+                            @if($event->status === 'published') Activo
+                            @elseif($event->status === 'draft') Borrador
+                            @elseif($event->status === 'completed') Finalizado
+                            @else Cancelado
+                            @endif
+                        </span>
                     </div>
-                    <h2 class="text-xl font-bold mb-1">Festival de Música Electrónica 2024</h2>
-                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-calendar-days mr-1"></i> 22/08/2025</div>
-                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-location-dot mr-1"></i> Explanada Central, CDMX</div>
-                    <div class="flex items-center gap-2 mt-auto">
-                        <span class="text-info"><i class="fa-solid fa-users"></i></span>
-                        <span class="font-semibold">245 asistentes</span>
+                    
+                    <h2 class="text-xl font-bold mb-1">{{ $event->name }}</h2>
+                    
+                    <div class="text-textMuted text-sm mb-2">
+                        <i class="fa-solid fa-calendar-days mr-1"></i> 
+                        {{ $event->date_range }}
+                    </div>
+                    
+                    <div class="text-textMuted text-sm mb-2">
+                        <i class="fa-solid fa-location-dot mr-1"></i> 
+                        @if($event->event_type === 'Virtual')
+                            Virtual
+                        @elseif($event->event_type === 'Híbrido')
+                            {{ $event->venue_name ?? 'Híbrido' }} / Virtual
+                        @else
+                            {{ $event->venue_name ?? $event->city }}
+                        @endif
+                    </div>
+                    
+                    <div class="text-textMuted text-sm mb-4">
+                        <i class="fa-solid fa-clock mr-1"></i> 
+                        {{ $event->time_range }}
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-auto">
+                        <div class="flex items-center gap-2">
+                            <span class="text-info"><i class="fa-solid fa-users"></i></span>
+                            <span class="font-semibold">{{ $event->capacity ?? 'Sin límite' }}</span>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button onclick="editarEvento({{ $event->id }})" 
+                                    class="text-secondary hover:text-accent transition-colors" 
+                                    title="Editar evento">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="eliminarEvento({{ $event->id }})" 
+                                    class="text-red-400 hover:text-red-300 transition-colors" 
+                                    title="Eliminar evento">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- Evento 2 -->
-            <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300 cursor-pointer" data-evento-id="2" data-fecha="2025-09-05">
-                <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80" alt="Evento" class="rounded-t-2xl h-40 w-full object-cover">
-                <div class="p-6 flex-1 flex flex-col">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="px-3 py-1 bg-tertiary/20 text-tertiary rounded-full text-xs font-bold">Conferencia</span>
-                        <span class="px-3 py-1 bg-success/20 text-success rounded-full text-xs font-bold">Activo</span>
-                    </div>
-                    <h2 class="text-xl font-bold mb-1">Conferencia de Tecnología Web</h2>
-                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-calendar-days mr-1"></i> 05/09/2025</div>
-                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-location-dot mr-1"></i> Centro de Convenciones / Virtual</div>
-                    <div class="flex items-center gap-2 mt-auto">
-                        <span class="text-info"><i class="fa-solid fa-users"></i></span>
-                        <span class="font-semibold">89 asistentes</span>
-                    </div>
+        @empty
+            <!-- Mensaje cuando no hay eventos -->
+            <div class="col-span-full text-center py-16">
+                <div class="bg-card/60 backdrop-blur-xl rounded-3xl p-12 border border-cardLight/30 max-w-lg mx-auto">
+                    <i class="fas fa-calendar-plus text-6xl text-textMuted mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4">¡Aún no tienes eventos!</h3>
+                    <p class="text-textMuted mb-6">Crea tu primer evento y comienza a organizar experiencias increíbles.</p>
+                    <a href="{{ route('event.create') }}" 
+                       class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold text-lg shadow-lg hover:from-info hover:to-secondary transition-all duration-300 transform hover:scale-105">
+                        <i class="fa-solid fa-plus"></i> Crear mi primer evento
+                    </a>
                 </div>
             </div>
-            <!-- Evento 3 -->
-            <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300 cursor-pointer" data-evento-id="3" data-fecha="2024-12-15">
-                <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=80" alt="Evento" class="rounded-t-2xl h-40 w-full object-cover">
-                <div class="p-6 flex-1 flex flex-col">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="px-3 py-1 bg-secondary/20 text-secondary rounded-full text-xs font-bold">Teatro</span>
-                        <span class="px-3 py-1 bg-success/20 text-success rounded-full text-xs font-bold">Finalizado</span>
-                    </div>
-                    <h2 class="text-xl font-bold mb-1">Obra de Teatro: El Sueño de una Noche</h2>
-                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-calendar-days mr-1"></i> 15/12/2024</div>
-                    <div class="text-textMuted text-sm mb-2"><i class="fa-solid fa-location-dot mr-1"></i> Teatro Nacional, Monterrey</div>
-                    <div class="flex items-center gap-2 mt-auto">
-                        <span class="text-info"><i class="fa-solid fa-users"></i></span>
-                        <span class="font-semibold">156 asistentes</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @endforelse
+    </div>
     </div>
 
     <!-- Modal de Modificación de Evento -->
@@ -1370,6 +1413,44 @@
             e.stopPropagation();
         });
     });
+
+    // Función para eliminar evento
+    function eliminarEvento(eventoId) {
+        if (confirm('¿Estás seguro de que quieres eliminar este evento? Esta acción no se puede deshacer.')) {
+            const token = document.querySelector('meta[name="csrf-token"]');
+            const csrfToken = token ? token.getAttribute('content') : '{{ csrf_token() }}';
+            
+            fetch(`/event/${eventoId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Evento eliminado exitosamente');
+                    // Recargar la página para mostrar los cambios
+                    window.location.reload();
+                } else {
+                    alert('❌ Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error al eliminar evento:', error);
+                alert('❌ Error al eliminar el evento. Por favor intenta de nuevo.');
+            });
+        }
+    }
+
+    // Función para editar evento (redirige al formulario de edición)
+    function editarEvento(eventoId) {
+        // Por ahora redirigir a una página de edición simple
+        // Más adelante se puede implementar un modal de edición completo
+        alert('Funcionalidad de edición en desarrollo. Evento ID: ' + eventoId);
+        // window.location.href = `/event/${eventoId}/edit`;
+    }
 </script>
 
 <style>

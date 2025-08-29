@@ -312,6 +312,9 @@
                                     <option value="requirements">📋 Actualización de requisitos</option>
                                     <option value="other">📦 Otro motivo</option>
                                 </select>
+                                <div id="changeTypeError" class="text-accent text-sm font-bold mt-3 hidden bg-accent/10 p-3 rounded-lg border border-accent/30">
+                                    ⚠️ Selecciona el tipo de cambio
+                                </div>
                             </div>
                             
                             <div>
@@ -321,7 +324,15 @@
                                 <textarea id="changeReason" name="change_reason" required rows="4"
                                           placeholder="Explica detalladamente el motivo de los cambios. Esta información será enviada a todos los asistentes."
                                           class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text placeholder-textMuted focus:outline-none focus:ring-2 focus:ring-warning/50 focus:border-warning backdrop-blur-sm resize-none"></textarea>
-                                <div class="text-xs text-warning mt-1">⚠️ Este campo es obligatorio y será visible para todos los involucrados</div>
+                                <div class="flex justify-between items-center mt-1">
+                                    <div class="text-xs text-warning">⚠️ Este campo es obligatorio y será visible para todos los involucrados</div>
+                                    <div class="text-xs text-textMuted">
+                                        <span id="reasonCount">0</span> / 500 caracteres
+                                    </div>
+                                </div>
+                                <div id="changeReasonError" class="text-accent text-sm font-bold mt-3 hidden bg-accent/10 p-3 rounded-lg border border-accent/30">
+                                    ⚠️ Proporciona una explicación detallada
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -493,6 +504,29 @@
                 ubicacionStatus.innerHTML = '❌ Campo no modificable por restricciones del venue';
                 ubicacionStatus.className = 'text-xs text-warning mt-1';
             }
+            
+            // Agregar contador de caracteres para el motivo
+            const changeReason = document.getElementById('changeReason');
+            const reasonCount = document.getElementById('reasonCount');
+            
+            if (changeReason && reasonCount) {
+                changeReason.addEventListener('input', function() {
+                    const length = Math.min(this.value.length, 500);
+                    reasonCount.textContent = length;
+                    if (this.value.length > 500) {
+                        this.value = this.value.substring(0, 500);
+                    }
+                    
+                    // Cambiar color según la longitud
+                    if (length < 20) {
+                        reasonCount.className = 'text-accent';
+                    } else if (length < 100) {
+                        reasonCount.className = 'text-warning';
+                    } else {
+                        reasonCount.className = 'text-success';
+                    }
+                });
+            }
         }
 
         function formatearFecha(fechaStr) {
@@ -513,15 +547,32 @@
             errorState.classList.remove('hidden');
         }
 
-        // Manejar envío del formulario
+        // Manejar envío del formulario con mejor validación
         document.getElementById('modificationForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const changeType = document.getElementById('changeType').value;
             const changeReason = document.getElementById('changeReason').value;
+            let isValid = true;
             
-            if (!changeType || !changeReason.trim()) {
-                alert('Debes especificar el motivo del cambio antes de guardar.');
+            // Validar tipo de cambio
+            if (!changeType) {
+                document.getElementById('changeTypeError').classList.remove('hidden');
+                isValid = false;
+            } else {
+                document.getElementById('changeTypeError').classList.add('hidden');
+            }
+            
+            // Validar motivo (mínimo 20 caracteres)
+            if (!changeReason.trim() || changeReason.trim().length < 20) {
+                document.getElementById('changeReasonError').classList.remove('hidden');
+                document.getElementById('changeReasonError').textContent = '⚠️ El motivo debe tener al menos 20 caracteres';
+                isValid = false;
+            } else {
+                document.getElementById('changeReasonError').classList.add('hidden');
+            }
+            
+            if (!isValid) {
                 return;
             }
             

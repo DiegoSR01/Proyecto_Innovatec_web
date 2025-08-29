@@ -7,7 +7,10 @@
     <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
     
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
-    <link rel="stylesheet" as="style" onload="this.rel='stylesheet'" 
+    <link rel="styleshe                    <button onclick="guardarEvento()" 
+                            class="px-10 py-4 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold hover:from-info hover:to-secondary transition-all duration-300 shadow-2xl hover:shadow-secondary/40 text-lg transform hover:scale-105">
+                        🚀 Publicar Evento
+                    </button>as="style" onload="this.rel='stylesheet'" 
           href="https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900" />
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -374,9 +377,9 @@
                        class="px-10 py-4 bg-gradient-to-r from-card/50 to-cardLight/40 text-text rounded-xl font-bold hover:from-cardLight/50 hover:to-card/60 transition-all duration-300 border border-cardLight/30 backdrop-blur-sm text-lg">
                         👁️ Vista Previa
                     </a>
-                    <button onclick="alert('Funcionalidad de publicar próximamente')" 
+                    <button onclick="guardarEvento()" 
                             class="px-10 py-4 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold hover:from-info hover:to-secondary transition-all duration-300 shadow-2xl hover:shadow-secondary/40 text-lg transform hover:scale-105">
-                        🚀 Publicar Evento
+                        � Guardar Evento
                     </button>
                 </div>
 
@@ -436,11 +439,45 @@
                 @endif
             }
         }
+
+        function guardarEvento() {
+            if (confirm('¿Estás seguro de que quieres publicar este evento? Una vez publicado, será visible y aparecerá en tu lista de eventos.')) {
+                // Mostrar indicador de carga
+                const button = event.target;
+                const originalText = button.innerHTML;
+                button.innerHTML = '⏳ Publicando...';
+                button.disabled = true;
+
+                fetch('{{ route("event.store") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        status: 'published'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('✅ ¡Evento publicado exitosamente!');
+                        // Redirigir a mis eventos
+                        window.location.href = data.redirect_url || '{{ route("mis.eventos") }}';
+                    } else {
+                        alert('❌ Error: ' + data.message);
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al publicar evento:', error);
+                    alert('❌ Error al publicar el evento. Por favor intenta de nuevo.');
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                });
+            }
+        }
     </script>
 </body>
-</html>
-</html>
-    </script>
-</body>
-</html>
 </html>
