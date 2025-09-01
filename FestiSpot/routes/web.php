@@ -15,8 +15,18 @@ use App\Http\Controllers\EventController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
 });
+Route::get('/login', function () {
+    return redirect('/');
+});
+Route::get('/register', function () {
+    return view('register');
+});
+// Simulación de login y registro (redirigen al dashboard)
+Route::get('/dashboard', function () {
+    return view('welcome');
+})->name('dashboard');
 
 Route::get('/event-modify-new', function () {
     return view('event_modify_new');

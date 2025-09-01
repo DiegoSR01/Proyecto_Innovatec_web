@@ -1,43 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>FestiSpot · Dashboard</title>
-  <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
-  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
-  <link rel="stylesheet" as="style" onload="this.rel='stylesheet'" 
-      href="https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            background: '#0a0a0f',
-            card: '#16213e',
-            cardLight: '#1e2749',
-            accent: '#ff4081',
-            secondary: '#00e5ff',
-            tertiary: '#7c4dff',
-            success: '#00c853',
-            warning: '#ff6b35',
-            info: '#2196f3',
-            purple: '#9c27b0',
-            text: '#ffffff',
-            textMuted: '#b0bec5',
-            textDark: '#78909c',
-            glow: '#ff4081'
-          }
-        }
-      }
-    }
-  </script>
-</head>
-<body class="bg-background text-text min-h-screen flex">
+@extends('layouts.app')
+
+@section('content')
+<div class="bg-background text-text min-h-screen flex">
   <!-- Sidebar -->
   <aside class="hidden md:flex flex-col w-64 min-h-screen shadow-xl z-20" style="background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.9) 50%, rgba(15, 15, 35, 0.95) 100%); border-right: 1px solid rgba(255, 64, 129, 0.2); backdrop-filter: blur(20px);">
     <!-- Logo -->
