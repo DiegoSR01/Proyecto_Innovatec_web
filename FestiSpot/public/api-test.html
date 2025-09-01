@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prueba de API FestiSpot</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .endpoint { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .method { display: inline-block; padding: 3px 8px; border-radius: 3px; color: white; font-weight: bold; }
+        .get { background-color: #61affe; }
+        .post { background-color: #49cc90; }
+        .put { background-color: #fca130; }
+        .delete { background-color: #f93e3e; }
+        button { padding: 8px 16px; margin: 5px; border: none; border-radius: 3px; cursor: pointer; }
+        .test-btn { background-color: #4CAF50; color: white; }
+        .result { margin-top: 10px; padding: 10px; background-color: #f9f9f9; border-radius: 3px; white-space: pre-wrap; font-family: monospace; }
+        .success { border-left: 4px solid #4CAF50; }
+        .error { border-left: 4px solid #f44336; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 FestiSpot API Test</h1>
+        <p><strong>Base URL:</strong> http://10.250.2.81:8000/api/v1</p>
+
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> /events</h3>
+            <p>Obtener lista de eventos (público)</p>
+            <button class="test-btn" onclick="testEndpoint('/events', 'GET')">Probar</button>
+            <div id="result-events" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> /categories</h3>
+            <p>Obtener lista de categorías (público)</p>
+            <button class="test-btn" onclick="testEndpoint('/categories', 'GET')">Probar</button>
+            <div id="result-categories" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> /locations</h3>
+            <p>Obtener lista de ubicaciones (público)</p>
+            <button class="test-btn" onclick="testEndpoint('/locations', 'GET')">Probar</button>
+            <div id="result-locations" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method post">POST</span> /auth/register</h3>
+            <p>Registrar nuevo usuario</p>
+            <button class="test-btn" onclick="testRegister()">Probar Registro</button>
+            <div id="result-register" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method post">POST</span> /auth/login</h3>
+            <p>Iniciar sesión</p>
+            <button class="test-btn" onclick="testLogin()">Probar Login</button>
+            <div id="result-login" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> /auth/me</h3>
+            <p>Obtener usuario autenticado (requiere token)</p>
+            <button class="test-btn" onclick="testMe()">Probar (necesita token)</button>
+            <div id="result-me" class="result" style="display: none;"></div>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <h3>📝 Documentación completa</h3>
+            <p>Para ver la documentación completa de la API, consulta el archivo <code>README_API.md</code></p>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = 'http://10.250.2.81:8000/api/v1';
+        let authToken = '';
+
+        async function testEndpoint(endpoint, method = 'GET', data = null) {
+            const resultId = 'result-' + endpoint.replace('/', '').replace('/', '-');
+            const resultDiv = document.getElementById(resultId);
+            
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Cargando...';
+            resultDiv.className = 'result';
+
+            try {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                };
+
+                if (authToken) {
+                    options.headers.Authorization = `Bearer ${authToken}`;
+                }
+
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+
+                const response = await fetch(BASE_URL + endpoint, options);
+                const result = await response.json();
+
+                resultDiv.className = response.ok ? 'result success' : 'result error';
+                resultDiv.textContent = `Status: ${response.status}\n\n${JSON.stringify(result, null, 2)}`;
+
+                // Si es login exitoso, guardar token
+                if (endpoint === '/auth/login' && result.success && result.data.access_token) {
+                    authToken = result.data.access_token;
+                    alert('Token guardado para pruebas autenticadas');
+                }
+
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        function testRegister() {
+            const userData = {
+                name: 'Usuario Test API',
+                email: `test${Date.now()}@example.com`,
+                password: 'password123',
+                password_confirmation: 'password123',
+                tipo_usuario: 'asistente'
+            };
+
+            testEndpoint('/auth/register', 'POST', userData);
+        }
+
+        function testLogin() {
+            const loginData = {
+                email: 'test@example.com', // Cambia por un email válido
+                password: 'password123'
+            };
+
+            testEndpoint('/auth/login', 'POST', loginData);
+        }
+
+        function testMe() {
+            if (!authToken) {
+                alert('Primero debes hacer login para obtener un token');
+                return;
+            }
+            testEndpoint('/auth/me', 'GET');
+        }
+    </script>
+</body>
+</html>
