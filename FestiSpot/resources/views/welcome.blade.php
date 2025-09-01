@@ -41,8 +41,9 @@
   <!-- Sidebar -->
   <aside class="hidden md:flex flex-col w-64 min-h-screen shadow-xl z-20" style="background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.9) 50%, rgba(15, 15, 35, 0.95) 100%); border-right: 1px solid rgba(255, 64, 129, 0.2); backdrop-filter: blur(20px);">
     <!-- Logo -->
-    <div class="flex items-center justify-center px-8 py-8">
-      <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" class="w-32 h-32 rounded-full">
+    <div class="flex items-center gap-3 px-8 py-8">
+      <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" class="w-24 h-24 rounded-full">
+      <span class="font-black text-2xl bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent">FestiSpot</span>
     </div>
     
     <!-- Navigation -->
@@ -80,24 +81,16 @@
     <!-- Header -->
     <header class="flex items-center justify-between border-b border-accent/20 px-6 py-6 bg-card/80 backdrop-blur-xl sticky top-0 z-10" style="border-bottom: 1px solid rgba(255, 64, 129, 0.2); background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.8) 50%, rgba(15, 15, 35, 0.9) 100%); backdrop-filter: blur(20px);">
       <div class="flex items-center gap-4 text-text">
-        <span style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</span>
+        <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" class="w-12 h-12 rounded-full md:hidden">
+        <span class="font-black text-xl md:text-2xl bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent">FestiSpot</span>
       </div>
-      <div class="flex gap-4 items-center">
+      <div class="flex gap-4">
         <button onclick="crearNuevoEvento()" id="btn-crear-evento-header" class="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold text-base shadow-lg hover:from-info hover:to-secondary transition-all">
           <i class="fa-solid fa-plus"></i> Crear Evento
         </button>
         <button class="flex items-center gap-2 px-5 py-2 bg-cardLight text-accent border border-accent/40 rounded-xl font-bold text-base shadow hover:bg-accent/10 transition-all">
           <i class="fa-solid fa-file-arrow-down"></i> Descargar Reporte
         </button>
-        <div class="relative">
-          <img src="{{ asset('assets/images/avatar-default.png') }}" alt="Usuario" class="w-10 h-10 rounded-full border-2 border-accent cursor-pointer" title="Mi perfil">
-          <!-- Menú desplegable de usuario -->
-          <div class="hidden absolute right-0 mt-2 w-48 bg-cardLight rounded-xl shadow-lg border border-card/30 z-50" id="userDropdown">
-            <a href="/profile" class="block px-4 py-3 text-text hover:bg-accent/10 rounded-t-xl">Mi perfil</a>
-            <a href="/configuration" class="block px-4 py-3 text-text hover:bg-accent/10">Configuración</a>
-            <a href="/logout" class="block px-4 py-3 text-accent hover:bg-accent/10 rounded-b-xl">Cerrar sesión</a>
-          </div>
-        </div>
       </div>
     </header>
 
@@ -144,13 +137,11 @@
       <div class="bg-cardLight rounded-2xl p-8 shadow-lg border border-card/30 flex flex-col">
         <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
           <i class="fa-solid fa-bell text-warning"></i> Notificaciones Recientes
-          <span class="ml-2 inline-block bg-warning text-background rounded-full px-2 py-0.5 text-xs font-bold">4</span>
         </h3>
         <ul class="space-y-4">
           <li class="flex items-center gap-3">
             <span class="text-accent"><i class="fa-solid fa-user-plus"></i></span> 
             Nueva solicitud de productor: <span class="font-semibold">María López</span>
-            <span class="ml-2 px-2 py-0.5 rounded-full bg-accent/20 text-accent text-xs">Nuevo</span>
           </li>
           <li class="flex items-center gap-3">
             <span class="text-success"><i class="fa-solid fa-comment-dots"></i></span> 
@@ -180,7 +171,6 @@
               <th class="px-6 py-4">Nombre</th>
               <th class="px-6 py-4">Fecha</th>
               <th class="px-6 py-4">Lugar</th>
-              <th class="px-6 py-4">Estado</th>
               <th class="px-6 py-4">Acciones</th>
             </tr>
           </thead>
@@ -189,17 +179,12 @@
               <td class="px-6 py-4 font-semibold">Festival Jazz</td>
               <td class="px-6 py-4">22/08/2025</td>
               <td class="px-6 py-4">Auditorio Nacional</td>
-              <td class="px-6 py-4">
-                <span class="inline-block px-3 py-1 rounded-full bg-success/20 text-success text-xs font-bold" title="Publicado">
-                  <i class="fa-solid fa-circle-check"></i> Publicado
-                </span>
-              </td>
               <td class="px-6 py-4 flex gap-2">
-                <a href="#" onclick="editarEvento('festival-jazz')" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all" title="Editar">
-                  <i class="fa-solid fa-pen"></i>
+                <a href="#" onclick="editarEvento('festival-jazz')" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all">
+                  <i class="fa-solid fa-pen"></i> Editar
                 </a>
-                <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all" title="Eliminar">
-                  <i class="fa-solid fa-trash"></i>
+                <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all">
+                  <i class="fa-solid fa-trash"></i> Eliminar
                 </a>
               </td>
             </tr>
@@ -207,17 +192,12 @@
               <td class="px-6 py-4 font-semibold">Tech Summit</td>
               <td class="px-6 py-4">05/09/2025</td>
               <td class="px-6 py-4">Centro de Convenciones</td>
-              <td class="px-6 py-4">
-                <span class="inline-block px-3 py-1 rounded-full bg-warning/20 text-warning text-xs font-bold" title="Borrador">
-                  <i class="fa-solid fa-circle-dot"></i> Borrador
-                </span>
-              </td>
               <td class="px-6 py-4 flex gap-2">
-                <a href="#" onclick="editarEvento('tech-summit')" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all" title="Editar">
-                  <i class="fa-solid fa-pen"></i>
+                <a href="#" onclick="editarEvento('tech-summit')" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all">
+                  <i class="fa-solid fa-pen"></i> Editar
                 </a>
-                <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all" title="Eliminar">
-                  <i class="fa-solid fa-trash"></i>
+                <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all">
+                  <i class="fa-solid fa-trash"></i> Eliminar
                 </a>
               </td>
             </tr>
@@ -225,35 +205,17 @@
               <td class="px-6 py-4 font-semibold">Expo Cultura</td>
               <td class="px-6 py-4">15/09/2025</td>
               <td class="px-6 py-4">Museo de Arte</td>
-              <td class="px-6 py-4">
-                <span class="inline-block px-3 py-1 rounded-full bg-accent/20 text-accent text-xs font-bold" title="Modificado">
-                  <i class="fa-solid fa-pen-to-square"></i> Modificado
-                </span>
-              </td>
               <td class="px-6 py-4 flex gap-2">
-                <a href="#" onclick="editarEvento('expo-cultura')" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all" title="Editar">
-                  <i class="fa-solid fa-pen"></i>
+                <a href="#" onclick="editarEvento('expo-cultura')" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all">
+                  <i class="fa-solid fa-pen"></i> Editar
                 </a>
-                <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all" title="Eliminar">
-                  <i class="fa-solid fa-trash"></i>
+                <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all">
+                  <i class="fa-solid fa-trash"></i> Eliminar
                 </a>
               </td>
             </tr>
           </tbody>
         </table>
-        <!-- Filtros y búsqueda -->
-        <div class="flex flex-col md:flex-row gap-4 mt-6 items-center justify-between">
-          <div class="flex gap-2">
-            <input type="text" placeholder="Buscar evento..." class="px-4 py-2 rounded-lg bg-card border border-cardLight/30 text-text placeholder-textMuted focus:outline-none focus:ring-2 focus:ring-accent/30" id="busqueda-evento">
-            <select class="px-4 py-2 rounded-lg bg-card border border-cardLight/30 text-text focus:outline-none focus:ring-2 focus:ring-accent/30" id="filtro-estado">
-              <option value="">Estatus</option>
-              <option value="publicado">Publicado</option>
-              <option value="borrador">Borrador</option>
-              <option value="modificado">Modificado</option>
-            </select>
-          </div>
-          <div class="text-sm text-textMuted" id="contador-eventos">Mostrando 1-3 de 3 eventos</div>
-        </div>
       </div>
     </section>
   </main>
@@ -545,51 +507,6 @@
       if (e.target === modal) {
         cerrarModal();
       }
-    });
-
-    // Menú desplegable de usuario
-    document.addEventListener('DOMContentLoaded', function() {
-      // ...existing code...
-      const avatar = document.querySelector('header img[alt="Usuario"]');
-      const dropdown = document.getElementById('userDropdown');
-      if (avatar && dropdown) {
-        avatar.addEventListener('click', function(e) {
-          e.stopPropagation();
-          dropdown.classList.toggle('hidden');
-        });
-        document.addEventListener('click', function(e) {
-          if (!dropdown.classList.contains('hidden')) {
-            dropdown.classList.add('hidden');
-          }
-        });
-      }
-      // Filtro y búsqueda de eventos (funcional)
-      const busqueda = document.getElementById('busqueda-evento');
-      const filtro = document.getElementById('filtro-estado');
-      const tabla = document.querySelector('table tbody');
-      const contador = document.getElementById('contador-eventos');
-
-      function filtrarTabla() {
-        const texto = (busqueda.value || '').toLowerCase();
-        const estado = filtro.value;
-        let visibles = 0;
-        tabla.querySelectorAll('tr').forEach(tr => {
-          const nombre = tr.children[0].textContent.toLowerCase();
-          const estadoTd = tr.children[3].textContent.toLowerCase();
-          const coincideTexto = nombre.includes(texto);
-          const coincideEstado = !estado || estadoTd.includes(estado);
-          if (coincideTexto && coincideEstado) {
-            tr.style.display = '';
-            visibles++;
-          } else {
-            tr.style.display = 'none';
-          }
-        });
-        contador.textContent = `Mostrando ${visibles} evento${visibles === 1 ? '' : 's'}`;
-      }
-
-      busqueda && busqueda.addEventListener('input', filtrarTabla);
-      filtro && filtro.addEventListener('change', filtrarTabla);
     });
   </script>
 </body>
