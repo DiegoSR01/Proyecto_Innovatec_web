@@ -4,17 +4,33 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Carbon\Carbon;
 
 class Event extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'user_id',
-        'name',
-        'description',
+        'organizador_id',
+        'titulo',
+        'descripcion',
+        'descripcion_corta',
+        'categoria_id',
+        'ubicacion_id',
+        'fecha_inicio',
+        'fecha_fin',
+        'hora_apertura_puertas',
+        'capacidad_total',
+        'edad_minima',
+        'estado',
+        'politicas_cancelacion',
+        'instrucciones_especiales',
+        'tags',
+        'fecha_publicacion',
+        'motivo_cambio',
+        // Campos legacy para compatibilidad
         'category',
-        'start_date',
-        'end_date',
         'start_time',
         'end_time',
         'repeat_schedule',
@@ -26,7 +42,6 @@ class Event extends Model
         'country',
         'postal_code',
         'location_details',
-        'capacity',
         'accessible',
         'virtual_platform',
         'event_link',
@@ -36,12 +51,15 @@ class Event extends Model
         'banner_image',
         'gallery_images',
         'videos',
-        'status'
     ];
 
     protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
+        'fecha_inicio' => 'datetime',
+        'fecha_fin' => 'datetime',
+        'fecha_creacion' => 'datetime',
+        'fecha_actualizacion' => 'datetime',
+        'fecha_publicacion' => 'datetime',
+        'tags' => 'array',
         'repeat_schedule' => 'boolean',
         'accessible' => 'boolean',
         'gallery_images' => 'array',
@@ -49,27 +67,116 @@ class Event extends Model
     ];
 
     /**
-     * Relación con el usuario creador del evento
+     * Relación con el organizador (usuario)
      */
-    public function user(): BelongsTo
+    public function organizador(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'organizador_id');
+    }
+
+    /**
+     * Relación con la categoría
+     */
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class, 'categoria_id');
+    }
+
+    /**
+     * Relación con la ubicación
+     */
+    public function ubicacion()
+    {
+        return $this->belongsTo(Ubicacion::class, 'ubicacion_id');
+    }
+
+    /**
+     * Relación con las imágenes del evento
+     */
+    public function imagenes()
+    {
+        return $this->hasMany(ImagenEvento::class, 'evento_id');
+    }
+
+    /**
+     * Relación con las asistencias
+     */
+    public function asistencias()
+    {
+        return $this->hasMany(Asistencia::class, 'evento_id');
+    }
+
+    /**
+     * Relación con los favoritos
+     */
+    public function favoritos()
+    {
+        return $this->hasMany(Favorito::class, 'evento_id');
+    }
+
+    /**
+     * Relación con las notificaciones
+     */
+    public function notificaciones()
+    {
+        return $this->hasMany(Notificacion::class, 'evento_id');
+    }
+
+    /**
+     * Relación con las reviews
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'evento_id');
+    }
+
+    /**
+     * Relación con los analytics
+     */
+    public function analytics()
+    {
+        return $this->hasMany(AnalyticsEvento::class, 'evento_id');
     }
 
     /**
      * Scope para eventos publicados
      */
-    public function scopePublished($query)
+    public function scopePublicados($query)
     {
-        return $query->where('status', 'published');
+        return $query->where('estado', 'publicado');
     }
 
     /**
-     * Scope para eventos del usuario
+     * Scope para eventos del organizador
      */
-    public function scopeByUser($query, $userId)
+    public function scopePorOrganizador($query, $organizadorId)
     {
-        return $query->where('user_id', $userId);
+        return $query->where('organizador_id', $organizadorId);
+    }
+
+    /**
+     * Scope para eventos por categoría
+     */
+    public function scopePorCategoria($query, $categoriaId)
+    {
+        return $query->where('categoria_id', $categoriaId);
+    }
+
+    /**
+     * Scope para eventos próximos
+     */
+    public function scopeProximos($query)
+    {
+        return $query->where('fecha_inicio', '>=', now());
+    }
+
+    /**
+     * Scope para eventos en curso
+     */
+    public function scopeEnCurso($query)
+    {
+        return $query->where('fecha_inicio', '<=', now())
+                    ->where('fecha_fin', '>=', now());
     }
 
     /**
@@ -78,7 +185,7 @@ class Event extends Model
     public function getFormattedStartDateAttribute()
     {
         Carbon::setLocale('es');
-        return $this->start_date->format('d \d\e F \d\e Y');
+        return $this->fecha_inicio->format('d \d\e F \d\e Y');
     }
 
     /**
@@ -88,11 +195,11 @@ class Event extends Model
     {
         Carbon::setLocale('es');
         
-        if ($this->start_date->eq($this->end_date)) {
-            return $this->start_date->format('d \d\e F \d\e Y');
+        if ($this->fecha_inicio->toDateString() === $this->fecha_fin?->toDateString()) {
+            return $this->fecha_inicio->format('d \d\e F \d\e Y');
         }
         
-        return $this->start_date->format('d \d\e F') . ' - ' . $this->end_date->format('d \d\e F \d\e Y');
+        return $this->fecha_inicio->format('d \d\e F') . ' - ' . $this->fecha_fin?->format('d \d\e F \d\e Y');
     }
 
     /**
@@ -100,7 +207,126 @@ class Event extends Model
      */
     public function getTimeRangeAttribute()
     {
-        return $this->start_time . ' - ' . $this->end_time;
+        $inicio = $this->fecha_inicio->format('H:i');
+        $fin = $this->fecha_fin ? $this->fecha_fin->format('H:i') : null;
+        
+        return $fin ? "$inicio - $fin" : $inicio;
+    }
+
+    /**
+     * Verificar si el evento está lleno
+     */
+    public function estaLleno()
+    {
+        if (!$this->capacidad_total) {
+            return false;
+        }
+
+        $asistenciasConfirmadas = $this->asistencias()
+            ->whereIn('estado', ['confirmada', 'asistio'])
+            ->sum('numero_acompanantes') + $this->asistencias()
+            ->whereIn('estado', ['confirmada', 'asistio'])
+            ->count();
+
+        return $asistenciasConfirmadas >= $this->capacidad_total;
+    }
+
+    /**
+     * Obtener el promedio de calificaciones
+     */
+    public function getPromedioCalificacionAttribute()
+    {
+        return $this->reviews()->visibles()->avg('calificacion') ?? 0;
+    }
+
+    /**
+     * Obtener el total de asistentes
+     */
+    public function getTotalAsistentesAttribute()
+    {
+        return $this->asistencias()
+            ->whereIn('estado', ['confirmada', 'asistio'])
+            ->sum('numero_acompanantes') + $this->asistencias()
+            ->whereIn('estado', ['confirmada', 'asistio'])
+            ->count();
+    }
+
+    /**
+     * Compatibilidad hacia atrás - alias para organizador
+     */
+    public function user(): BelongsTo
+    {
+        return $this->organizador();
+    }
+
+    /**
+     * Compatibilidad hacia atrás - alias para eventos publicados
+     */
+    public function scopePublished($query)
+    {
+        return $this->scopePublicados($query);
+    }
+
+    /**
+     * Compatibilidad hacia atrás - alias para eventos por usuario
+     */
+    public function scopeByUser($query, $userId)
+    {
+        return $this->scopePorOrganizador($query, $userId);
+    }
+
+    /**
+     * Obtener el campo name para compatibilidad
+     */
+    public function getNameAttribute()
+    {
+        return $this->titulo;
+    }
+
+    /**
+     * Obtener el campo description para compatibilidad
+     */
+    public function getDescriptionAttribute()
+    {
+        return $this->descripcion;
+    }
+
+    /**
+     * Obtener start_date para compatibilidad
+     */
+    public function getStartDateAttribute()
+    {
+        return $this->fecha_inicio->toDateString();
+    }
+
+    /**
+     * Obtener end_date para compatibilidad
+     */
+    public function getEndDateAttribute()
+    {
+        return $this->fecha_fin?->toDateString();
+    }
+
+    /**
+     * Obtener capacity para compatibilidad
+     */
+    public function getCapacityAttribute()
+    {
+        return $this->capacidad_total;
+    }
+
+    /**
+     * Obtener status para compatibilidad
+     */
+    public function getStatusAttribute()
+    {
+        return match($this->estado) {
+            'borrador' => 'draft',
+            'publicado' => 'published',
+            'finalizado' => 'completed',
+            'cancelado' => 'cancelled',
+            default => 'draft'
+        };
     }
 
     /**

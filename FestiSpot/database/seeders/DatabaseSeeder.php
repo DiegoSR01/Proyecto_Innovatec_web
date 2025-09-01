@@ -13,11 +13,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Crear usuarios de prueba
+        User::factory(10)->create();
 
+        // Crear usuario de prueba específico
         User::factory()->create([
-            'name' => 'Test User',
+            'nombre' => 'Usuario',
+            'apellido' => 'Prueba',
             'email' => 'test@example.com',
+            'rol_id' => 2, // Organizador
+        ]);
+
+        // Crear usuario admin
+        User::factory()->create([
+            'nombre' => 'Admin',
+            'apellido' => 'Sistema',
+            'email' => 'admin@festispot.com',
+            'rol_id' => 3, // Admin
         ]);
     }
 }

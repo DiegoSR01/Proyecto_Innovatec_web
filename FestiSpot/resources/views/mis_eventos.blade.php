@@ -111,7 +111,7 @@
             <!-- Evento ID: {{ $event->id }} -->
             <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300 cursor-pointer" 
                  data-evento-id="{{ $event->id }}" 
-                 data-fecha="{{ $event->start_date->format('Y-m-d') }}">
+                 data-fecha="{{ \Carbon\Carbon::parse($event->fecha_inicio)->format('Y-m-d') }}">
                 
                 @if($event->banner_image)
                     <img src="{{ asset('storage/events/banners/' . $event->banner_image) }}" 

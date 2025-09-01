@@ -404,17 +404,25 @@ class EventController extends Controller
                 ], 400);
             }
 
+            // Debug temporal - verificar datos
+            if (empty($basicData['event_category'])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'La categoría del evento es requerida. Datos recibidos: ' . json_encode($basicData)
+                ], 400);
+            }
+
             // Usar usuario fijo para pruebas (ID 1)
             $userId = 1; // User::first()->id;
 
             // Preparar los datos para guardar
             $eventData = [
-                'user_id' => $userId,
-                'name' => $basicData['event_name'],
-                'description' => $basicData['event_description'],
-                'category' => $basicData['event_category'],
-                'start_date' => $dateData['fecha_inicio'],
-                'end_date' => $dateData['fecha_fin'],
+                'organizador_id' => $userId,
+                'titulo' => $basicData['event_name'],
+                'descripcion' => $basicData['event_description'],
+                'category' => $basicData['event_category'] ?? 'General',
+                'fecha_inicio' => $dateData['fecha_inicio'] . ' ' . $dateData['hora_inicio'],
+                'fecha_fin' => $dateData['fecha_fin'] . ' ' . $dateData['hora_fin'],
                 'start_time' => $dateData['hora_inicio'],
                 'end_time' => $dateData['hora_fin'],
                 'repeat_schedule' => $dateData['repetir_horario'] ?? false,
@@ -474,8 +482,8 @@ class EventController extends Controller
         // Usar usuario fijo para pruebas (ID 1)
         $userId = 1;
 
-        // Obtener los eventos del usuario
-        $events = Event::byUser($userId)
+        // Obtener los eventos del usuario usando la nueva estructura
+        $events = Event::where('organizador_id', $userId)
                       ->orderBy('created_at', 'desc')
                       ->get();
 
@@ -488,7 +496,7 @@ class EventController extends Controller
     public function show(Event $event)
     {
         // Verificar que el usuario puede ver este evento
-        if ($event->user_id !== Auth::id() && $event->status !== 'published') {
+        if ($event->organizador_id !== Auth::id() && $event->estado !== 'publicado') {
             abort(403, 'No tienes permiso para ver este evento.');
         }
 
@@ -502,7 +510,7 @@ class EventController extends Controller
     {
         try {
             // Verificar que el usuario es el propietario del evento (para pruebas usamos ID 1)
-            if ($event->user_id !== 1) {
+            if ($event->organizador_id !== 1) {
                 return response()->json([
                     'success' => false,
                     'message' => 'No tienes permiso para eliminar este evento.'
