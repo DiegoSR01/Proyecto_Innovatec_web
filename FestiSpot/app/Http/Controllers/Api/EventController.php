@@ -76,15 +76,24 @@ class EventController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'titulo' => 'required|string|max:255',
-            'descripcion' => 'required|string',
+            'descripcion' => 'nullable|string',
+            'descripcion_corta' => 'nullable|string|max:500',
             'fecha_inicio' => 'required|date|after:now',
-            'fecha_fin' => 'required|date|after:fecha_inicio',
-            'ubicacion_id' => 'required|exists:ubicaciones,id',
-            'categoria_id' => 'required|exists:categorias,id',
-            'capacidad_maxima' => 'nullable|integer|min:1',
-            'precio' => 'nullable|numeric|min:0',
-            'imagen_url' => 'nullable|url',
-            'estado' => 'required|in:activo,cancelado,finalizado',
+            'fecha_fin' => 'nullable|date|after:fecha_inicio',
+            'ubicacion_id' => 'nullable|exists:ubicaciones,id',
+            'categoria_id' => 'nullable|exists:categorias,id',
+            'capacidad_total' => 'nullable|integer|min:1',
+            'edad_minima' => 'nullable|integer|min:0',
+            'estado' => 'required|in:borrador,publicado,finalizado,cancelado',
+            'event_type' => 'nullable|in:Presencial,Virtual,Híbrido',
+            'venue_name' => 'nullable|string|max:255',
+            'full_address' => 'nullable|string',
+            'city' => 'nullable|string|max:100',
+            'state' => 'nullable|string|max:100',
+            'country' => 'nullable|string|max:100',
+            'virtual_platform' => 'nullable|string|max:100',
+            'event_link' => 'nullable|url',
+            'banner_image' => 'nullable|url',
         ]);
 
         if ($validator->fails()) {
@@ -95,20 +104,34 @@ class EventController extends Controller
             ], 422);
         }
 
-        $event = Event::create([
+        $eventData = [
             'titulo' => $request->titulo,
             'descripcion' => $request->descripcion,
+            'descripcion_corta' => $request->descripcion_corta,
             'fecha_inicio' => Carbon::parse($request->fecha_inicio),
-            'fecha_fin' => Carbon::parse($request->fecha_fin),
-            'ubicacion_id' => $request->ubicacion_id,
-            'categoria_id' => $request->categoria_id,
             'organizador_id' => $request->user()->id,
-            'capacidad_maxima' => $request->capacidad_maxima,
-            'precio' => $request->precio,
-            'imagen_url' => $request->imagen_url,
-            'estado' => $request->estado,
-        ]);
+            'estado' => $request->estado ?? 'borrador',
+            'event_type' => $request->event_type ?? 'Presencial',
+        ];
 
+        // Campos opcionales
+        $optionalFields = [
+            'fecha_fin', 'ubicacion_id', 'categoria_id', 'capacidad_total',
+            'edad_minima', 'venue_name', 'full_address', 'city', 'state',
+            'country', 'virtual_platform', 'event_link', 'banner_image'
+        ];
+
+        foreach ($optionalFields as $field) {
+            if ($request->has($field) && !is_null($request->$field)) {
+                if ($field === 'fecha_fin') {
+                    $eventData[$field] = Carbon::parse($request->$field);
+                } else {
+                    $eventData[$field] = $request->$field;
+                }
+            }
+        }
+
+        $event = Event::create($eventData);
         $event->load(['organizador', 'categoria', 'ubicacion']);
 
         return response()->json([
@@ -143,14 +166,23 @@ class EventController extends Controller
         $validator = Validator::make($request->all(), [
             'titulo' => 'sometimes|string|max:255',
             'descripcion' => 'sometimes|string',
+            'descripcion_corta' => 'sometimes|string|max:500',
             'fecha_inicio' => 'sometimes|date',
             'fecha_fin' => 'sometimes|date|after:fecha_inicio',
             'ubicacion_id' => 'sometimes|exists:ubicaciones,id',
             'categoria_id' => 'sometimes|exists:categorias,id',
-            'capacidad_maxima' => 'nullable|integer|min:1',
-            'precio' => 'nullable|numeric|min:0',
-            'imagen_url' => 'nullable|url',
-            'estado' => 'sometimes|in:activo,cancelado,finalizado',
+            'capacidad_total' => 'nullable|integer|min:1',
+            'edad_minima' => 'nullable|integer|min:0',
+            'estado' => 'sometimes|in:borrador,publicado,finalizado,cancelado',
+            'event_type' => 'sometimes|in:Presencial,Virtual,Híbrido',
+            'venue_name' => 'sometimes|string|max:255',
+            'full_address' => 'sometimes|string',
+            'city' => 'sometimes|string|max:100',
+            'state' => 'sometimes|string|max:100',
+            'country' => 'sometimes|string|max:100',
+            'virtual_platform' => 'sometimes|string|max:100',
+            'event_link' => 'sometimes|url',
+            'banner_image' => 'sometimes|url',
         ]);
 
         if ($validator->fails()) {
@@ -162,9 +194,10 @@ class EventController extends Controller
         }
 
         $updateData = $request->only([
-            'titulo', 'descripcion', 'fecha_inicio', 'fecha_fin',
-            'ubicacion_id', 'categoria_id', 'capacidad_maxima',
-            'precio', 'imagen_url', 'estado'
+            'titulo', 'descripcion', 'descripcion_corta', 'fecha_inicio', 'fecha_fin',
+            'ubicacion_id', 'categoria_id', 'capacidad_total', 'edad_minima',
+            'estado', 'event_type', 'venue_name', 'full_address', 'city',
+            'state', 'country', 'virtual_platform', 'event_link', 'banner_image'
         ]);
 
         if (isset($updateData['fecha_inicio'])) {
