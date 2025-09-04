@@ -12,19 +12,28 @@
         </div>
         <h2 class="text-white text-2xl font-bold mb-2 text-center">¡Bienvenido de vuelta!</h2>
         <p class="text-textMuted text-center mb-6">Inicia sesión para continuar</p>
-        <form method="GET" action="/dashboard" class="space-y-5">
+        <form method="POST" action="/login" class="space-y-5">
+            @csrf
+            @if ($errors->any())
+                <div class="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-4">
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-triangle-exclamation text-red-500 mr-2"></i>
+                        <span class="text-red-400 text-sm">{{ $errors->first() }}</span>
+                    </div>
+                </div>
+            @endif
             <div>
                 <label for="email" class="block text-textMuted font-semibold mb-1">Correo electrónico</label>
                 <div class="flex items-center bg-[#1a1b2d] rounded-xl px-4 py-3 border border-[#2e2f4a]">
                     <i class="fa-regular fa-envelope text-pink-500 mr-3"></i>
-                    <input id="email" type="email" name="email" required autofocus class="bg-transparent outline-none border-none flex-1 text-white placeholder:text-textMuted" placeholder="tucorreo@ejemplo.com">
+                    <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus class="bg-transparent outline-none border-none flex-1 text-white placeholder:text-textMuted" placeholder="test@festispot.com">
                 </div>
             </div>
             <div>
                 <label for="password" class="block text-textMuted font-semibold mb-1">Contraseña</label>
                 <div class="flex items-center bg-[#1a1b2d] rounded-xl px-4 py-3 border border-[#2e2f4a]">
                     <i class="fa-solid fa-lock text-pink-500 mr-3"></i>
-                    <input id="password" type="password" name="password" required class="bg-transparent outline-none border-none flex-1 text-white placeholder:text-textMuted" placeholder="••••••••">
+                    <input id="password" type="password" name="password" required class="bg-transparent outline-none border-none flex-1 text-white placeholder:text-textMuted" placeholder="password123">
                     <i class="fa-regular fa-eye-slash text-textMuted ml-2"></i>
                 </div>
             </div>

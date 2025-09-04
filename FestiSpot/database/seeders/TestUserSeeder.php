@@ -16,7 +16,8 @@ class TestUserSeeder extends Seeder
     {
         // Crear usuario de prueba
         User::create([
-            'name' => 'Usuario de Prueba',
+            'nombre' => 'Usuario de Prueba',
+            'apellido' => 'Apellido Test',
             'email' => 'test@festispot.com',
             'password' => Hash::make('password123'),
         ]);
