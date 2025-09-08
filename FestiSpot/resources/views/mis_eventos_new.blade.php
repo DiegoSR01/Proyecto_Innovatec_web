@@ -132,9 +132,10 @@
         <div id="eventos-lista" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($events as $event)
                 <!-- Evento ID: {{ $event->id }} -->
-                <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300" 
+                <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300 cursor-pointer" 
                      data-evento-id="{{ $event->id }}" 
-                     data-fecha="{{ \Carbon\Carbon::parse($event->fecha_inicio)->format('Y-m-d') }}">
+                     data-fecha="{{ \Carbon\Carbon::parse($event->fecha_inicio)->format('Y-m-d') }}"
+                     onclick="abrirModalEvento({{ $event->id }}, '{{ addslashes($event->titulo ?? $event->name) }}')">
                     
                     @if($event->banner_image)
                         <img src="{{ asset('storage/events/banners/' . $event->banner_image) }}" 
@@ -233,10 +234,89 @@
     </div>
 </div>
 
+<!-- Modal para opciones del evento - VERSIÓN MEJORADA -->
+<div id="modalEvento" class="fixed inset-0 bg-black/60 backdrop-blur-lg z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
+    <div id="modalContent" class="bg-gradient-to-br from-card to-cardLight rounded-3xl p-8 m-4 max-w-lg w-full border-2 border-accent/30 shadow-2xl transform scale-90 transition-all duration-300">
+        <!-- Header del modal -->
+        <div class="text-center mb-8 relative">
+            <div class="absolute -top-2 -right-2">
+                <button onclick="cerrarModalEvento()" class="w-8 h-8 bg-red-500/20 text-red-400 rounded-full hover:bg-red-500 hover:text-white transition-all duration-200 flex items-center justify-center">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
+            
+            <div class="w-16 h-16 bg-gradient-to-br from-accent to-secondary rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
+                <i class="fas fa-calendar-star text-2xl text-white"></i>
+            </div>
+            
+            <h3 id="modalEventoTitulo" class="text-2xl font-bold text-text mb-2 bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent"></h3>
+            <p class="text-textMuted">¿Qué deseas hacer con este evento?</p>
+        </div>
+        
+        <!-- Opciones del modal con iconos más grandes y animaciones -->
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <button onclick="modificarEvento()" class="group p-6 bg-gradient-to-br from-info/10 to-info/5 border-2 border-info/20 text-info rounded-2xl hover:border-info hover:bg-info hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-info/25">
+                <div class="text-center">
+                    <i class="fa-solid fa-edit text-3xl mb-3 group-hover:animate-pulse"></i>
+                    <p class="font-bold text-sm">Modificar</p>
+                    <p class="text-xs opacity-70 mt-1">Editar evento</p>
+                </div>
+            </button>
+            
+            <button onclick="crearAnuncio()" class="group p-6 bg-gradient-to-br from-secondary/10 to-secondary/5 border-2 border-secondary/20 text-secondary rounded-2xl hover:border-secondary hover:bg-secondary hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-secondary/25">
+                <div class="text-center">
+                    <i class="fa-solid fa-bullhorn text-3xl mb-3 group-hover:animate-pulse"></i>
+                    <p class="font-bold text-sm">Anunciar</p>
+                    <p class="text-xs opacity-70 mt-1">Crear anuncio</p>
+                </div>
+            </button>
+            
+            <button onclick="verReseñas()" class="group p-6 bg-gradient-to-br from-warning/10 to-warning/5 border-2 border-warning/20 text-warning rounded-2xl hover:border-warning hover:bg-warning hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-warning/25">
+                <div class="text-center">
+                    <i class="fa-solid fa-star text-3xl mb-3 group-hover:animate-pulse"></i>
+                    <p class="font-bold text-sm">Reseñas</p>
+                    <p class="text-xs opacity-70 mt-1">Ver opiniones</p>
+                </div>
+            </button>
+            
+            <button onclick="verDetalles()" class="group p-6 bg-gradient-to-br from-accent/10 to-accent/5 border-2 border-accent/20 text-accent rounded-2xl hover:border-accent hover:bg-accent hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-accent/25">
+                <div class="text-center">
+                    <i class="fa-solid fa-eye text-3xl mb-3 group-hover:animate-pulse"></i>
+                    <p class="font-bold text-sm">Detalles</p>
+                    <p class="text-xs opacity-70 mt-1">Ver completo</p>
+                </div>
+            </button>
+        </div>
+        
+        <!-- Opciones adicionales -->
+        <div class="flex gap-3 mb-6">
+            <button onclick="duplicarEvento()" class="flex-1 p-3 bg-gradient-to-r from-tertiary/20 to-purple/20 border border-tertiary/30 text-tertiary rounded-xl hover:bg-gradient-to-r hover:from-tertiary hover:to-purple hover:text-white transition-all duration-300 transform hover:scale-105">
+                <i class="fa-solid fa-copy mr-2"></i>
+                <span class="font-semibold text-sm">Duplicar</span>
+            </button>
+            
+            <button onclick="compartirEvento()" class="flex-1 p-3 bg-gradient-to-r from-success/20 to-success/10 border border-success/30 text-success rounded-xl hover:bg-gradient-to-r hover:from-success hover:to-success hover:text-white transition-all duration-300 transform hover:scale-105">
+                <i class="fa-solid fa-share mr-2"></i>
+                <span class="font-semibold text-sm">Compartir</span>
+            </button>
+        </div>
+        
+        <!-- Footer -->
+        <div class="pt-4 border-t border-cardLight/30">
+            <button onclick="cerrarModalEvento()" class="w-full p-3 border-2 border-textMuted/30 text-textMuted rounded-xl hover:bg-textMuted/10 hover:border-textMuted transition-all duration-300">
+                <i class="fa-solid fa-times mr-2"></i>
+                Cerrar
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
     // Calendario visual para mis eventos
     let calendarDate = new Date();
     let selectedDate = null;
+    let currentEventId = null;
+    let currentEventName = null;
     const monthNames = [
         'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
@@ -418,12 +498,152 @@
         }
     }
 
-    // Función para editar evento (redirige al formulario de edición)
+    // Función para eliminar evento (redirige al formulario de edición)
     function editarEvento(eventoId) {
         // Por ahora redirigir a una página de edición simple
         // Más adelante se puede implementar un modal de edición completo
         alert('Funcionalidad de edición en desarrollo. Evento ID: ' + eventoId);
         // window.location.href = `/event/${eventoId}/edit`;
     }
+
+    // === FUNCIONES DEL MODAL MEJORADAS ===
+    function abrirModalEvento(eventoId, eventoNombre) {
+        currentEventId = eventoId;
+        currentEventName = eventoNombre;
+        
+        const modal = document.getElementById('modalEvento');
+        const content = document.getElementById('modalContent');
+        
+        document.getElementById('modalEventoTitulo').textContent = eventoNombre;
+        
+        // Mostrar modal con animación
+        modal.classList.remove('hidden');
+        
+        // Forzar reflow antes de animar
+        modal.offsetHeight;
+        
+        // Animar entrada
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            content.classList.remove('scale-90');
+            content.classList.add('scale-100');
+        }, 10);
+        
+        // Prevenir propagación del evento
+        event.stopPropagation();
+    }
+
+    function cerrarModalEvento() {
+        const modal = document.getElementById('modalEvento');
+        const content = document.getElementById('modalContent');
+        
+        // Animar salida
+        modal.classList.add('opacity-0');
+        content.classList.remove('scale-100');
+        content.classList.add('scale-90');
+        
+        // Ocultar después de la animación
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            currentEventId = null;
+            currentEventName = null;
+        }, 300);
+    }
+
+    function modificarEvento() {
+        if (currentEventId) {
+            // Animación de clic
+            animarBoton(event.target);
+            setTimeout(() => {
+                alert('🔧 Redirigiendo a editar evento: ' + currentEventName + ' (ID: ' + currentEventId + ')');
+                // window.location.href = `/event/${currentEventId}/edit`;
+                cerrarModalEvento();
+            }, 200);
+        }
+    }
+
+    function crearAnuncio() {
+        if (currentEventId) {
+            animarBoton(event.target);
+            setTimeout(() => {
+                alert('📢 Creando anuncio para: ' + currentEventName + ' (ID: ' + currentEventId + ')');
+                // window.location.href = `/event/${currentEventId}/announcements/create`;
+                cerrarModalEvento();
+            }, 200);
+        }
+    }
+
+    function verReseñas() {
+        if (currentEventId) {
+            animarBoton(event.target);
+            setTimeout(() => {
+                alert('⭐ Viendo reseñas de: ' + currentEventName + ' (ID: ' + currentEventId + ')');
+                // window.location.href = `/event/${currentEventId}/reviews`;
+                cerrarModalEvento();
+            }, 200);
+        }
+    }
+
+    function verDetalles() {
+        if (currentEventId) {
+            animarBoton(event.target);
+            setTimeout(() => {
+                alert('👁️ Viendo detalles de: ' + currentEventName + ' (ID: ' + currentEventId + ')');
+                // window.location.href = `/event/${currentEventId}`;
+                cerrarModalEvento();
+            }, 200);
+        }
+    }
+
+    function duplicarEvento() {
+        if (currentEventId) {
+            animarBoton(event.target);
+            setTimeout(() => {
+                alert('📋 Duplicando evento: ' + currentEventName + ' (ID: ' + currentEventId + ')');
+                // window.location.href = `/event/${currentEventId}/duplicate`;
+                cerrarModalEvento();
+            }, 200);
+        }
+    }
+
+    function compartirEvento() {
+        if (currentEventId) {
+            animarBoton(event.target);
+            setTimeout(() => {
+                alert('🔗 Compartiendo evento: ' + currentEventName + ' (ID: ' + currentEventId + ')');
+                // Aquí puedes implementar compartir en redes sociales
+                cerrarModalEvento();
+            }, 200);
+        }
+    }
+
+    // Función para animar botones
+    function animarBoton(button) {
+        button.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            button.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 100);
+        }, 100);
+    }
+
+    // Cerrar modal al hacer clic fuera
+    document.addEventListener('click', function(event) {
+        const modal = document.getElementById('modalEvento');
+        if (event.target === modal) {
+            cerrarModalEvento();
+        }
+    });
+
+    // Prevenir que los botones de la tarjeta abran el modal
+    document.addEventListener('DOMContentLoaded', function() {
+        const botones = document.querySelectorAll('.evento-card button');
+        botones.forEach(boton => {
+            boton.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+    });
 </script>
 @endsection

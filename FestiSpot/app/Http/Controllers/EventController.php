@@ -167,10 +167,11 @@ class EventController extends Controller
         if ($request->hasFile('banner_image')) {
             $bannerFile = $request->file('banner_image');
             $existingMedia['has_banner'] = true;
-            $existingMedia['banner_name'] = $bannerFile->getClientOriginalName();
-            // Aquí guardarías el archivo físicamente
-            // $bannerPath = $bannerFile->store('events/banners', 'public');
-            // $existingMedia['banner_path'] = $bannerPath;
+            // Guardar el archivo físicamente y obtener la ruta
+            $bannerPath = $bannerFile->store('events/banners', 'public');
+            $existingMedia['banner_path'] = $bannerPath;
+            $existingMedia['banner_name'] = basename($bannerPath); // Usar el nombre generado por Laravel
+            $existingMedia['banner_url'] = asset('storage/' . $bannerPath);
         }
         
         // Procesar nuevas imágenes de galería
@@ -487,7 +488,7 @@ class EventController extends Controller
                       ->orderBy('created_at', 'desc')
                       ->get();
 
-        return view('mis_eventos', compact('events'));
+        return view('mis_eventos_new', compact('events'));
     }
 
     /**
