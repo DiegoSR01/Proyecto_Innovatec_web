@@ -119,6 +119,11 @@
     </style>
 </head>
 <body class="bg-background text-text min-h-screen">
+    <!-- Icono de usuario en esquina superior derecha -->
+    <div class="fixed top-4 right-4 z-50">
+        @include('partials.user-icon')
+    </div>
+
     <!-- Efectos de fondo -->
     <div class="fixed inset-0 opacity-10 pointer-events-none">
         <div class="absolute top-0 left-0 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
@@ -139,10 +144,6 @@
                     <a href="/" class="nav-link">Inicio</a>
                     <a href="/configuration" class="nav-link active">Configuración</a>
                 </nav>
-                
-                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #ff4081, #00e5ff); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; box-shadow: 0 4px 12px rgba(255, 64, 129, 0.3);">
-                    U
-                </div>
             </div>
         </header>
 

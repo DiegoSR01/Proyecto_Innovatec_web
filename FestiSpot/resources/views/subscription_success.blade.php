@@ -67,6 +67,11 @@
     </style>
 </head>
 <body class="bg-background text-text min-h-screen">
+    <!-- Icono de usuario en esquina superior derecha -->
+    <div class="fixed top-4 right-4 z-50">
+        @include('partials.user-icon')
+    </div>
+
     <!-- Efectos de fondo con gradientes sutiles -->
     <div class="fixed inset-0 opacity-10 pointer-events-none">
         <div class="absolute top-0 left-0 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
@@ -98,12 +103,6 @@
                         <button class="nav-link" style="padding: 8px 12px;">
                             <i class="fas fa-bell" style="font-size: 16px;"></i>
                         </button>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #ff4081, #00e5ff); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                            <span style="color: white; font-weight: 600; font-size: 14px;">U</span>
-                        </div>
-                        <span style="color: #ffffff; font-weight: 500; font-size: 14px;">Usuario</span>
                     </div>
                 </div>
             </div>

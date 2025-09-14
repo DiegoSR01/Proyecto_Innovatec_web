@@ -53,12 +53,6 @@
         <button class="flex items-center gap-2 px-5 py-2 bg-cardLight text-accent border border-accent/40 rounded-xl font-bold text-base shadow hover:bg-accent/10 transition-all">
           <i class="fa-solid fa-file-arrow-down"></i> Descargar Reporte
         </button>
-        <form method="POST" action="{{ route('logout') }}" class="inline">
-          @csrf
-          <button type="submit" class="flex items-center gap-2 px-5 py-2 bg-red-500/20 text-red-400 border border-red-500/40 rounded-xl font-bold text-base shadow hover:bg-red-500/30 transition-all">
-            <i class="fa-solid fa-sign-out-alt"></i> Cerrar Sesión
-          </button>
-        </form>
       </div>
     </header>
 
