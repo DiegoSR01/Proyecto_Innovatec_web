@@ -11,7 +11,17 @@
             <h1 class="font-black text-2xl text-white mb-1">¡Únete a FestiSpot!</h1>
             <p class="text-textMuted text-base text-center">Descubre y organiza eventos increíbles</p>
         </div>
-    <form method="GET" action="/dashboard" class="space-y-5">
+    @if ($errors->any())
+        <div class="mb-4 p-4 rounded-xl bg-red-900/60 border border-red-500 text-red-200">
+            <ul class="list-disc pl-5">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    <form method="POST" action="/register" class="space-y-5">
+        @csrf
             <div class="flex gap-4">
                 <div class="flex-1">
                     <label for="nombre" class="block text-textMuted font-semibold mb-1">Nombre</label>
