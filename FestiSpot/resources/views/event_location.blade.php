@@ -108,18 +108,20 @@
     </div>
 
     <div class="relative flex size-full min-h-screen flex-col bg-background z-10">
-        <!-- Header minimalista -->
+        <!-- Header usando el estilo de create_event -->
         <header class="header">
             <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 40px;">
+                <!-- Logo -->
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" style="width: 70px; height: 70px; border-radius: 50%;">
                     <h1 style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</h1>
                 </div>
                 
+                <!-- Navigation central -->
                 <nav style="display: flex; gap: 8px;">
                     <a href="/" class="nav-link">Inicio</a>
                     <a href="/event/create" class="nav-link">Crear evento</a>
-                    <a href="/configuration" class="nav-link">Configuración</a>
+                    <a href="/subscription/plans" class="nav-link">Suscripción</a>
                 </nav>
             </div>
         </header>

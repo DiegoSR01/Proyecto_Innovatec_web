@@ -54,7 +54,7 @@
         </div>
     </header>
 
-    <div class="relative z-10 px-8 md:px-20 lg:px-40 py-8">
+    <div class="relative z-10 px-8 md:px-20 lg:px-40 pr-8 md:pr-20 lg:pr-24 py-8">
         <div class="max-w-5xl mx-auto">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
                 <h1 class="text-3xl font-black bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent drop-shadow-lg">Solicitudes de Productores</h1>

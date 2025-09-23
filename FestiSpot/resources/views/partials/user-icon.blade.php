@@ -3,7 +3,7 @@
     <!-- Botón de Usuario -->
     <div class="user-icon-container" onclick="toggleUserDropdown()">
         <div class="user-icon">
-            <i class="fas fa-user"></i>
+            <span class="user-initial">U</span>
         </div>
         <div class="user-icon-indicator"></div>
     </div>
@@ -96,6 +96,13 @@
         0 8px 32px rgba(255, 64, 129, 0.4),
         0 0 0 1px rgba(255, 64, 129, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.user-initial {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .user-icon-indicator {

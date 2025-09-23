@@ -109,7 +109,7 @@
         </header>
 
         <!-- Main Content -->
-        <div class="flex-1 flex items-center justify-center px-8 py-12">
+        <div class="flex-1 flex items-center justify-center px-8 pr-20 py-12">
             <div class="max-w-2xl mx-auto text-center">
                 
                 <!-- Success Animation -->

@@ -178,7 +178,7 @@
         <div class="absolute top-1/2 left-1/2 w-96 h-96 bg-tertiary rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
     </div>
   <!-- Header con icono de usuario -->
-  <div class="fixed top-4 right-4 z-50">
+  <div class="fixed top-4 right-4 md:right-6 lg:right-8 z-50">
     @include('partials.user-icon')
   </div>
 

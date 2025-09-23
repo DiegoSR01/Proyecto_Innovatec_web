@@ -79,7 +79,7 @@
         </div>
     </header>
 
-    <div class="relative z-10 px-8 md:px-20 lg:px-40 py-8">
+    <div class="relative z-10 px-8 md:px-20 lg:px-40 pr-8 md:pr-20 lg:pr-24 py-8">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
             <h1 class="text-3xl font-black bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent drop-shadow-lg">Mis Eventos</h1>
             <a href="#" onclick="crearNuevoEventoMisEventos(event)" id="btn-nuevo-evento-mis-eventos" class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold text-lg shadow-lg hover:from-info hover:to-secondary transition-all duration-300 transform hover:scale-105 hover:shadow-secondary/50"><i class="fa-solid fa-plus"></i> Nuevo Evento</a>

@@ -109,7 +109,7 @@
         </header>
 
         <!-- Main Content -->
-        <div class="flex-1 px-8 md:px-20 lg:px-40 py-8">
+        <div class="flex-1 px-8 md:px-20 lg:px-40 pr-8 md:pr-20 lg:pr-24 py-8">
             <div class="max-w-7xl mx-auto">
                 
                 <!-- Title Section -->

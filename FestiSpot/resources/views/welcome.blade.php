@@ -42,11 +42,11 @@
   <!-- Main Content -->
   <main class="flex-1 flex flex-col min-h-screen relative z-10 bg-background/90">
     <!-- Header -->
-    <header class="flex items-center justify-between border-b border-accent/20 px-6 py-6 bg-card/80 backdrop-blur-xl sticky top-0 z-10" style="border-bottom: 1px solid rgba(255, 64, 129, 0.2); background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.8) 50%, rgba(15, 15, 35, 0.9) 100%); backdrop-filter: blur(20px);">
+    <header class="flex items-center justify-between border-b border-accent/20 px-6 py-6 pr-24 bg-card/80 backdrop-blur-xl sticky top-0 z-10" style="border-bottom: 1px solid rgba(255, 64, 129, 0.2); background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.8) 50%, rgba(15, 15, 35, 0.9) 100%); backdrop-filter: blur(20px);">
       <div class="flex items-center gap-4 text-text">
         <span class="font-black text-xl md:text-2xl bg-gradient-to-r from-accent via-secondary to-tertiary bg-clip-text text-transparent">FestiSpot</span>
       </div>
-      <div class="flex gap-4">
+      <div class="flex gap-4 mr-8">
         <button onclick="crearNuevoEvento()" id="btn-crear-evento-header" class="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-secondary to-info text-white rounded-xl font-bold text-base shadow-lg hover:from-info hover:to-secondary transition-all">
           <i class="fa-solid fa-plus"></i> Crear Evento
         </button>
@@ -57,7 +57,7 @@
     </header>
 
     <!-- Métricas -->
-    <section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 px-6 py-8">
+    <section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 px-6 pr-24 py-8">
       <div class="bg-card rounded-2xl p-6 flex flex-col items-center shadow-lg border border-cardLight/30">
         <span class="text-3xl text-accent mb-2"><i class="fa-solid fa-calendar-check"></i></span>
         <div class="text-3xl font-bold">9</div>
@@ -86,7 +86,7 @@
     </section>
 
     <!-- Gráficas y Notificaciones -->
-    <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 px-6 pb-8">
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 px-6 pr-24 pb-8">
       <!-- Gráfica -->
       <div class="bg-cardLight rounded-2xl p-8 shadow-lg border border-card/30 col-span-2 flex flex-col">
         <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
@@ -122,7 +122,7 @@
     </section>
 
     <!-- Próximos eventos -->
-    <section class="px-6 pb-16">
+    <section class="px-6 pr-24 pb-16">
       <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
         <i class="fa-solid fa-calendar-days text-accent"></i> Próximos Eventos
       </h3>
