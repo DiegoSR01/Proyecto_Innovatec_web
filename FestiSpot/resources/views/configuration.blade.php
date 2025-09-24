@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>FestiSpot - Configuración</title>
     <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
     
@@ -137,7 +138,7 @@
             <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 40px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" style="width: 70px; height: 70px; border-radius: 50%;">
-                    <h1 style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</h1>
+                    <h1 style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</h1>
                 </div>
                 
                 <nav style="display: flex; gap: 8px;">
@@ -165,64 +166,99 @@
                 <div class="space-y-8">
                     
                     <!-- Perfil de Usuario -->
-                    <div class="setting-card rounded-3xl p-8">
-                        <h2 class="text-2xl font-bold mb-6 bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent flex items-center">
-                            <span class="mr-3">👤</span> Perfil de Usuario
-                        </h2>
+                    <form id="profileForm" enctype="multipart/form-data">
+                        @csrf
+                        <div class="setting-card rounded-3xl p-8">
+                            <h2 class="text-2xl font-bold mb-6 bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent flex items-center">
+                                <span class="mr-3">👤</span> Perfil de Usuario
+                            </h2>
                         
                         <div class="grid md:grid-cols-2 gap-8">
                             <div class="space-y-6">
                                 <div>
-                                    <label class="block text-textMuted text-sm font-medium mb-3">Nombre completo</label>
-                                    <input type="text" value="Juan Carlos Pérez" 
+                                    <label class="block text-textMuted text-sm font-medium mb-3">Nombre</label>
+                                    <input type="text" name="nombre" value="{{ $user->nombre }}" 
                                            class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text focus:border-accent focus:ring-2 focus:ring-accent/30 focus:outline-none transition-all">
                                 </div>
                                 
                                 <div>
+                                    <label class="block text-textMuted text-sm font-medium mb-3">Apellido</label>
+                                    <input type="text" name="apellido" value="{{ $user->apellido }}" 
+                                           class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text focus:border-accent focus:ring-2 focus:ring-accent/30 focus:outline-none transition-all">
+                                </div>
+
+                                <div>
                                     <label class="block text-textMuted text-sm font-medium mb-3">Email</label>
-                                    <input type="email" value="juan.perez@ejemplo.com" 
+                                    <input type="email" name="email" value="{{ $user->email }}" 
                                            class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text focus:border-accent focus:ring-2 focus:ring-accent/30 focus:outline-none transition-all">
                                 </div>
                                 
                                 <div>
                                     <label class="block text-textMuted text-sm font-medium mb-3">Teléfono</label>
-                                    <input type="tel" value="+52 55 1234 5678" 
+                                    <input type="tel" name="telefono" value="{{ $user->telefono ?? '' }}" 
                                            class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text focus:border-accent focus:ring-2 focus:ring-accent/30 focus:outline-none transition-all">
                                 </div>
                             </div>
                             
                             <div class="space-y-6">
                                 <div>
-                                    <label class="block text-textMuted text-sm font-medium mb-3">Organización</label>
-                                    <input type="text" placeholder="Nombre de tu empresa/organización" 
-                                           class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text placeholder-textDark focus:border-accent focus:ring-2 focus:ring-accent/30 focus:outline-none transition-all">
+                                    <label class="block text-textMuted text-sm font-medium mb-3">Fecha de Nacimiento</label>
+                                    <input type="date" name="fecha_nacimiento" value="{{ $user->fecha_nacimiento ? $user->fecha_nacimiento->format('Y-m-d') : '' }}" 
+                                           class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text focus:border-accent focus:ring-2 focus:ring-accent/30 focus:outline-none transition-all">
                                 </div>
                                 
                                 <div>
-                                    <label class="block text-textMuted text-sm font-medium mb-3">Ubicación</label>
-                                    <select class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text focus:border-accent focus:ring-2 focus:ring-accent/30 focus:outline-none transition-all">
-                                        <option>Ciudad de México, México</option>
-                                        <option>Guadalajara, México</option>
-                                        <option>Monterrey, México</option>
-                                        <option>Puebla, México</option>
-                                        <option>Otra ubicación</option>
+                                    <label class="block text-textMuted text-sm font-medium mb-3">Género</label>
+                                    <select name="genero" class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text focus:border-accent focus:ring-2 focus:ring-accent/30 focus:outline-none transition-all">
+                                        <option value="">Prefiero no especificar</option>
+                                        <option value="masculino" {{ $user->genero == 'masculino' ? 'selected' : '' }}>Masculino</option>
+                                        <option value="femenino" {{ $user->genero == 'femenino' ? 'selected' : '' }}>Femenino</option>
+                                        <option value="otro" {{ $user->genero == 'otro' ? 'selected' : '' }}>Otro</option>
+                                        <option value="prefiero_no_decir" {{ $user->genero == 'prefiero_no_decir' ? 'selected' : '' }}>Prefiero no decir</option>
                                     </select>
                                 </div>
+
+                                <div>
+                                    <label class="block text-textMuted text-sm font-medium mb-3">Rol</label>
+                                    <input type="text" value="{{ ucfirst($user->rol->nombre ?? 'Asistente') }}" 
+                                           class="w-full bg-cardLight/30 border border-cardLight/30 rounded-xl px-4 py-3 text-textMuted cursor-not-allowed" readonly>
+                                </div>
                                 
                                 <div>
-                                    <label class="block text-textMuted text-sm font-medium mb-3">Biografía</label>
-                                    <textarea rows="3" placeholder="Cuéntanos sobre ti y tu experiencia organizando eventos..."
-                                              class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text placeholder-textDark focus:border-accent focus:ring-2 focus:ring-accent/30 focus:outline-none transition-all resize-none"></textarea>
+                                    <label class="block text-textMuted text-sm font-medium mb-3">Foto de Perfil</label>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-16 h-16 rounded-full bg-gradient-to-r from-accent to-secondary flex items-center justify-center overflow-hidden">
+                                                @if($user->avatar_image)
+                                                    <img src="{{ $user->avatar_image }}" alt="Avatar" class="w-full h-full object-cover">
+                                                @else
+                                                    <span class="text-white text-xl font-bold">{{ $user->initial }}</span>
+                                                @endif
+                                            </div>
+                                            <div class="flex-1">
+                                                <input type="file" name="avatar" id="avatar" accept="image/*" 
+                                                       class="w-full bg-cardLight/50 border border-cardLight/30 rounded-xl px-4 py-3 text-text focus:border-accent focus:ring-2 focus:ring-accent/30 focus:outline-none transition-all file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-accent file:text-white hover:file:bg-secondary">
+                                                <p class="text-xs text-textMuted mt-1">JPG, PNG o GIF. Máximo 2MB.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-textMuted text-sm font-medium mb-3">Miembro desde</label>
+                                    <input type="text" value="{{ $user->fecha_registro ? $user->fecha_registro->format('d/m/Y') : $user->created_at->format('d/m/Y') }}" 
+                                           class="w-full bg-cardLight/30 border border-cardLight/30 rounded-xl px-4 py-3 text-textMuted cursor-not-allowed" readonly>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="mt-6 flex justify-end">
-                            <button class="px-6 py-3 bg-gradient-to-r from-accent to-secondary text-white rounded-xl font-bold hover:from-secondary hover:to-accent transition-all duration-300 shadow-lg">
-                                💾 Guardar Cambios
+                            <button type="submit" class="px-6 py-3 bg-gradient-to-r from-accent to-secondary text-white rounded-xl font-bold hover:from-secondary hover:to-accent transition-all duration-300 shadow-lg">
+                                💾 Guardar Cambios del Perfil
                             </button>
                         </div>
                     </div>
+                    </form>
 
                     <!-- Notificaciones -->
                     <div class="setting-card rounded-3xl p-8">
@@ -240,7 +276,7 @@
                                             <div class="font-medium text-text">Nuevos asistentes</div>
                                             <div class="text-sm text-textMuted">Recibe un email cuando alguien se registre a tus eventos</div>
                                         </div>
-                                        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                                        <div class="toggle-switch {{ $configuracion->notificaciones_email ? 'active' : '' }}" onclick="toggleSwitch(this)"></div>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">
@@ -248,7 +284,7 @@
                                             <div class="font-medium text-text">Solicitudes de productores</div>
                                             <div class="text-sm text-textMuted">Notificaciones sobre nuevas solicitudes de colaboración</div>
                                         </div>
-                                        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                                        <div class="toggle-switch {{ $configuracion->notificaciones_email ? 'active' : '' }}" onclick="toggleSwitch(this)"></div>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">
@@ -256,7 +292,7 @@
                                             <div class="font-medium text-text">Comentarios y reseñas</div>
                                             <div class="text-sm text-textMuted">Cuando recibas comentarios en tus eventos</div>
                                         </div>
-                                        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                                        <div class="toggle-switch {{ $configuracion->notificaciones_email ? 'active' : '' }}" onclick="toggleSwitch(this)"></div>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">
@@ -264,7 +300,7 @@
                                             <div class="font-medium text-text">Recordatorios de eventos</div>
                                             <div class="text-sm text-textMuted">Recordatorios antes de tus eventos programados</div>
                                         </div>
-                                        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                                        <div class="toggle-switch {{ $configuracion->notificaciones_email ? 'active' : '' }}" onclick="toggleSwitch(this)"></div>
                                     </div>
                                 </div>
                             </div>
@@ -278,7 +314,7 @@
                                             <div class="font-medium text-text">Mensajes urgentes</div>
                                             <div class="text-sm text-textMuted">Notificaciones importantes sobre tus eventos</div>
                                         </div>
-                                        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                                        <div class="toggle-switch {{ $configuracion->notificaciones_push ? 'active' : '' }}" onclick="toggleSwitch(this)"></div>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">
@@ -286,7 +322,7 @@
                                             <div class="font-medium text-text">Actualizaciones de la plataforma</div>
                                             <div class="text-sm text-textMuted">Nuevas funciones y mejoras de FestiSpot</div>
                                         </div>
-                                        <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                                        <div class="toggle-switch {{ $configuracion->notificaciones_push ? 'active' : '' }}" onclick="toggleSwitch(this)"></div>
                                     </div>
                                     
                                     <div class="flex justify-between items-center">
@@ -404,26 +440,16 @@
                                 <div>
                                     <label class="block text-textMuted text-sm font-medium mb-3">Categorías favoritas de eventos</label>
                                     <div class="space-y-2">
+                                        @foreach($categorias as $categoria)
                                         <label class="flex items-center">
-                                            <input type="checkbox" checked class="mr-3 h-4 w-4 text-accent rounded border-gray-300 focus:ring-accent">
-                                            <span class="text-textMuted">🎵 Música y Conciertos</span>
+                                            <input type="checkbox" 
+                                                   name="categorias_favoritas[]" 
+                                                   value="{{ $categoria->id }}"
+                                                   {{ $configuracion->categorias_favoritas && in_array($categoria->id, $configuracion->categorias_favoritas) ? 'checked' : '' }}
+                                                   class="mr-3 h-4 w-4 text-accent rounded border-gray-300 focus:ring-accent">
+                                            <span class="text-textMuted">{{ $categoria->icono ?? '🎪' }} {{ $categoria->nombre }}</span>
                                         </label>
-                                        <label class="flex items-center">
-                                            <input type="checkbox" checked class="mr-3 h-4 w-4 text-accent rounded border-gray-300 focus:ring-accent">
-                                            <span class="text-textMuted">💼 Eventos Corporativos</span>
-                                        </label>
-                                        <label class="flex items-center">
-                                            <input type="checkbox" class="mr-3 h-4 w-4 text-accent rounded border-gray-300 focus:ring-accent">
-                                            <span class="text-textMuted">🎭 Arte y Cultura</span>
-                                        </label>
-                                        <label class="flex items-center">
-                                            <input type="checkbox" checked class="mr-3 h-4 w-4 text-accent rounded border-gray-300 focus:ring-accent">
-                                            <span class="text-textMuted">💻 Tecnología</span>
-                                        </label>
-                                        <label class="flex items-center">
-                                            <input type="checkbox" class="mr-3 h-4 w-4 text-accent rounded border-gray-300 focus:ring-accent">
-                                            <span class="text-textMuted">⚽ Deportes</span>
-                                        </label>
+                                        @endforeach
                                     </div>
                                 </div>
                                 
@@ -588,11 +614,20 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             console.log('⚙️ Configuración cargada');
+
+            // Manejo del formulario de perfil
+            const profileForm = document.getElementById('profileForm');
+            if (profileForm) {
+                profileForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    saveProfile(this);
+                });
+            }
             
-            // Simular guardado de configuración
+            // Simular guardado de configuración para otros botones
             const saveButtons = document.querySelectorAll('button');
             saveButtons.forEach(button => {
-                if (button.textContent.includes('Guardar')) {
+                if (button.textContent.includes('Guardar') && button.type !== 'submit') {
                     button.addEventListener('click', function() {
                         const originalText = this.innerHTML;
                         this.innerHTML = '⏳ Guardando...';
@@ -609,6 +644,69 @@
                 }
             });
         });
+
+        function saveProfile(form) {
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
+            
+            submitButton.innerHTML = '⏳ Guardando perfil...';
+            submitButton.disabled = true;
+            
+            const formData = new FormData(form);
+            
+            fetch('/configuration/profile', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || document.querySelector('input[name="_token"]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    submitButton.innerHTML = '✅ Perfil actualizado';
+                    showNotification('Perfil actualizado correctamente', 'success');
+                } else {
+                    submitButton.innerHTML = '❌ Error';
+                    showNotification('Error al actualizar el perfil', 'error');
+                }
+                
+                setTimeout(() => {
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                }, 2000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                submitButton.innerHTML = '❌ Error';
+                showNotification('Error de conexión', 'error');
+                
+                setTimeout(() => {
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                }, 2000);
+            });
+        }
+
+        function showNotification(message, type) {
+            // Crear notificación temporal
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-xl text-white font-medium shadow-lg transition-all duration-300 ${
+                type === 'success' ? 'bg-success' : 'bg-accent'
+            }`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Animación de entrada
+            setTimeout(() => notification.style.transform = 'translateX(0)', 10);
+            
+            // Remover después de 3 segundos
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
     </script>
 </body>
 </html>

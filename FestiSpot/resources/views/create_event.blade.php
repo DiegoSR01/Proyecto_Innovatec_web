@@ -90,7 +90,7 @@
                 <!-- Logo -->
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" style="width: 70px; height: 70px; border-radius: 50%;">
-                    <h1 style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</h1>
+                    <h1 style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</h1>
                 </div>
                 
                 <!-- Navigation central -->
@@ -194,17 +194,11 @@
                             required
                         >
                             <option value="">🎭 Selecciona una categoría</option>
-                            <option value="Conferencia" {{ old('event_category', $eventBasic['event_category'] ?? '') == 'Conferencia' ? 'selected' : '' }}>🎤 Conferencia</option>
-                            <option value="Seminario" {{ old('event_category', $eventBasic['event_category'] ?? '') == 'Seminario' ? 'selected' : '' }}>📚 Seminario</option>
-                            <option value="Taller" {{ old('event_category', $eventBasic['event_category'] ?? '') == 'Taller' ? 'selected' : '' }}>🔧 Taller</option>
-                            <option value="Networking" {{ old('event_category', $eventBasic['event_category'] ?? '') == 'Networking' ? 'selected' : '' }}>🤝 Networking</option>
-                            <option value="Festival" {{ old('event_category', $eventBasic['event_category'] ?? '') == 'Festival' ? 'selected' : '' }}>🎉 Festival</option>
-                            <option value="Deportivo" {{ old('event_category', $eventBasic['event_category'] ?? '') == 'Deportivo' ? 'selected' : '' }}>⚽ Evento Deportivo</option>
-                            <option value="Cultural" {{ old('event_category', $eventBasic['event_category'] ?? '') == 'Cultural' ? 'selected' : '' }}>🎭 Evento Cultural</option>
-                            <option value="Empresarial" {{ old('event_category', $eventBasic['event_category'] ?? '') == 'Empresarial' ? 'selected' : '' }}>💼 Evento Empresarial</option>
-                            <option value="Educativo" {{ old('event_category', $eventBasic['event_category'] ?? '') == 'Educativo' ? 'selected' : '' }}>🎓 Educativo</option>
-                            <option value="Social" {{ old('event_category', $eventBasic['event_category'] ?? '') == 'Social' ? 'selected' : '' }}>👥 Evento Social</option>
-                            <option value="Otro" {{ old('event_category', $eventBasic['event_category'] ?? '') == 'Otro' ? 'selected' : '' }}>🌟 Otro</option>
+                            @foreach($categorias as $categoria)
+                                <option value="{{ $categoria->nombre }}" {{ old('event_category', $eventBasic['event_category'] ?? '') == $categoria->nombre ? 'selected' : '' }}>
+                                    {{ $categoria->icono ?? '📅' }} {{ $categoria->nombre }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
 

@@ -3,7 +3,11 @@
     <!-- Botón de Usuario -->
     <div class="user-icon-container" onclick="toggleUserDropdown()">
         <div class="user-icon">
-            <span class="user-initial">U</span>
+            @if(Auth::user()->avatar_image)
+                <img src="{{ Auth::user()->avatar_image }}" alt="Avatar" class="w-full h-full object-cover rounded-full">
+            @else
+                <span class="user-initial">{{ Auth::user()->initial }}</span>
+            @endif
         </div>
         <div class="user-icon-indicator"></div>
     </div>
@@ -12,11 +16,15 @@
     <div class="user-dropdown" id="userDropdown">
         <div class="dropdown-header">
             <div class="user-avatar">
-                <i class="fas fa-user"></i>
+                @if(Auth::user()->avatar_image)
+                    <img src="{{ Auth::user()->avatar_image }}" alt="Avatar" class="w-full h-full object-cover rounded-full">
+                @else
+                    <span>{{ Auth::user()->initial }}</span>
+                @endif
             </div>
             <div class="user-info">
                 <span class="user-name">{{ Auth::user()->name ?? 'Usuario' }}</span>
-                <span class="user-role">Organizador</span>
+                <span class="user-role">{{ Auth::user()->rol->nombre ?? 'Usuario' }}</span>
             </div>
         </div>
         

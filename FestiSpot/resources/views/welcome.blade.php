@@ -60,7 +60,7 @@
     <section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 px-6 pr-24 py-8">
       <div class="bg-card rounded-2xl p-6 flex flex-col items-center shadow-lg border border-cardLight/30">
         <span class="text-3xl text-accent mb-2"><i class="fa-solid fa-calendar-check"></i></span>
-        <div class="text-3xl font-bold">9</div>
+        <div class="text-3xl font-bold">{{ $totalEventosActivos ?? 0 }}</div>
         <div class="text-textMuted mt-1 text-sm">Eventos Activos</div>
       </div>
       <div class="bg-card rounded-2xl p-6 flex flex-col items-center shadow-lg border border-cardLight/30">
@@ -137,12 +137,13 @@
             </tr>
           </thead>
           <tbody>
+            @forelse($eventosActivos as $evento)
             <tr class="border-t border-card/20 hover:bg-card/30 transition-all">
-              <td class="px-6 py-4 font-semibold">Festival Jazz</td>
-              <td class="px-6 py-4">22/08/2025</td>
-              <td class="px-6 py-4">Auditorio Nacional</td>
+              <td class="px-6 py-4 font-semibold">{{ $evento->titulo ?? $evento->name }}</td>
+              <td class="px-6 py-4">{{ $evento->fecha_inicio ? $evento->fecha_inicio->format('d/m/Y') : 'Por definir' }}</td>
+              <td class="px-6 py-4">{{ $evento->ubicacion->direccion ?? $evento->location ?? 'Por definir' }}</td>
               <td class="px-6 py-4 flex gap-2">
-                <a href="#" onclick="editarEvento('festival-jazz')" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all">
+                <a href="#" onclick="editarEvento('evento-{{ $evento->id }}')" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all">
                   <i class="fa-solid fa-pen"></i> Editar
                 </a>
                 <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all">
@@ -150,32 +151,15 @@
                 </a>
               </td>
             </tr>
-            <tr class="border-t border-card/20 hover:bg-card/30 transition-all">
-              <td class="px-6 py-4 font-semibold">Tech Summit</td>
-              <td class="px-6 py-4">05/09/2025</td>
-              <td class="px-6 py-4">Centro de Convenciones</td>
-              <td class="px-6 py-4 flex gap-2">
-                <a href="#" onclick="editarEvento('tech-summit')" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all">
-                  <i class="fa-solid fa-pen"></i> Editar
-                </a>
-                <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all">
-                  <i class="fa-solid fa-trash"></i> Eliminar
-                </a>
+            @empty
+            <tr class="border-t border-card/20">
+              <td colspan="4" class="px-6 py-8 text-center text-textMuted">
+                <i class="fa-solid fa-calendar-xmark text-4xl mb-4"></i><br>
+                No hay eventos activos en este momento.<br>
+                <a href="{{ route('event.create') }}" class="text-accent hover:underline">¡Crea tu primer evento aquí!</a>
               </td>
             </tr>
-            <tr class="border-t border-card/20 hover:bg-card/30 transition-all">
-              <td class="px-6 py-4 font-semibold">Expo Cultura</td>
-              <td class="px-6 py-4">15/09/2025</td>
-              <td class="px-6 py-4">Museo de Arte</td>
-              <td class="px-6 py-4 flex gap-2">
-                <a href="#" onclick="editarEvento('expo-cultura')" class="px-3 py-1 bg-info/20 text-info rounded-lg text-sm font-bold hover:bg-info/40 transition-all">
-                  <i class="fa-solid fa-pen"></i> Editar
-                </a>
-                <a href="#" class="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm font-bold hover:bg-accent/40 transition-all">
-                  <i class="fa-solid fa-trash"></i> Eliminar
-                </a>
-              </td>
-            </tr>
+            @endforelse
           </tbody>
         </table>
       </div>

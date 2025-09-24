@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\Event;
+use App\Models\Categoria;
+use App\Models\ImagenEvento;
 
 class EventController extends Controller
 {
@@ -22,8 +25,48 @@ class EventController extends Controller
      */
     public function create()
     {
-        // Mantener los datos de la sesión al editar
-        return view('create_event');
+        // Obtener categorías activas de la base de datos
+        $categorias = Categoria::where('activo', true)->get();
+        
+        return view('create_event', compact('categorias'));
+    }
+    
+    /**
+     * Mostrar mis eventos
+     */
+    public function myEvents()
+    {
+        // Usar usuario fijo para pruebas (ID 1)
+        $userId = 1;
+
+        // Obtener los eventos del usuario usando la nueva estructura, incluyendo las imágenes
+        $events = Event::where('organizador_id', $userId)
+                      ->with(['imagenes' => function($query) {
+                          $query->where('tipo', 'principal');
+                      }])
+                      ->orderBy('created_at', 'desc')
+                      ->get();
+        
+        // Migrar imágenes legacy a BLOB automáticamente
+        foreach ($events as $event) {
+            if ($event->banner_image && !$event->imagenes->where('tipo', 'principal')->count()) {
+                Log::info("Detectado evento con imagen legacy, migrando: Evento {$event->id}");
+                $this->migrarImagenLegacyABlob($event);
+            }
+        }
+        
+        // Recargar eventos después de posibles migraciones
+        $events = Event::where('organizador_id', $userId)
+                      ->with(['imagenes' => function($query) {
+                          $query->where('tipo', 'principal');
+                      }])
+                      ->orderBy('created_at', 'desc')
+                      ->get();
+                      
+        // Obtener categorías activas para los filtros
+        $categorias = Categoria::where('activo', true)->get();
+
+        return view('mis_eventos_new', compact('events', 'categorias'));
     }
 
     /**
@@ -153,25 +196,51 @@ class EventController extends Controller
      */
     public function storeMedia(Request $request)
     {
-        // Validar archivos de media
-        $validated = $request->validate([
-            'banner_image' => 'nullable|image|max:5120',
-            'gallery_images.*' => 'nullable|image|max:5120',
-            'videos.*' => 'nullable|mimes:mp4,avi,mov,wmv|max:51200',
+        Log::info('=== storeMedia iniciado ===');
+        Log::info('Archivos recibidos en request:', [
+            'has_banner_image' => $request->hasFile('banner_image'),
+            'has_gallery_images' => $request->hasFile('gallery_images'),
+            'has_videos' => $request->hasFile('videos'),
+            'all_files' => $request->allFiles()
         ]);
+        
+        // Validar archivos de media
+        try {
+            $validated = $request->validate([
+                'banner_image' => 'nullable|image|max:5120',
+                'gallery_images.*' => 'nullable|image|max:5120',
+                'videos.*' => 'nullable|mimes:mp4,avi,mov,wmv|max:51200',
+            ]);
+            Log::info('Validación exitosa');
+        } catch (\Exception $e) {
+            Log::error('Error de validación: ' . $e->getMessage());
+            return back()->withErrors('Error de validación: ' . $e->getMessage())->withInput();
+        }
         
         // Obtener media existente
         $existingMedia = Session::get('event_media', []);
+        Log::info('Media existente en sesión:', $existingMedia);
         
         // Procesar nueva imagen principal
         if ($request->hasFile('banner_image')) {
-            $bannerFile = $request->file('banner_image');
-            $existingMedia['has_banner'] = true;
-            // Guardar el archivo físicamente y obtener la ruta
-            $bannerPath = $bannerFile->store('events/banners', 'public');
+            $banner = $request->file('banner_image');
+            Log::info('Procesando banner image:', [
+                'name' => $banner->getClientOriginalName(),
+                'size' => $banner->getSize(),
+                'mime' => $banner->getMimeType()
+            ]);
+            
+            $existingMedia['banner_name'] = $banner->getClientOriginalName();
+            $bannerPath = $banner->store('temp', 'public');
             $existingMedia['banner_path'] = $bannerPath;
-            $existingMedia['banner_name'] = basename($bannerPath); // Usar el nombre generado por Laravel
-            $existingMedia['banner_url'] = asset('storage/' . $bannerPath);
+            $existingMedia['has_banner'] = true;
+            
+            Log::info('Banner guardado en:', [
+                'path' => $bannerPath,
+                'full_path' => storage_path('app/public/' . $bannerPath)
+            ]);
+        } else {
+            Log::warning('No se recibió banner_image en el request');
         }
         
         // Procesar nuevas imágenes de galería
@@ -179,11 +248,15 @@ class EventController extends Controller
             if (!isset($existingMedia['gallery_files'])) {
                 $existingMedia['gallery_files'] = [];
             }
+            if (!isset($existingMedia['gallery_paths'])) {
+                $existingMedia['gallery_paths'] = [];
+            }
             
             foreach ($request->file('gallery_images') as $file) {
                 $existingMedia['gallery_files'][] = $file->getClientOriginalName();
-                // Aquí guardarías cada archivo físicamente
-                // $filePath = $file->store('events/gallery', 'public');
+                // Guardar archivo temporalmente para convertir a BLOB después
+                $galleryPath = $file->store('events/gallery', 'public');
+                $existingMedia['gallery_paths'][] = $galleryPath;
             }
             $existingMedia['gallery_count'] = count($existingMedia['gallery_files']);
         }
@@ -204,6 +277,9 @@ class EventController extends Controller
         
         // Guardar en sesión
         Session::put('event_media', $existingMedia);
+        
+        Log::info('=== storeMedia completado ===');
+        Log::info('Datos finales guardados en sesión:', $existingMedia);
         
         return redirect()->route('event.summary')->with('success', 'Media guardada correctamente');
     }
@@ -279,11 +355,11 @@ class EventController extends Controller
         $mediaData = Session::get('event_media', []);
         
         // Debug: log de los datos para verificar
-        \Log::info('=== DATOS DEL RESUMEN ===');
-        \Log::info('Básicos: ', $basicData);
-        \Log::info('Fechas: ', $dateData);
-        \Log::info('Ubicación: ', $locationData);
-        \Log::info('Media: ', $mediaData);
+        Log::info('=== DATOS DEL RESUMEN ===');
+        Log::info('Básicos: ', $basicData);
+        Log::info('Fechas: ', $dateData);
+        Log::info('Ubicación: ', $locationData);
+        Log::info('Media: ', $mediaData);
         
         return view('event_summary', [
             'basic' => $basicData,
@@ -455,6 +531,113 @@ class EventController extends Controller
             // Crear el evento
             $event = Event::create($eventData);
 
+            // Debug: Log de datos de media
+            Log::info('Datos de media recibidos:', $mediaData);
+
+            // Procesar y guardar imágenes como BLOB (base64)
+            if (!empty($mediaData['banner_path'])) {
+                // Leer el archivo banner desde el storage temporal
+                $bannerPath = storage_path('app/public/' . $mediaData['banner_path']);
+                if (file_exists($bannerPath)) {
+                    try {
+                        // Optimizar la imagen antes de guardarla
+                        $imagenOptimizada = $this->optimizarImagen($bannerPath, $mediaData['banner_name'] ?? '');
+                        
+                        if ($imagenOptimizada) {
+                            // Crear registro en imagenes_evento con imagen optimizada
+                            ImagenEvento::create([
+                                'evento_id' => $event->id,
+                                'imagen_data' => $imagenOptimizada['base64'],
+                                'mime_type' => $imagenOptimizada['mime_type'],
+                                'tipo' => 'principal',
+                                'tamaño_kb' => $imagenOptimizada['size_kb'],
+                                'formato' => $imagenOptimizada['extension'],
+                            ]);
+                        } else {
+                            // Fallback: usar imagen original pero verificar tamaño
+                            $imageData = file_get_contents($bannerPath);
+                            $imagenBase64 = base64_encode($imageData);
+                            
+                            // Verificar tamaño antes de guardar
+                            if (strlen($imagenBase64) > 16000000) { // ~16MB limit
+                                Log::warning("Imagen demasiado grande, saltando: " . $bannerPath);
+                            } else {
+                                $mimeType = mime_content_type($bannerPath);
+                                
+                                ImagenEvento::create([
+                                    'evento_id' => $event->id,
+                                    'imagen_data' => $imagenBase64,
+                                    'mime_type' => $mimeType,
+                                    'tipo' => 'principal',
+                                    'tamaño_kb' => round(filesize($bannerPath) / 1024),
+                                    'formato' => pathinfo($bannerPath, PATHINFO_EXTENSION),
+                                ]);
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        Log::error('Error al procesar imagen principal: ' . $e->getMessage());
+                        // Continuar sin imagen en caso de error
+                    }
+                    
+                    // Eliminar archivo temporal
+                    if (file_exists($bannerPath)) {
+                        unlink($bannerPath);
+                    }
+                }
+            }
+            
+            // Procesar imágenes de galería si existen
+            if (!empty($mediaData['gallery_paths'])) {
+                foreach ($mediaData['gallery_paths'] as $galleryPath) {
+                    $fullPath = storage_path('app/public/' . $galleryPath);
+                    if (file_exists($fullPath)) {
+                        try {
+                            // Optimizar cada imagen de galería
+                            $imagenOptimizada = $this->optimizarImagen($fullPath);
+                            
+                            if ($imagenOptimizada) {
+                                ImagenEvento::create([
+                                    'evento_id' => $event->id,
+                                    'imagen_data' => $imagenOptimizada['base64'],
+                                    'mime_type' => $imagenOptimizada['mime_type'],
+                                    'tipo' => 'galeria',
+                                    'tamaño_kb' => $imagenOptimizada['size_kb'],
+                                    'formato' => $imagenOptimizada['extension'],
+                                ]);
+                            } else {
+                                // Fallback: usar imagen original pero verificar tamaño
+                                $imageData = file_get_contents($fullPath);
+                                $imagenBase64 = base64_encode($imageData);
+                                
+                                // Verificar tamaño antes de guardar
+                                if (strlen($imagenBase64) <= 16000000) { // ~16MB limit
+                                    $mimeType = mime_content_type($fullPath);
+                                    
+                                    ImagenEvento::create([
+                                        'evento_id' => $event->id,
+                                        'imagen_data' => $imagenBase64,
+                                        'mime_type' => $mimeType,
+                                        'tipo' => 'galeria',
+                                        'tamaño_kb' => round(filesize($fullPath) / 1024),
+                                        'formato' => pathinfo($fullPath, PATHINFO_EXTENSION),
+                                    ]);
+                                } else {
+                                    Log::warning("Imagen de galería demasiado grande, saltando: " . $fullPath);
+                                }
+                            }
+                        } catch (\Exception $e) {
+                            Log::error('Error al procesar imagen de galería: ' . $e->getMessage());
+                            // Continuar con la siguiente imagen
+                        }
+                        
+                        // Eliminar archivo temporal
+                        if (file_exists($fullPath)) {
+                            unlink($fullPath);
+                        }
+                    }
+                }
+            }
+
             // Limpiar las sesiones después de guardar exitosamente
             Session::forget(['event_basic', 'event_date', 'event_location', 'event_media']);
 
@@ -466,7 +649,7 @@ class EventController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            \Log::error('Error al crear evento: ' . $e->getMessage());
+            Log::error('Error al crear evento: ' . $e->getMessage());
             
             return response()->json([
                 'success' => false,
@@ -476,32 +659,38 @@ class EventController extends Controller
     }
 
     /**
-     * Mostrar los eventos del usuario
+     * Mostrar un evento específico
      */
-    public function myEvents()
+    public function show($id)
     {
-        // Usar usuario fijo para pruebas (ID 1)
-        $userId = 1;
-
-        // Obtener los eventos del usuario usando la nueva estructura
-        $events = Event::where('organizador_id', $userId)
-                      ->orderBy('created_at', 'desc')
-                      ->get();
-
-        return view('mis_eventos_new', compact('events'));
+        $event = Event::findOrFail($id);
+        return view('events.show', compact('event'));
     }
 
     /**
-     * Mostrar un evento específico
+     * Dashboard - mostrar eventos activos dinámicos
      */
-    public function show(Event $event)
+    public function dashboard()
     {
-        // Verificar que el usuario puede ver este evento
-        if ($event->organizador_id !== Auth::id() && $event->estado !== 'publicado') {
-            abort(403, 'No tienes permiso para ver este evento.');
-        }
+        // Obtener eventos activos (próximos y en curso)
+        $eventosActivos = Event::where('fecha_inicio', '>=', now())
+                               ->orWhere(function($query) {
+                                   $query->where('fecha_inicio', '<=', now())
+                                         ->where('fecha_fin', '>=', now());
+                               })
+                               ->orderBy('fecha_inicio', 'asc')
+                               ->take(6) // Mostrar solo los primeros 6
+                               ->get();
+                               
+        // Contar total de eventos activos
+        $totalEventosActivos = Event::where('fecha_inicio', '>=', now())
+                                   ->orWhere(function($query) {
+                                       $query->where('fecha_inicio', '<=', now())
+                                             ->where('fecha_fin', '>=', now());
+                                   })
+                                   ->count();
 
-        return view('event_show', compact('event'));
+        return view('welcome', compact('eventosActivos', 'totalEventosActivos'));
     }
 
     /**
@@ -547,6 +736,205 @@ class EventController extends Controller
                 'success' => false,
                 'message' => 'Error al eliminar el evento: ' . $e->getMessage()
             ], 500);
+        }
+    }
+    
+    /**
+     * Optimizar imagen para reducir su tamaño antes de almacenarla como base64
+     */
+    private function optimizarImagen($imagePath, $originalName = '')
+    {
+        try {
+            // Verificar que el archivo existe
+            if (!file_exists($imagePath)) {
+                return false;
+            }
+            
+            // Obtener información de la imagen
+            $imageInfo = getimagesize($imagePath);
+            if (!$imageInfo) {
+                return false;
+            }
+            
+            $mimeType = $imageInfo['mime'];
+            $width = $imageInfo[0];
+            $height = $imageInfo[1];
+            
+            // Determinar si necesita redimensionado (máximo 1200x800)
+            $maxWidth = 1200;
+            $maxHeight = 800;
+            $needsResize = ($width > $maxWidth || $height > $maxHeight);
+            
+            // Crear imagen desde el archivo original
+            $sourceImage = null;
+            switch ($mimeType) {
+                case 'image/jpeg':
+                    $sourceImage = imagecreatefromjpeg($imagePath);
+                    $extension = 'jpg';
+                    break;
+                case 'image/png':
+                    $sourceImage = imagecreatefrompng($imagePath);
+                    $extension = 'png';
+                    break;
+                case 'image/gif':
+                    $sourceImage = imagecreatefromgif($imagePath);
+                    $extension = 'gif';
+                    break;
+                case 'image/webp':
+                    $sourceImage = imagecreatefromwebp($imagePath);
+                    $extension = 'webp';
+                    break;
+                default:
+                    return false;
+            }
+            
+            if (!$sourceImage) {
+                return false;
+            }
+            
+            // Calcular nuevas dimensiones si es necesario
+            if ($needsResize) {
+                $aspectRatio = $width / $height;
+                
+                if ($width > $height) {
+                    $newWidth = min($width, $maxWidth);
+                    $newHeight = intval($newWidth / $aspectRatio);
+                } else {
+                    $newHeight = min($height, $maxHeight);
+                    $newWidth = intval($newHeight * $aspectRatio);
+                }
+            } else {
+                $newWidth = $width;
+                $newHeight = $height;
+            }
+            
+            // Crear nueva imagen redimensionada
+            $optimizedImage = imagecreatetruecolor($newWidth, $newHeight);
+            
+            // Preservar transparencia para PNG y GIF
+            if ($mimeType === 'image/png' || $mimeType === 'image/gif') {
+                imagecolortransparent($optimizedImage, imagecolorallocatealpha($optimizedImage, 0, 0, 0, 127));
+                imagealphablending($optimizedImage, false);
+                imagesavealpha($optimizedImage, true);
+            }
+            
+            // Redimensionar la imagen
+            imagecopyresampled(
+                $optimizedImage, $sourceImage,
+                0, 0, 0, 0,
+                $newWidth, $newHeight, $width, $height
+            );
+            
+            // Generar la imagen optimizada en memoria
+            ob_start();
+            switch ($mimeType) {
+                case 'image/jpeg':
+                    imagejpeg($optimizedImage, null, 85); // 85% calidad
+                    break;
+                case 'image/png':
+                    imagepng($optimizedImage, null, 6); // Compresión nivel 6
+                    break;
+                case 'image/gif':
+                    imagegif($optimizedImage, null);
+                    break;
+                case 'image/webp':
+                    imagewebp($optimizedImage, null, 85);
+                    break;
+            }
+            $optimizedImageData = ob_get_clean();
+            
+            // Limpiar memoria
+            imagedestroy($sourceImage);
+            imagedestroy($optimizedImage);
+            
+            // Convertir a base64
+            $base64 = base64_encode($optimizedImageData);
+            
+            // Verificar que el resultado sea más pequeño que el límite
+            if (strlen($base64) > 16000000) { // ~16MB limit
+                Log::warning("Imagen optimizada aún es demasiado grande: " . strlen($base64) . " bytes");
+                return false;
+            }
+            
+            return [
+                'base64' => $base64,
+                'mime_type' => $mimeType,
+                'size_kb' => round(strlen($optimizedImageData) / 1024, 2),
+                'extension' => $extension,
+                'original_size' => filesize($imagePath),
+                'optimized_size' => strlen($optimizedImageData),
+                'compression_ratio' => round((1 - strlen($optimizedImageData) / filesize($imagePath)) * 100, 1)
+            ];
+            
+        } catch (\Exception $e) {
+            Log::error('Error en optimizarImagen: ' . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Migrar imagen legacy a BLOB
+     */
+    public function migrarImagenLegacyABlob($event)
+    {
+        if (!$event->banner_image) {
+            return false;
+        }
+        
+        // Verificar si ya tiene imagen BLOB
+        if ($event->imagenes()->where('tipo', 'principal')->exists()) {
+            return false; // Ya tiene imagen BLOB, no migrar
+        }
+        
+        try {
+            $possiblePaths = [
+                storage_path('app/public/temp/' . $event->banner_image),
+                storage_path('app/public/events/banners/' . $event->banner_image),
+                storage_path('app/public/' . $event->banner_image),
+                public_path('storage/events/banners/' . $event->banner_image),
+                public_path('storage/' . $event->banner_image),
+            ];
+            
+            foreach ($possiblePaths as $path) {
+                if (file_exists($path)) {
+                    Log::info("Migrando imagen legacy a BLOB: " . $path);
+                    
+                    // Optimizar la imagen antes de guardarla como BLOB
+                    $imagenOptimizada = $this->optimizarImagen($path, $event->banner_image);
+                    
+                    if ($imagenOptimizada) {
+                        // Crear registro BLOB
+                        ImagenEvento::create([
+                            'evento_id' => $event->id,
+                            'imagen_data' => $imagenOptimizada['base64'],
+                            'mime_type' => $imagenOptimizada['mime_type'],
+                            'tipo' => 'principal',
+                            'tamaño_kb' => $imagenOptimizada['size_kb'],
+                            'formato' => $imagenOptimizada['extension'],
+                        ]);
+                        
+                        Log::info("Imagen migrada exitosamente. Compresión: {$imagenOptimizada['compression_ratio']}%");
+                        
+                        // Eliminar archivo original después de migrar
+                        if (file_exists($path)) {
+                            unlink($path);
+                        }
+                        
+                        // Limpiar el campo legacy
+                        $event->banner_image = null;
+                        $event->save();
+                        
+                        return true;
+                    }
+                }
+            }
+            
+            Log::warning("No se pudo encontrar archivo para migrar: " . $event->banner_image);
+            return false;
+            
+        } catch (\Exception $e) {
+            Log::error('Error al migrar imagen legacy: ' . $e->getMessage());
+            return false;
         }
     }
 }

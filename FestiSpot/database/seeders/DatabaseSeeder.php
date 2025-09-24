@@ -13,23 +13,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crear usuarios de prueba
-        User::factory(10)->create();
-
-        // Crear usuario de prueba específico
-        User::factory()->create([
-            'nombre' => 'Usuario',
-            'apellido' => 'Prueba',
-            'email' => 'test@example.com',
-            'rol_id' => 2, // Organizador
+        // Solo ejecutar seeders esenciales para el funcionamiento de la app
+        $this->call([
+            CategoriaSeeder::class,
+            UbicacionSeeder::class,
         ]);
 
-        // Crear usuario admin
-        User::factory()->create([
-            'nombre' => 'Admin',
-            'apellido' => 'Sistema',
-            'email' => 'admin@festispot.com',
-            'rol_id' => 3, // Admin
-        ]);
+        // Los datos de prueba están comentados - descomenta si los necesitas
+        // $this->call([
+        //     TestUserSeeder::class,
+        //     TestEventSeeder::class,
+        // ]);
     }
 }

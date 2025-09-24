@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class Event extends Model
@@ -343,5 +344,72 @@ class Event extends Model
     public function isPresential()
     {
         return in_array($this->event_type, ['Presencial', 'Híbrido']);
+    }
+
+    /**
+     * Obtener la imagen principal del evento (BLOB)
+     */
+    public function getImagenPrincipalAttribute()
+    {
+        // Intentar obtener imagen desde la tabla imagenes_evento (BLOB)
+        $imagen = $this->imagenes()->where('tipo', 'principal')->first();
+        if ($imagen && $imagen->hasImageBlob()) {
+            // Devolver imagen base64 directamente
+            return $imagen->imagen_base64;
+        }
+        
+        // Fallback a banner_image legacy si existe
+        if ($this->banner_image) {
+            // Verificar si es una ruta de archivo o una URL completa
+            if (filter_var($this->banner_image, FILTER_VALIDATE_URL)) {
+                return $this->banner_image;
+            } else {
+                // Es un nombre de archivo, construir la ruta
+                $imagePath = storage_path('app/public/temp/' . $this->banner_image);
+                if (file_exists($imagePath)) {
+                    // Leer el archivo y convertir a base64 para mostrar
+                    $imageData = file_get_contents($imagePath);
+                    $mimeType = mime_content_type($imagePath);
+                    return 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                } else {
+                    // Intentar en otras rutas posibles
+                    $possiblePaths = [
+                        storage_path('app/public/events/banners/' . $this->banner_image),
+                        storage_path('app/public/' . $this->banner_image),
+                        public_path('storage/events/banners/' . $this->banner_image),
+                        public_path('storage/' . $this->banner_image),
+                    ];
+                    
+                    foreach ($possiblePaths as $path) {
+                        if (file_exists($path)) {
+                            $imageData = file_get_contents($path);
+                            $mimeType = mime_content_type($path);
+                            return 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                        }
+                    }
+                    
+                    // Si no se encuentra el archivo, devolver asset URL como fallback
+                    return asset('storage/events/banners/' . $this->banner_image);
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    /**
+     * Obtener todas las imágenes de galería
+     */
+    public function getImagenesGaleriaAttribute()
+    {
+        return $this->imagenes()->where('tipo', 'galeria')->get();
+    }
+
+    /**
+     * Verificar si tiene imagen principal
+     */
+    public function hasImagenPrincipal()
+    {
+        return $this->imagenes()->where('tipo', 'principal')->exists() || !empty($this->banner_image);
     }
 }

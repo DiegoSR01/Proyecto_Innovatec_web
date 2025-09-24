@@ -65,7 +65,7 @@
             <!-- Logo -->
             <div style="display: flex; align-items: center; gap: 12px;">
                 <img src="{{ asset('assets/images/logo-festispot.png') }}" alt="FestiSpot Logo" style="width: 70px; height: 70px; border-radius: 50%;">
-                <h1 style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</h1>
+                <h1 style="font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #ff4081, #00e5ff, #7c4dff); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">FestiSpot</h1>
             </div>
             
             <!-- Navigation central -->
@@ -109,10 +109,9 @@
             <input type="date" class="bg-card px-4 py-2 rounded-lg text-text border border-cardLight/30 focus:border-accent focus:ring-2 focus:ring-accent/20" placeholder="Fecha" />
             <select class="bg-card px-4 py-2 rounded-lg text-text border border-cardLight/30 focus:border-accent focus:ring-2 focus:ring-accent/20">
                 <option value="">Categoría</option>
-                <option>Festival</option>
-                <option>Conferencia</option>
-                <option>Deportivo</option>
-                <option>Cultural</option>
+                @foreach($categorias as $categoria)
+                    <option value="{{ $categoria->nombre }}">{{ $categoria->nombre }}</option>
+                @endforeach
             </select>
             <select class="bg-card px-4 py-2 rounded-lg text-text border border-cardLight/30 focus:border-accent focus:ring-2 focus:ring-accent/20">
                 <option value="">Estatus</option>
@@ -132,8 +131,8 @@
                      data-fecha="{{ \Carbon\Carbon::parse($event->fecha_inicio)->format('Y-m-d') }}"
                      onclick="abrirModalEvento({{ $event->id }}, '{{ addslashes($event->titulo ?? $event->name) }}')">
                     
-                    @if($event->banner_image)
-                        <img src="{{ asset('storage/events/banners/' . $event->banner_image) }}" 
+                    @if($event->imagen_principal)
+                        <img src="{{ $event->imagen_principal }}" 
                              alt="{{ $event->titulo ?? $event->name }}" 
                              class="rounded-t-2xl h-40 w-full object-cover">
                     @else

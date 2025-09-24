@@ -65,13 +65,24 @@ return new class extends Migration
             ELSE 'borrador'
         END");
 
-        // Combinar fechas y horas ANTES de renombrar columnas
-        DB::statement("UPDATE events SET start_date = STR_TO_DATE(CONCAT(start_date, ' ', start_time), '%Y-%m-%d %H:%i:%s') WHERE start_time IS NOT NULL");
-        DB::statement("UPDATE events SET end_date = CASE 
-            WHEN end_date IS NOT NULL AND end_time IS NOT NULL 
-            THEN STR_TO_DATE(CONCAT(end_date, ' ', end_time), '%Y-%m-%d %H:%i:%s')
-            ELSE NULL 
-        END");
+        // Combinar fechas y horas ANTES de renombrar columnas (compatible con SQLite)
+        if (DB::getDriverName() === 'mysql') {
+            // Para MySQL
+            DB::statement("UPDATE events SET start_date = STR_TO_DATE(CONCAT(start_date, ' ', start_time), '%Y-%m-%d %H:%i:%s') WHERE start_time IS NOT NULL");
+            DB::statement("UPDATE events SET end_date = CASE 
+                WHEN end_date IS NOT NULL AND end_time IS NOT NULL 
+                THEN STR_TO_DATE(CONCAT(end_date, ' ', end_time), '%Y-%m-%d %H:%i:%s')
+                ELSE NULL 
+            END");
+        } else {
+            // Para SQLite
+            DB::statement("UPDATE events SET start_date = start_date || ' ' || COALESCE(start_time, '00:00:00') WHERE start_time IS NOT NULL");
+            DB::statement("UPDATE events SET end_date = CASE 
+                WHEN end_date IS NOT NULL AND end_time IS NOT NULL 
+                THEN end_date || ' ' || end_time
+                ELSE NULL 
+            END WHERE end_time IS NOT NULL");
+        }
 
         // Renombrar columnas (excepto status que se manejará después)
         Schema::table('events', function (Blueprint $table) {
@@ -102,18 +113,23 @@ return new class extends Migration
             $table->string('titulo', 200)->change();
         });
 
-        // Manejar el cambio de status a estado por separado
+        // Manejar el cambio de status a estado por separado (compatible con SQLite)
         if (Schema::hasColumn('events', 'status')) {
-            // Primero cambiar a VARCHAR temporal
-            DB::statement("ALTER TABLE events MODIFY COLUMN status VARCHAR(50) NOT NULL DEFAULT 'draft'");
-            
-            // Luego renombrar la columna
-            Schema::table('events', function (Blueprint $table) {
-                $table->renameColumn('status', 'estado');
-            });
-            
-            // Finalmente cambiar a ENUM con los nuevos valores
-            DB::statement("ALTER TABLE events MODIFY COLUMN estado ENUM('borrador', 'publicado', 'en_curso', 'finalizado', 'cancelado') NOT NULL DEFAULT 'borrador'");
+            if (DB::getDriverName() === 'mysql') {
+                // Para MySQL
+                DB::statement("ALTER TABLE events MODIFY COLUMN status VARCHAR(50) NOT NULL DEFAULT 'draft'");
+                
+                Schema::table('events', function (Blueprint $table) {
+                    $table->renameColumn('status', 'estado');
+                });
+                
+                DB::statement("ALTER TABLE events MODIFY COLUMN estado ENUM('borrador', 'publicado', 'en_curso', 'finalizado', 'cancelado') NOT NULL DEFAULT 'borrador'");
+            } else {
+                // Para SQLite - simplemente renombramos la columna
+                Schema::table('events', function (Blueprint $table) {
+                    $table->renameColumn('status', 'estado');
+                });
+            }
         }
     }
 

@@ -47,9 +47,12 @@ class AuthController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'apellido' => 'required|string|max:255',
+            'apellido' => 'required|string|max:100',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'telefono' => 'nullable|string|max:20',
+            'fecha_nacimiento' => 'nullable|date|before:today',
+            'genero' => 'nullable|in:masculino,femenino,otro,prefiero_no_decir',
         ]);
 
         $user = User::create([
@@ -57,6 +60,23 @@ class AuthController extends Controller
             'apellido' => $request->apellido,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'telefono' => $request->telefono,
+            'fecha_nacimiento' => $request->fecha_nacimiento,
+            'genero' => $request->genero,
+            'rol_id' => 1, // Asignar rol de asistente por defecto
+            'estado' => 'activo',
+            'fecha_registro' => now(),
+            'email_verificado' => false,
+        ]);
+
+        // Crear configuración de usuario por defecto
+        $user->configuraciones()->create([
+            'notificaciones_push' => true,
+            'notificaciones_email' => true,
+            'categorias_favoritas' => null,
+            'radio_busqueda_km' => 50,
+            'idioma' => 'es',
+            'tema' => 'auto',
         ]);
 
         Auth::login($user);

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ImagenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +26,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Rutas protegidas (requieren autenticación)
 Route::middleware('auth')->group(function () {
     // Dashboard
-    Route::get('/dashboard', function () {
-        return view('welcome');
-    })->name('dashboard');
+    Route::get('/dashboard', [EventController::class, 'dashboard'])->name('dashboard');
     Route::get('/event-modify-new', function () {
         return view('event_modify_new');
     });
@@ -113,7 +112,55 @@ Route::middleware('auth')->group(function () {
     })->name('subscription.success');
 
     // Ruta para la página de configuración
-    Route::get('/configuration', function () {
-        return view('configuration');
-    })->name('configuration');
+    Route::get('/configuration', [App\Http\Controllers\ConfigurationController::class, 'index'])->name('configuration');
+    Route::post('/configuration/profile', [App\Http\Controllers\ConfigurationController::class, 'updateProfile'])->name('configuration.profile');
+    Route::post('/configuration/notifications', [App\Http\Controllers\ConfigurationController::class, 'updateNotifications'])->name('configuration.notifications');
+    Route::post('/configuration/preferences', [App\Http\Controllers\ConfigurationController::class, 'updatePreferences'])->name('configuration.preferences');
+    Route::post('/configuration/password', [App\Http\Controllers\ConfigurationController::class, 'changePassword'])->name('configuration.password');
+    
+    // Rutas para imágenes BLOB
+    Route::get('/imagen/{id}', [ImagenController::class, 'mostrar'])->name('imagen.mostrar');
+    Route::post('/imagen/subir', [ImagenController::class, 'subir'])->name('imagen.subir');
+    Route::delete('/imagen/{id}', [ImagenController::class, 'eliminar'])->name('imagen.eliminar');
+    
+    // Ruta para mostrar avatares BLOB
+    Route::get('/avatar/{id}', [ImagenController::class, 'mostrarAvatar'])->name('avatar.show');
+    
+    // Ruta de debug para imágenes
+    Route::get('/debug-images', function() {
+        $imagenes = App\Models\ImagenEvento::with('evento')->take(10)->get();
+        return view('debug-images', compact('imagenes'));
+    })->name('debug.images');
+    
+    // Ruta de debug para eventos
+    Route::get('/debug-eventos', function() {
+        $events = App\Models\Event::with(['imagenes'])->orderBy('created_at', 'desc')->take(10)->get();
+        return view('debug-eventos', compact('events'));
+    })->name('debug.eventos');
+    
+    // Rutas de debug temporales
+    Route::get('/debug-eventos', [EventController::class, 'debugEventos'])->name('debug.eventos');
+    Route::get('/debug-logs', function () {
+        return view('debug-logs');
+    })->name('debug.logs');
+    
+    // Ruta para migrar imágenes legacy a BLOB
+    Route::get('/migrar-imagenes', function() {
+        $controller = new App\Http\Controllers\EventController();
+        $events = App\Models\Event::whereNotNull('banner_image')->get();
+        $migratedCount = 0;
+        
+        foreach ($events as $event) {
+            $result = $controller->migrarImagenLegacyABlob($event);
+            if ($result) {
+                $migratedCount++;
+            }
+        }
+        
+        return response()->json([
+            'message' => "Migración completada. {$migratedCount} imágenes migradas.",
+            'total_events' => $events->count(),
+            'migrated' => $migratedCount
+        ]);
+    })->name('migrar.imagenes');
 });

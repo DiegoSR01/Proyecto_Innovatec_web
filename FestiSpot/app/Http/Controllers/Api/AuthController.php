@@ -173,8 +173,8 @@ class AuthController extends Controller
             ], 422);
         }
 
-        // Aquí puedes implementar la lógica de envío de email
-        // Para este ejemplo, solo retornamos un mensaje de éxito
+        // Implementar la lógica de envío de email para restablecimiento de contraseña
+        // Retornar mensaje de éxito
 
         return response()->json([
             'success' => true,

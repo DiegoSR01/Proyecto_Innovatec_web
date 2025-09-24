@@ -28,6 +28,8 @@ class User extends Authenticatable
         'fecha_nacimiento',
         'genero',
         'avatar_url',
+        'avatar_data', // Datos binarios del avatar (BLOB)
+        'avatar_mime_type', // Tipo MIME del avatar
         'rol_id',
         'estado',
         'ultimo_acceso',
@@ -149,6 +151,49 @@ class User extends Authenticatable
     public function getNombreCompletoAttribute()
     {
         return $this->nombre . ' ' . $this->apellido;
+    }
+
+    /**
+     * Obtener la URL del avatar o una imagen por defecto
+     */
+    public function getAvatarImageAttribute()
+    {
+        // Prioridad: BLOB avatar -> archivo avatar -> null
+        if ($this->hasAvatarBlob()) {
+            return route('avatar.show', ['id' => $this->id]);
+        }
+        
+        if ($this->avatar_url && file_exists(public_path($this->avatar_url))) {
+            return asset($this->avatar_url);
+        }
+        return null; // Return null if no avatar, will use initials instead
+    }
+
+    /**
+     * Obtener el avatar del usuario como base64 para mostrar en HTML
+     */
+    public function getAvatarBase64Attribute()
+    {
+        if ($this->avatar_data && $this->avatar_mime_type) {
+            return 'data:' . $this->avatar_mime_type . ';base64,' . base64_encode($this->avatar_data);
+        }
+        return null;
+    }
+
+    /**
+     * Verificar si el usuario tiene avatar BLOB
+     */
+    public function hasAvatarBlob()
+    {
+        return !empty($this->avatar_data) && !empty($this->avatar_mime_type);
+    }
+
+    /**
+     * Obtener la inicial del usuario
+     */
+    public function getInitialAttribute()
+    {
+        return strtoupper(substr($this->nombre ?? $this->name ?? 'U', 0, 1));
     }
 
     /**
