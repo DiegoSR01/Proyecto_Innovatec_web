@@ -1,4 +1,5 @@
 <!-- User Icon Component - Minimalista y Moderno -->
+@auth
 <div class="user-icon-wrapper">
     <!-- Botón de Usuario -->
     <div class="user-icon-container" onclick="toggleUserDropdown()">
@@ -61,6 +62,7 @@
         </div>
     </div>
 </div>
+@endauth
 
 <style>
 /* User Icon Styles - Diseño Minimalista Integrado */

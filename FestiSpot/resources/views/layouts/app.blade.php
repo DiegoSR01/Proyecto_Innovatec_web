@@ -169,6 +169,21 @@
         }
       }
     </script>
+    
+    <!-- Chart.js con múltiples CDNs para mayor confiabilidad -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js" crossorigin="anonymous"></script>
+    <script>
+      // Fallback para Chart.js si el primer CDN falla
+      if (typeof Chart === 'undefined') {
+        document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js" crossorigin="anonymous"><\/script>');
+      }
+    </script>
+    <script>
+      // Segundo fallback
+      if (typeof Chart === 'undefined') {
+        document.write('<script src="https://unpkg.com/chart.js@4.4.0/dist/chart.min.js" crossorigin="anonymous"><\/script>');
+      }
+    </script>
 </head>
 <body class="bg-background text-text min-h-screen relative overflow-x-hidden">
     <!-- Efectos de fondo -->

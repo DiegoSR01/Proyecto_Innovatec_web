@@ -39,11 +39,14 @@ class EventController extends Controller
         // Usar usuario fijo para pruebas (ID 1)
         $userId = 1;
 
-        // Obtener los eventos del usuario usando la nueva estructura, incluyendo las imágenes
+        // Obtener los eventos del usuario usando la nueva estructura, incluyendo las imágenes y categorías
         $events = Event::where('organizador_id', $userId)
-                      ->with(['imagenes' => function($query) {
-                          $query->where('tipo', 'principal');
-                      }])
+                      ->with([
+                          'imagenes' => function($query) {
+                              $query->where('tipo', 'principal');
+                          },
+                          'categoria' // Cargar la relación con categoría
+                      ])
                       ->orderBy('created_at', 'desc')
                       ->get();
         
@@ -57,16 +60,19 @@ class EventController extends Controller
         
         // Recargar eventos después de posibles migraciones
         $events = Event::where('organizador_id', $userId)
-                      ->with(['imagenes' => function($query) {
-                          $query->where('tipo', 'principal');
-                      }])
+                      ->with([
+                          'imagenes' => function($query) {
+                              $query->where('tipo', 'principal');
+                          },
+                          'categoria' // Cargar la relación con categoría
+                      ])
                       ->orderBy('created_at', 'desc')
                       ->get();
                       
         // Obtener categorías activas para los filtros
         $categorias = Categoria::where('activo', true)->get();
 
-        return view('mis_eventos_new', compact('events', 'categorias'));
+        return view('mis_eventos', compact('events', 'categorias'));
     }
 
     /**

@@ -89,10 +89,44 @@
     <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 px-6 pr-24 pb-8">
       <!-- Gráfica -->
       <div class="bg-cardLight rounded-2xl p-8 shadow-lg border border-card/30 col-span-2 flex flex-col">
-        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-chart-column text-info"></i> Interacción de Asistentes
-        </h3>
-        <canvas id="chartAsistentes" height="120"></canvas>
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-bold flex items-center gap-3">
+            <div class="p-2 bg-info/10 rounded-lg">
+              <i class="fa-solid fa-chart-line text-info"></i>
+            </div>
+            Interacción de Asistentes
+          </h3>
+          <div class="flex items-center gap-2 text-sm text-textMuted">
+            <div class="w-3 h-3 bg-info rounded-full animate-pulse"></div>
+            <span>En tiempo real</span>
+          </div>
+        </div>
+        <div class="flex-1 relative bg-gradient-to-br from-background/20 to-card/20 rounded-xl p-4" style="min-height: 300px;">
+          <canvas id="chartAsistentes"></canvas>
+        </div>
+        <div class="mt-6 grid grid-cols-3 gap-4 pt-4 border-t border-gray-700/30">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-info flex items-center justify-center gap-1">
+              <i class="fa-solid fa-users text-lg"></i>
+              560
+            </div>
+            <div class="text-sm text-textMuted">Total Asistentes</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-accent flex items-center justify-center gap-1">
+              <i class="fa-solid fa-calendar-days text-lg"></i>
+              72
+            </div>
+            <div class="text-sm text-textMuted">Eventos Activos</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-success flex items-center justify-center gap-1">
+              <i class="fa-solid fa-arrow-trend-up text-lg"></i>
+              +18%
+            </div>
+            <div class="text-sm text-textMuted">Crecimiento</div>
+          </div>
+        </div>
       </div>
       
       <!-- Notificaciones -->
@@ -238,34 +272,324 @@
   </div>
 
   <script>
-    // Inicializar gráfica
+    // Inicializar gráfica con verificación mejorada y fallback CSS
     document.addEventListener('DOMContentLoaded', function() {
-      const ctx = document.getElementById('chartAsistentes').getContext('2d');
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago'],
-          datasets: [{
-            label: 'Asistentes',
-            data: [30, 45, 60, 80, 120, 150, 200, 245],
-            borderColor: '#00e5ff',
-            backgroundColor: 'rgba(0,229,255,0.1)',
-            tension: 0.4,
-            fill: true,
-            pointBackgroundColor: '#ff4081',
-            pointRadius: 5,
-          }]
-        },
-        options: {
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            x: { grid: { color: '#1e2749' }, ticks: { color: '#b0bec5' } },
-            y: { grid: { color: '#1e2749' }, ticks: { color: '#b0bec5' } }
-          }
+      const canvas = document.getElementById('chartAsistentes');
+      const container = canvas.parentElement;
+      
+      // Función para crear gráfica CSS como fallback
+      function createCSSChart() {
+        container.innerHTML = `
+          <div class="css-chart-container h-full flex flex-col p-4" style="min-height: 300px; max-height: 300px; overflow: hidden;">
+            <!-- Etiquetas de la leyenda -->
+            <div class="chart-legend flex gap-6 mb-4 text-sm justify-center">
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-info rounded-full"></div>
+                <span class="text-white font-medium text-xs">Asistentes Registrados</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-accent rounded-full"></div>
+                <span class="text-white font-medium text-xs">Eventos Creados</span>
+              </div>
+            </div>
+            
+            <!-- Contenedor de barras -->
+            <div class="chart-bars-container flex items-end justify-between w-full flex-1 px-2 py-2 relative overflow-hidden">
+              <!-- Líneas de fondo -->
+              <div class="absolute inset-x-2 inset-y-2 flex flex-col justify-between opacity-20 pointer-events-none">
+                <div class="border-t border-gray-600"></div>
+                <div class="border-t border-gray-600"></div>
+                <div class="border-t border-gray-600"></div>
+                <div class="border-t border-gray-600"></div>
+              </div>
+              
+              <!-- Barras de datos -->
+              <div class="chart-bar-group flex flex-col items-center gap-1 z-10 flex-1">
+                <div class="chart-bars flex gap-0.5 items-end justify-center w-full max-w-6">
+                  <div class="bg-info rounded-t flex-1 min-w-0" style="height: 12px; max-width: 12px;"></div>
+                  <div class="bg-accent rounded-t flex-1 min-w-0" style="height: 8px; max-width: 8px;"></div>
+                </div>
+                <span class="text-xs text-textMuted">Ene</span>
+              </div>
+              
+              <div class="chart-bar-group flex flex-col items-center gap-1 z-10 flex-1">
+                <div class="chart-bars flex gap-0.5 items-end justify-center w-full max-w-6">
+                  <div class="bg-info rounded-t flex-1 min-w-0" style="height: 18px; max-width: 12px;"></div>
+                  <div class="bg-accent rounded-t flex-1 min-w-0" style="height: 12px; max-width: 8px;"></div>
+                </div>
+                <span class="text-xs text-textMuted">Feb</span>
+              </div>
+              
+              <div class="chart-bar-group flex flex-col items-center gap-1 z-10 flex-1">
+                <div class="chart-bars flex gap-0.5 items-end justify-center w-full max-w-6">
+                  <div class="bg-info rounded-t flex-1 min-w-0" style="height: 24px; max-width: 12px;"></div>
+                  <div class="bg-accent rounded-t flex-1 min-w-0" style="height: 15px; max-width: 8px;"></div>
+                </div>
+                <span class="text-xs text-textMuted">Mar</span>
+              </div>
+              
+              <div class="chart-bar-group flex flex-col items-center gap-1 z-10 flex-1">
+                <div class="chart-bars flex gap-0.5 items-end justify-center w-full max-w-6">
+                  <div class="bg-info rounded-t flex-1 min-w-0" style="height: 30px; max-width: 12px;"></div>
+                  <div class="bg-accent rounded-t flex-1 min-w-0" style="height: 18px; max-width: 8px;"></div>
+                </div>
+                <span class="text-xs text-textMuted">Abr</span>
+              </div>
+              
+              <div class="chart-bar-group flex flex-col items-center gap-1 z-10 flex-1">
+                <div class="chart-bars flex gap-0.5 items-end justify-center w-full max-w-6">
+                  <div class="bg-info rounded-t flex-1 min-w-0" style="height: 40px; max-width: 12px;"></div>
+                  <div class="bg-accent rounded-t flex-1 min-w-0" style="height: 25px; max-width: 8px;"></div>
+                </div>
+                <span class="text-xs text-textMuted">May</span>
+              </div>
+              
+              <div class="chart-bar-group flex flex-col items-center gap-1 z-10 flex-1">
+                <div class="chart-bars flex gap-0.5 items-end justify-center w-full max-w-6">
+                  <div class="bg-info rounded-t flex-1 min-w-0" style="height: 50px; max-width: 12px;"></div>
+                  <div class="bg-accent rounded-t flex-1 min-w-0" style="height: 32px; max-width: 8px;"></div>
+                </div>
+                <span class="text-xs text-textMuted">Jun</span>
+              </div>
+              
+              <div class="chart-bar-group flex flex-col items-center gap-1 z-10 flex-1">
+                <div class="chart-bars flex gap-0.5 items-end justify-center w-full max-w-6">
+                  <div class="bg-info rounded-t flex-1 min-w-0" style="height: 64px; max-width: 12px;"></div>
+                  <div class="bg-accent rounded-t flex-1 min-w-0" style="height: 38px; max-width: 8px;"></div>
+                </div>
+                <span class="text-xs text-textMuted">Jul</span>
+              </div>
+              
+              <div class="chart-bar-group flex flex-col items-center gap-1 z-10 flex-1">
+                <div class="chart-bars flex gap-0.5 items-end justify-center w-full max-w-6">
+                  <div class="bg-info rounded-t flex-1 min-w-0" style="height: 72px; max-width: 12px;"></div>
+                  <div class="bg-accent rounded-t flex-1 min-w-0" style="height: 45px; max-width: 8px;"></div>
+                </div>
+                <span class="text-xs text-textMuted">Ago</span>
+              </div>
+              
+              <div class="chart-bar-group flex flex-col items-center gap-1 z-10 flex-1">
+                <div class="chart-bars flex gap-0.5 items-end justify-center w-full max-w-6">
+                  <div class="bg-info rounded-t flex-1 min-w-0" style="height: 85px; max-width: 12px;"></div>
+                  <div class="bg-accent rounded-t flex-1 min-w-0" style="height: 52px; max-width: 8px;"></div>
+                </div>
+                <span class="text-xs text-textMuted">Sep</span>
+              </div>
+              
+              <div class="chart-bar-group flex flex-col items-center gap-1 z-10 flex-1">
+                <div class="chart-bars flex gap-0.5 items-end justify-center w-full max-w-6">
+                  <div class="bg-info rounded-t flex-1 min-w-0" style="height: 95px; max-width: 12px;"></div>
+                  <div class="bg-accent rounded-t flex-1 min-w-0" style="height: 58px; max-width: 8px;"></div>
+                </div>
+                <span class="text-xs text-textMuted">Oct</span>
+              </div>
+              
+              <div class="chart-bar-group flex flex-col items-center gap-1 z-10 flex-1">
+                <div class="chart-bars flex gap-0.5 items-end justify-center w-full max-w-6">
+                  <div class="bg-info rounded-t flex-1 min-w-0" style="height: 110px; max-width: 12px;"></div>
+                  <div class="bg-accent rounded-t flex-1 min-w-0" style="height: 65px; max-width: 8px;"></div>
+                </div>
+                <span class="text-xs text-textMuted">Nov</span>
+              </div>
+              
+              <div class="chart-bar-group flex flex-col items-center gap-1 z-10 flex-1">
+                <div class="chart-bars flex gap-0.5 items-end justify-center w-full max-w-6">
+                  <div class="bg-info rounded-t flex-1 min-w-0" style="height: 125px; max-width: 12px;"></div>
+                  <div class="bg-accent rounded-t flex-1 min-w-0" style="height: 72px; max-width: 8px;"></div>
+                </div>
+                <span class="text-xs text-textMuted">Dic</span>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Agregar animación a las barras
+        setTimeout(() => {
+          const bars = container.querySelectorAll('.chart-bars > div');
+          bars.forEach((bar, index) => {
+            bar.style.transform = 'scaleY(0)';
+            bar.style.transformOrigin = 'bottom';
+            bar.style.transition = 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            setTimeout(() => {
+              bar.style.transform = 'scaleY(1)';
+            }, index * 100);
+          });
+        }, 100);
+      }
+      
+      // Intentar cargar Chart.js con retrasos múltiples
+      function attemptChartLoad(attempt = 0) {
+        if (typeof Chart !== 'undefined') {
+          // Chart.js está disponible, crear gráfica
+          const ctx = canvas.getContext('2d');
+          
+          // Crear gradiente para el fondo
+          const gradient1 = ctx.createLinearGradient(0, 0, 0, 300);
+          gradient1.addColorStop(0, 'rgba(0,229,255,0.2)');
+          gradient1.addColorStop(1, 'rgba(0,229,255,0.02)');
+          
+          const gradient2 = ctx.createLinearGradient(0, 0, 0, 300);
+          gradient2.addColorStop(0, 'rgba(255,64,129,0.2)');
+          gradient2.addColorStop(1, 'rgba(255,64,129,0.02)');
+          
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+              datasets: [{
+                label: 'Asistentes Registrados',
+                data: [45, 78, 95, 125, 180, 220, 285, 320, 380, 425, 490, 560],
+                borderColor: '#00e5ff',
+                backgroundColor: gradient1,
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: '#ff4081',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 3,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                pointHoverBorderWidth: 4,
+              }, {
+                label: 'Eventos Creados',
+                data: [8, 12, 15, 18, 25, 32, 38, 45, 52, 58, 65, 72],
+                borderColor: '#ff4081',
+                backgroundColor: gradient2,
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: '#00e5ff',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 3,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                pointHoverBorderWidth: 4,
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              animation: {
+                duration: 2000,
+                easing: 'easeInOutQuart'
+              },
+              plugins: {
+                legend: { 
+                  display: true,
+                  position: 'top',
+                  align: 'start',
+                  labels: {
+                    color: '#ffffff',
+                    font: {
+                      size: 13,
+                      weight: '600'
+                    },
+                    padding: 20,
+                    usePointStyle: true,
+                    pointStyle: 'circle',
+                  }
+                },
+                tooltip: {
+                  mode: 'index',
+                  intersect: false,
+                  backgroundColor: 'rgba(22, 33, 62, 0.95)',
+                  titleColor: '#ffffff',
+                  bodyColor: '#b0bec5',
+                  borderColor: '#ff4081',
+                  borderWidth: 2,
+                  cornerRadius: 12,
+                  displayColors: true,
+                  titleFont: {
+                    size: 14,
+                    weight: 'bold'
+                  },
+                  bodyFont: {
+                    size: 13
+                  },
+                  padding: 12,
+                  callbacks: {
+                    label: function(context) {
+                      return context.dataset.label + ': ' + context.parsed.y.toLocaleString();
+                    }
+                  }
+                }
+              },
+              interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false
+              },
+              scales: {
+                x: { 
+                  grid: { 
+                    color: 'rgba(30, 39, 73, 0.6)',
+                    drawBorder: false,
+                    lineWidth: 1,
+                  }, 
+                  ticks: { 
+                    color: '#b0bec5',
+                    font: {
+                      size: 12,
+                      weight: '500'
+                    },
+                    padding: 8
+                  },
+                  border: {
+                    display: false
+                  }
+                },
+                y: { 
+                  grid: { 
+                    color: 'rgba(30, 39, 73, 0.6)',
+                    drawBorder: false,
+                    lineWidth: 1,
+                  }, 
+                  ticks: { 
+                    color: '#b0bec5',
+                    font: {
+                      size: 12,
+                      weight: '500'
+                    },
+                    padding: 8,
+                    callback: function(value) {
+                      return value.toLocaleString();
+                    }
+                  },
+                  beginAtZero: true,
+                  border: {
+                    display: false
+                  }
+                }
+              },
+              elements: {
+                line: {
+                  borderWidth: 4
+                }
+              },
+              layout: {
+                padding: {
+                  top: 20,
+                  bottom: 10,
+                  left: 10,
+                  right: 10
+                }
+              }
+            }
+          });
+          
+          return;
         }
-      });
+        
+        // Si Chart.js no está disponible después de 3 intentos, usar fallback CSS
+        if (attempt < 3) {
+          setTimeout(() => attemptChartLoad(attempt + 1), 500);
+        } else {
+          console.warn('Chart.js no se pudo cargar después de múltiples intentos, usando fallback CSS');
+          createCSSChart();
+        }
+      }
+      
+      // Iniciar el proceso de carga
+      attemptChartLoad();
     });
 
     // Función para crear nuevo evento

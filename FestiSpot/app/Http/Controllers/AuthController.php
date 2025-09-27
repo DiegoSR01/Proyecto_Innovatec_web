@@ -63,7 +63,7 @@ class AuthController extends Controller
             'telefono' => $request->telefono,
             'fecha_nacimiento' => $request->fecha_nacimiento,
             'genero' => $request->genero,
-            'rol_id' => 1, // Asignar rol de asistente por defecto
+            'rol_id' => 3, // Asignar rol 3 por defecto (como solicita el usuario)
             'estado' => 'activo',
             'fecha_registro' => now(),
             'email_verificado' => false,

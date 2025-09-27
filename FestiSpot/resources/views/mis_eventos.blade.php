@@ -108,20 +108,21 @@
 
         <!-- Filtros -->
         <form id="filtros-form" class="flex flex-wrap gap-4 mb-8 bg-cardLight/80 p-4 rounded-xl shadow border border-card/30">
-            <input type="date" class="bg-card px-4 py-2 rounded-lg text-text border border-cardLight/30 focus:border-accent focus:ring-2 focus:ring-accent/20" placeholder="Fecha" />
-            <select class="bg-card px-4 py-2 rounded-lg text-text border border-cardLight/30 focus:border-accent focus:ring-2 focus:ring-accent/20">
+            <input type="date" id="filtro-fecha" class="bg-card px-4 py-2 rounded-lg text-text border border-cardLight/30 focus:border-accent focus:ring-2 focus:ring-accent/20" placeholder="Fecha" />
+            <select id="filtro-categoria" class="bg-card px-4 py-2 rounded-lg text-text border border-cardLight/30 focus:border-accent focus:ring-2 focus:ring-accent/20">
                 <option value="">Categoría</option>
-                <option>Festival</option>
-                <option>Conferencia</option>
-                <option>Deportivo</option>
-                <option>Cultural</option>
+                @foreach($categorias as $categoria)
+                    <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
+                @endforeach
             </select>
-            <select class="bg-card px-4 py-2 rounded-lg text-text border border-cardLight/30 focus:border-accent focus:ring-2 focus:ring-accent/20">
+            <select id="filtro-estado" class="bg-card px-4 py-2 rounded-lg text-text border border-cardLight/30 focus:border-accent focus:ring-2 focus:ring-accent/20">
                 <option value="">Estatus</option>
-                <option>Activo</option>
-                <option>Finalizado</option>
+                <option value="publicado">Activo</option>
+                <option value="finalizado">Finalizado</option>
+                <option value="borrador">Borrador</option>
+                <option value="cancelado">Cancelado</option>
             </select>
-            <button type="submit" class="ml-auto px-6 py-2 border-2 border-[#00e5ff] text-[#00e5ff] bg-transparent rounded-lg font-bold transition-all hover:bg-[#00e5ff] hover:text-white"><i class="fa-solid fa-filter"></i> Filtrar</button>
+            <button type="button" id="btn-aplicar-filtros" class="ml-auto px-6 py-2 border-2 border-[#00e5ff] text-[#00e5ff] bg-transparent rounded-lg font-bold transition-all hover:bg-[#00e5ff] hover:text-white"><i class="fa-solid fa-filter"></i> Filtrar</button>
             <button type="button" id="btn-borrar-filtros" class="px-6 py-2 border-2 border-[#ff4081] text-[#ff4081] bg-transparent rounded-lg font-bold transition-all hover:bg-[#ff4081] hover:text-white"><i class="fa-solid fa-xmark"></i> Borrar filtros</button>
         </form>
 
@@ -131,7 +132,10 @@
                 <!-- Evento ID: {{ $event->id }} -->
                 <div class="evento-card bg-card rounded-2xl shadow-lg border border-cardLight/30 flex flex-col transition-all duration-300" 
                      data-evento-id="{{ $event->id }}" 
-                     data-fecha="{{ \Carbon\Carbon::parse($event->fecha_inicio)->format('Y-m-d') }}">
+                     data-fecha="{{ \Carbon\Carbon::parse($event->fecha_inicio)->format('Y-m-d') }}"
+                     data-categoria-id="{{ $event->categoria_id }}"
+                     data-categoria-nombre="{{ $event->categoria ? $event->categoria->nombre : 'General' }}"
+                     data-estado="{{ $event->estado }}">
                     
                     @if($event->banner_image)
                         <img src="{{ asset('storage/events/banners/' . $event->banner_image) }}" 
@@ -241,6 +245,8 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         updateCalendar();
+        
+        // Event listeners para el calendario
         document.getElementById('prev-month').addEventListener('click', function() {
             calendarDate.setMonth(calendarDate.getMonth() - 1);
             updateCalendar();
@@ -250,12 +256,21 @@
             updateCalendar();
         });
         
-        // Botón borrar filtros
-        document.getElementById('btn-borrar-filtros').addEventListener('click', function() {
-            selectedDate = null;
-            filtrarEventosPorFecha(null);
-            updateCalendar();
+        // Event listeners para los filtros
+        document.getElementById('btn-aplicar-filtros').addEventListener('click', aplicarFiltros);
+        document.getElementById('btn-borrar-filtros').addEventListener('click', borrarFiltros);
+        
+        // Auto-aplicar filtros cuando cambien los valores
+        document.getElementById('filtro-fecha').addEventListener('change', aplicarFiltros);
+        document.getElementById('filtro-categoria').addEventListener('change', aplicarFiltros);
+        document.getElementById('filtro-estado').addEventListener('change', aplicarFiltros);
+        
+        // Asegurarse de que todos los eventos estén visibles al cargar
+        const eventos = document.querySelectorAll('#eventos-lista > div[data-evento-id]');
+        eventos.forEach(evento => {
+            evento.style.display = '';
         });
+        mostrarMensajeSinEventos(false);
     });
 
     function updateCalendar() {
@@ -305,26 +320,90 @@
     function selectDate(dateString, el) {
         selectedDate = dateString;
         updateCalendar();
-        filtrarEventosPorFecha(dateString);
+        // Sincronizar con el filtro de fecha
+        document.getElementById('filtro-fecha').value = dateString;
+        aplicarFiltros();
+    }
+
+    function aplicarFiltros() {
+        const filtroFecha = document.getElementById('filtro-fecha').value;
+        const filtroCategoria = document.getElementById('filtro-categoria').value;
+        const filtroEstado = document.getElementById('filtro-estado').value;
+        
+        // Si no hay ningún filtro aplicado, mostrar todos los eventos
+        const hayFiltros = filtroFecha || filtroCategoria || filtroEstado;
+        
+        const eventos = document.querySelectorAll('#eventos-lista > div[data-evento-id]');
+        let eventosVisibles = 0;
+        
+        eventos.forEach((evento) => {
+            let mostrar = true;
+            
+            // Solo aplicar filtros si hay alguno seleccionado
+            if (hayFiltros) {
+                const eventoFecha = evento.getAttribute('data-fecha');
+                const eventoCategoria = evento.getAttribute('data-categoria-id');
+                const eventoEstado = evento.getAttribute('data-estado');
+                
+                // Filtro por fecha
+                if (filtroFecha && eventoFecha !== filtroFecha) {
+                    mostrar = false;
+                }
+                
+                // Filtro por categoría
+                if (filtroCategoria && eventoCategoria !== filtroCategoria) {
+                    mostrar = false;
+                }
+                
+                // Filtro por estado
+                if (filtroEstado && eventoEstado !== filtroEstado) {
+                    mostrar = false;
+                }
+            }
+            
+            if (mostrar) {
+                evento.style.display = '';
+                eventosVisibles++;
+            } else {
+                evento.style.display = 'none';
+            }
+        });
+        
+        // Solo mostrar mensaje de "sin eventos" si hay filtros aplicados y no hay eventos visibles
+        mostrarMensajeSinEventos(hayFiltros && eventosVisibles === 0);
+        
+        // Sincronizar con el calendario si se seleccionó una fecha
+        if (filtroFecha && filtroFecha !== selectedDate) {
+            selectedDate = filtroFecha;
+            updateCalendar();
+        }
+    }
+    
+    function borrarFiltros() {
+        // Limpiar todos los filtros
+        document.getElementById('filtro-fecha').value = '';
+        document.getElementById('filtro-categoria').value = '';
+        document.getElementById('filtro-estado').value = '';
+        
+        // Limpiar selección del calendario
+        selectedDate = null;
+        updateCalendar();
+        
+        // Mostrar todos los eventos
+        const eventos = document.querySelectorAll('#eventos-lista > div[data-evento-id]');
+        eventos.forEach(evento => {
+            evento.style.display = '';
+        });
+        
+        // Ocultar mensaje de sin eventos
+        mostrarMensajeSinEventos(false);
     }
 
     function filtrarEventosPorFecha(fecha) {
-        const eventos = document.querySelectorAll('#eventos-lista > div[data-fecha]');
-        let count = 0;
-        if (!fecha) {
-            eventos.forEach(ev => { ev.style.display = ''; count++; });
-            mostrarMensajeSinEventos(false);
-            return;
-        }
-        eventos.forEach(ev => {
-            if (ev.getAttribute('data-fecha') === fecha) {
-                ev.style.display = '';
-                count++;
-            } else {
-                ev.style.display = 'none';
-            }
-        });
-        mostrarMensajeSinEventos(count === 0);
+        // Esta función se mantiene para compatibilidad con el calendario
+        // pero ahora usa la nueva función aplicarFiltros
+        document.getElementById('filtro-fecha').value = fecha || '';
+        aplicarFiltros();
     }
 
     function mostrarMensajeSinEventos(show) {
@@ -333,10 +412,30 @@
             msg = document.createElement('div');
             msg.id = 'sin-eventos-msg';
             msg.className = 'col-span-full text-center py-12 text-xl font-bold text-textMuted animate-fade-in';
-            msg.innerHTML = '😕 No hay eventos para la fecha seleccionada.';
             document.getElementById('eventos-lista').appendChild(msg);
         }
-        msg.style.display = show ? '' : 'none';
+        
+        if (show) {
+            // Determinar qué filtros están aplicados para personalizar el mensaje
+            const filtroFecha = document.getElementById('filtro-fecha').value;
+            const filtroCategoria = document.getElementById('filtro-categoria').value;
+            const filtroEstado = document.getElementById('filtro-estado').value;
+            
+            let mensaje = '😕 No hay eventos que coincidan con ';
+            const filtrosAplicados = [];
+            
+            if (filtroFecha) filtrosAplicados.push('la fecha seleccionada');
+            if (filtroCategoria) filtrosAplicados.push('la categoría seleccionada');
+            if (filtroEstado) filtrosAplicados.push('el estado seleccionado');
+            
+            mensaje += filtrosAplicados.join(', ');
+            mensaje += '.';
+            
+            msg.innerHTML = mensaje;
+            msg.style.display = '';
+        } else {
+            msg.style.display = 'none';
+        }
     }
 
     // Función para crear nuevo evento desde mis eventos
